@@ -1,39 +1,37 @@
-import React from 'react';
-import { ThemeProvider } from './contexts/ThemeContext';
+import React, { createContext, useContext, useState } from 'react';
 import { CssBaseline, Typography, Box } from '@mui/material';
 import NavRail from './components/NavRail';
-import NewAppBar from './components/NewAppBar';
-import { useTheme } from "./contexts/ThemeContext";
+import AppBar from './components/NewAppBar';
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { LayoutProvider } from './contexts/LayoutContext';
-
-
+import { LoginProvider}from './contexts/LoginContext';
 
 const App = () => {
-    const theme = useTheme();
-
     return (
-        <LayoutProvider>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                    <NewAppBar position={"sticky"} style={{zIndex:11}}/>
-                    <NavRail />
-                    <Box component="main"
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100vw',
-                            height: '100vh'
+        <LoginProvider>
+            <LayoutProvider>
+                <ThemeProvider>
+                    <CssBaseline />
+                        <AppBar position={"sticky"} style={{zIndex:11}}/>
+                        <NavRail />
+                        <Box component="main"
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '100vw',
+                                height: '100vh'
+                            }}>
+                                {/* Main content area with top padding to avoid overlap with AppBar */}
+                        <Typography paragraph sx={{
+                            ml:'240px', marginTop: 2
                         }}>
-                            {/* Main content area with top padding to avoid overlap with AppBar */}
-                    <Typography paragraph sx={{
-                        ml:'240px', marginTop: 2
-                    }}>
-                            Hello, this is the main content area!
-                        </Typography>
-                            {/* More content components or elements */}
-                </Box>
-            </ThemeProvider>
-        </LayoutProvider>
+                                Hello, this is the main content area!
+                            </Typography>
+                                {/* More content components or elements */}
+                    </Box>
+                </ThemeProvider>
+            </LayoutProvider>
+        </LoginProvider>
     );
 }
 

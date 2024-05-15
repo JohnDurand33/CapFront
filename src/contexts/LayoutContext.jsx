@@ -5,7 +5,7 @@ const LayoutContext = createContext();
 export const useLayout = () => useContext(LayoutContext);
 
 export const LayoutProvider = ({ children }) => {
-    const [isNavOpen, setNavOpen] = useState(false);
+    const [isNavOpen, setNavOpen] = useState(true);
 
     const toggleNav = () => {
         setNavOpen(!isNavOpen);

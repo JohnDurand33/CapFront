@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box, Menu, MenuItem, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -8,13 +8,15 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
+import { useLogin } from '../contexts/LoginContext';
 import '../../src/styles/index.css';
 
 const NewAppBar = () => {
     const { theme, toggleTheme } = useTheme();
     const { isNavOpen, toggleNav } = useLayout();
-    const [isAuth, setIsAuth] = useState(false);  
-    const [anchorEl, setAnchorEl] = useState(null); 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const { loggedIn, setIsLoggedIn} = useLogin();
+
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -24,9 +26,13 @@ const NewAppBar = () => {
         setAnchorEl(null);
     };
 
-    const toggleAuth = () => {
-        setIsAuth(!isAuth);
+    const toggleIsLoggedIn = () => {
+        setIsLoggedIn(!loggedIn);
+        console.log(`User is ${loggedIn ? 'logged in' : 'logged out'}`);
     };
+;
+    useEffect(() => {console.log('NewAppBar rendered');
+    }, []);
 
     return (
         <AppBar position="sticky" sx={{ zIndex: theme.zIndex.appBar }}>
@@ -46,18 +52,18 @@ const NewAppBar = () => {
 
                 {/* Right Section */}
                 <Box sx={{ display: 'flex', alignItems: 'evenly' }}>
-                    {isAuth ? (
+                    {loggedIn ? (
                         <>
-                            <IconButton color="inherit" onClick={toggleAuth}>
+                            <IconButton color="inherit" onClick={toggleIsLoggedIn}>
                                 <ExitToAppIcon />
                             </IconButton>
                         </>
                     ) : (
                         <>
-                            <IconButton color="inherit" onClick={() => setIsAuth(true)}>
+                                <IconButton color="inherit" onClick={() => { }}>
                                 <PersonAddIcon />
                             </IconButton>
-                            <IconButton color="inherit" onClick={toggleAuth}>
+                                <IconButton color="inherit" onClick={toggleIsLoggedIn}>
                                 <VpnKeyIcon />
                             </IconButton>
                         </>

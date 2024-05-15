@@ -18,8 +18,10 @@ export const ThemeProvider = ({ children }) => {
         setMode(prevMode => prevMode === 'light' ? 'dark' : 'light');
     };
 
+    const value = useMemo(() => ({ mode, toggleTheme, theme }), [mode, theme]);
+
     return (
-        <ThemeContext.Provider value={{ mode, toggleTheme, theme }}>
+        <ThemeContext.Provider value={value}>
             <MUIThemeProvider theme={theme}>
                 {children}
             </MUIThemeProvider>
