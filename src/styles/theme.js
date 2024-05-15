@@ -16,16 +16,16 @@ const getTheme = (mode) =>
                 dark: mode === "dark" ? "#505A65" : "#FFB300",
             },
             secondary: {
-                main: "#FFBF00", 
-                dark: "#CC9A00", 
+                main: "#FFBF00",
+                dark: "#CC9A00",
             },
             background: {
-                default: mode === "dark" ? "#424242" : "#F0F0F0", 
-                paper: mode === "dark" ? "#616161" : "#FFFFFF", 
+                default: mode === "dark" ? "#424242" : "#F0F0F0",
+                paper: mode === "dark" ? "#616161" : "#FFFFFF",
             },
             text: {
-                primary: mode === "dark" ? "#FFFFFF" : "#212121", 
-                secondary: mode === "dark" ? "#BDBDBD" : "#757575", 
+                primary: mode === "dark" ? "#FFFFFF" : "#212121",
+                secondary: mode === "dark" ? "#BDBDBD" : "#757575",
             },
             transitions: {},
         },
@@ -52,11 +52,16 @@ const getTheme = (mode) =>
                             mode === "dark" ? "#BDBDBD" : "#424242"
                         }`,
                         backgroundColor:
-                            mode === "dark" ? "#0d47a1" : "#bbdefb", 
-                        color: mode === "dark" ? "#FFFFFF" : "#bbdefb",
+                            mode === "dark" ? "#0d47a1" : "#bbdefb",
+                        color: mode === "dark" ? "#FFFFFF" : "#212121",
                     },
                 },
             },
+        },
+        zIndex: {
+            appBar: 1200,
+            drawer: 1100,
+            modal: 1300,
         },
     });
 

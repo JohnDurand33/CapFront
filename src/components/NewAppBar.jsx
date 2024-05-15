@@ -10,7 +10,8 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
 import '../../src/styles/index.css';
 
-const NewAppBar= () => {
+const NewAppBar = () => {
+    const { theme, toggleTheme } = useTheme();
     const { isNavOpen, toggleNav } = useLayout();
     const [isAuth, setIsAuth] = useState(false);  
     const [anchorEl, setAnchorEl] = useState(null); 
@@ -28,10 +29,12 @@ const NewAppBar= () => {
     };
 
     return (
-        <AppBar position="sticky"
-        style={{zIndex:1}}>
+        <AppBar position="sticky" sx={{ zIndex: theme.zIndex.appBar }}>
             <Toolbar >
-                <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'evenly' }}>
+                <IconButton color="inherit" onClick={toggleNav}>
+                    <MenuIcon />
+                </IconButton>
+                <Box  x={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - ${isNavOpen ? 240 : 0}px)` }}>
                     {/* Left Icons */}
                     <IconButton color="inherit">
                         <AccountBalanceWalletIcon />

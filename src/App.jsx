@@ -9,7 +9,7 @@ import { LayoutProvider } from './contexts/LayoutContext';
 
 
 const App = () => {
-    const { theme } = useTheme();
+    const theme = useTheme();
 
     return (
         <LayoutProvider>

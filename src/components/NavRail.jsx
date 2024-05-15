@@ -7,18 +7,26 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ThemeToggler from './ThemeToggler';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLayout } from '../contexts/LayoutContext';
 
 function NavigationRail() {
-    const { mode, toggleTheme, theme } = useTheme();
+    const { theme } = useTheme();
+    const { isNavOpen } = useLayout();
     
 
     return (
+        <>
         <Drawer
-            variant="permanent"
+            variant="persistent"
+            open={isNavOpen}
             anchor="left"
             sx={{
-                width: 240, flexShrink: 0, '& .MuiDrawer-paper': {
-                    boxSizing: 'border-box', marginTop: '64px', zIndex: 0
+                width: 240,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    boxSizing: 'border-box',
+                    marginTop: '64px',
+                    zIndex: theme.zIndex.drawer
                 }
             }}
         >
@@ -64,7 +72,8 @@ function NavigationRail() {
                     <ThemeToggler />
                 </ListItem>
             </List>
-        </Drawer>
+            </Drawer>
+        </>
     );
 }
 
