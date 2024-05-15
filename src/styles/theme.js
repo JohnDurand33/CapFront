@@ -6,27 +6,28 @@ const customBorderStyles = {
     borderStyle: "solid",
 };
 
-// Function to generate a theme object based on the mode
+
 const getTheme = (mode) =>
     createTheme({
         palette: {
             mode: mode,
             primary: {
-                main: "#4169E1",
-                dark: "#3B3B3B",
+                main: mode === "dark" ? "#708090" : "#FFC107",
+                dark: mode === "dark" ? "#505A65" : "#FFB300",
             },
             secondary: {
-                main: "#FFBF00",
-                dark: "#9F8949",
+                main: "#FFBF00", 
+                dark: "#CC9A00", 
             },
             background: {
-                default: mode === "dark" ? "#600670" : "#DAE3F3",
-                paper: mode === "dark" ? "#888B0E" : "#6975BD",
+                default: mode === "dark" ? "#424242" : "#F0F0F0", 
+                paper: mode === "dark" ? "#616161" : "#FFFFFF", 
             },
             text: {
-                primary: mode === "dark" ? "#ffffff" : "#000000",
-                secondary: mode === "dark" ? "#E0E0E0" : "#444444",
+                primary: mode === "dark" ? "#FFFFFF" : "#212121", 
+                secondary: mode === "dark" ? "#BDBDBD" : "#757575", 
             },
+            transitions: {},
         },
         components: {
             MuiOutlinedInput: {
@@ -47,9 +48,12 @@ const getTheme = (mode) =>
             MuiAppBar: {
                 styleOverrides: {
                     root: {
-                        borderBottom: `1px solid ${customBorderStyles.borderColor}`,
+                        borderBottom: `1px solid ${
+                            mode === "dark" ? "#BDBDBD" : "#424242"
+                        }`,
                         backgroundColor:
-                            mode === "dark" ? "#7A1B8B" : "#4B5FD2",
+                            mode === "dark" ? "#0d47a1" : "#bbdefb", 
+                        color: mode === "dark" ? "#FFFFFF" : "#bbdefb",
                     },
                 },
             },

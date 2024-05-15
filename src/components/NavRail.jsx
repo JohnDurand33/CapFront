@@ -6,13 +6,21 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ThemeToggler from './ThemeToggler';
+import { useTheme } from '../contexts/ThemeContext';
 
 function NavigationRail() {
+    const { mode, toggleTheme, theme } = useTheme();
+    
+
     return (
         <Drawer
             variant="permanent"
             anchor="left"
-            sx={{ width: 240, flexShrink: 0, '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box' } }}
+            sx={{
+                width: 240, flexShrink: 0, '& .MuiDrawer-paper': {
+                    boxSizing: 'border-box', marginTop: '64px', zIndex: 0
+                }
+            }}
         >
             <List>
                 {/* New Search */}

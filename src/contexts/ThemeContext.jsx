@@ -2,7 +2,11 @@ import React, { createContext, useContext, useMemo, useState } from 'react';
 import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
 import { getTheme } from '../styles/theme'; 
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({
+    mode: 'dark',
+    toggleTheme: () => { }, 
+    theme: getTheme('dark')  
+});
 
 export const useTheme = () => useContext(ThemeContext);
 
@@ -15,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
     };
 
     return (
-        <ThemeContext.Provider value={{ mode, toggleTheme }}>
+        <ThemeContext.Provider value={{ mode, toggleTheme, theme }}>
             <MUIThemeProvider theme={theme}>
                 {children}
             </MUIThemeProvider>
