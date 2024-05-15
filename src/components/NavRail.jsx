@@ -78,11 +78,3 @@ function NavigationRail() {
 }
 
 export default NavigationRail;
-// Explanation:
-// Drawer Component: Acts as the container for the Navigation Rail.
-// List and ListItem: Used to create clickable items within the Drawer.
-//     Icons: Each ListItem is equipped to have an icon that represents its purpose.For example, SearchIcon for "New Search," AccountBalanceWalletIcon for "DoggyWallet," and PetsIcon for "MyBreeds."
-// Action Handlers: I added placeholder onClick events that you can replace with actual navigation logic or modal display functions as needed in your application.
-//     Integration:
-// To use the NavigationRail component, simply import it into your application's main component or wherever you manage your layout:
-
