@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box, Menu, MenuItem, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -11,12 +11,11 @@ import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import '../../src/styles/index.css';
 
-const NewAppBar = () => {
+const NewAppBar = ({setAppBarHeight}) => {
     const { theme, toggleTheme } = useTheme();
     const { isNavOpen, toggleNav } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
-    const { loggedIn, setIsLoggedIn} = useLogin();
-
+    const { loggedIn, setIsLoggedIn } = useLogin();
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -30,9 +29,7 @@ const NewAppBar = () => {
         setIsLoggedIn(!loggedIn);
         console.log(`User is ${loggedIn ? 'logged in' : 'logged out'}`);
     };
-;
-    useEffect(() => {console.log('NewAppBar rendered');
-    }, []);
+
 
     return (
         <AppBar position="sticky" sx={{ zIndex: theme.zIndex.appBar }}>
@@ -60,7 +57,7 @@ const NewAppBar = () => {
                         </>
                     ) : (
                         <>
-                                <IconButton color="inherit" onClick={() => { }}>
+                            <IconButton color="inherit" onClick={() => {}}>
                                 <PersonAddIcon />
                             </IconButton>
                                 <IconButton color="inherit" onClick={toggleIsLoggedIn}>

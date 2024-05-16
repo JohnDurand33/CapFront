@@ -1,4 +1,6 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider} from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton } from '@mui/material';
+import { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -9,10 +11,9 @@ import ThemeToggler from './ThemeToggler';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLayout } from '../contexts/LayoutContext';
 
-function NavigationRail() {
+function NavRail() {
     const { theme } = useTheme();
     const { isNavOpen } = useLayout();
-    
 
     return (
         <>
@@ -20,13 +21,16 @@ function NavigationRail() {
             variant="persistent"
             open={isNavOpen}
             anchor="left"
+            transition= "margin-left 1.0s ease-in-out"
             sx={{
-                width: 240,
                 flexShrink: 0,
+                width: isNavOpen ? 240 : 0,
+                transition: 'margin-left 1.0s ease-in-out',
                 '& .MuiDrawer-paper': {
                     boxSizing: 'border-box',
-                    marginTop: '64px',
-                    zIndex: theme.zIndex.drawer
+                    marginTop: `64px`,
+                    zIndex: theme.zIndex.drawer,
+                    transition: 'margin-left 1.0s ease-in-out',
                 }
             }}
         >
@@ -52,10 +56,10 @@ function NavigationRail() {
             <Divider />
             <List>
                 {/* Sign Up */}
-                <ListItem onClick={() => alert('Navigate to Sign Up')}>
+                <ListItemButton component={Link} to='/signup'>
                     <ListItemIcon><PersonAddIcon /></ListItemIcon>
                     <ListItemText primary="Sign Up" />
-                </ListItem>
+                </ListItemButton>
 
                 {/* Sign In */}
                 <ListItem onClick={() => alert('Navigate to Sign In')}>
@@ -77,4 +81,4 @@ function NavigationRail() {
     );
 }
 
-export default NavigationRail;
+export default NavRail;

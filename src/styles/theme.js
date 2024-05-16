@@ -58,6 +58,7 @@ const getTheme = (mode) =>
                 },
             },
         },
+        spacing: 8,
         zIndex: {
             appBar: 1200,
             drawer: 1100,
