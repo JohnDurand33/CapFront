@@ -1,4 +1,4 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton, useTheme } from '@mui/material';
 import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
@@ -7,12 +7,11 @@ import PetsIcon from '@mui/icons-material/Pets';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import ThemeToggler from './ThemeToggler';
-import { useTheme } from '../contexts/ThemeContext';
+import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 
-function NavRail() {
-    const { theme } = useTheme();
+function NavRail({mode, toggleMode}) {
+    const  theme  = useTheme();
     const { isNavOpen } = useLayout();
 
     return (
@@ -73,7 +72,7 @@ function NavRail() {
                     <ListItemText primary="Sign Out" />
                 </ListItem>
                 <ListItem>
-                    <ThemeToggler />
+                    <ThemeToggler mode={mode} toggleMode={toggleMode}/>
                 </ListItem>
             </List>
             </Drawer>

@@ -6,13 +6,14 @@ import PetsIcon from '@mui/icons-material/Pets';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { useTheme } from '../contexts/ThemeContext';
+import ThemeToggleButton from './ThemeToggleButton';
+import { useTheme } from '@mui/material/styles';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import '../../src/styles/index.css';
 
-const NewAppBar = ({setAppBarHeight}) => {
-    const { theme, toggleTheme } = useTheme();
+const NewAppBar = ({ toggleMode, mode }) => {
+    const theme = useTheme();
     const { isNavOpen, toggleNav } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, setIsLoggedIn } = useLogin();
@@ -67,6 +68,7 @@ const NewAppBar = ({setAppBarHeight}) => {
                     )}
 
                     {/* Menu Icon for future functionalities */}
+                    <ThemeToggleButton toggleMode={toggleMode} mode={mode} />
                     <IconButton color="inherit" onClick={handleMenuOpen}>
                         <MenuIcon />
                     </IconButton>
