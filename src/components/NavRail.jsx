@@ -1,6 +1,7 @@
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton, useTheme } from '@mui/material';
 import { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
+import { Link, NavLink } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -36,7 +37,7 @@ function NavRail({mode, toggleMode}) {
             <List>
                 {/* New Search */}
                 <ListItem onClick={() => alert('Open modal for New Search')}>
-                    <ListItemIcon><SearchIcon /></ListItemIcon>
+                        <ListItemIcon><Link><SearchIcon /></Link></ListItemIcon>
                     <ListItemText primary="New Search" />
                 </ListItem>
 

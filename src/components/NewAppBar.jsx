@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Typography, Box, Menu, MenuItem, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -58,7 +59,7 @@ const NewAppBar = ({ toggleMode, mode }) => {
                         </>
                     ) : (
                         <>
-                            <IconButton color="inherit" onClick={() => {}}>
+                            <IconButton color="inherit" component={Link} to='/signup'>
                                 <PersonAddIcon />
                             </IconButton>
                                 <IconButton color="inherit" onClick={toggleIsLoggedIn}>

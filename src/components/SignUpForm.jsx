@@ -25,7 +25,7 @@ const SignUpForm = () => {
     });
 
     const onSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
-        console.log('1) Trying to sign up')
+        console.log('1) Trying to sign up');
         try {
             const response = await axios.post('http://localhost:5000/auth/signup', {
                 email: values.email,
@@ -34,16 +34,19 @@ const SignUpForm = () => {
             });
             console.log('2) response:', response);
 
-            setStatus({ success: 'Sign up successful! Please log in.' });
+            // Set success message
+            setStatus({ success: 'Sign up successful! Please log in.', error: null });
+            // Clear any previous errors
             setErrors({});
-            setSubmitting(false);
         } catch (error) {
-            console.error('Error:', error);  
-            setErrors({ submit: error.response?.data?.message || 'Sign up failed. Please try again.' });
-            setStatus({ success: '' });
+            console.error('Error:', error);
+            // Set error message
+            setStatus({ success: null, error: error.response?.data?.message || 'Sign up failed. Please try again.' });
+        } finally {
+            // End submitting state
             setSubmitting(false);
         }
-        console.log(`3) Sign up complete', success: ${success}`);
+        console.log('3) Sign up complete');
     };
 
     return (
@@ -51,13 +54,13 @@ const SignUpForm = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
-            >
-            {({ isSubmitting, status, errors, }) => (
+        >
+            {({ isSubmitting, status }) => (
                 <Form>
-                    <Box sx={{ mt: 3, ml: isNavOpen ? '240px':'0px', transition: 'margin-left 0.3s ease-in-out'}}>
+                    <Box sx={{ mt: 5, mr: 3, ml: isNavOpen ? '240px' : 3, transition: 'margin-left 0.3s ease-in-out' }}>
                         <Typography variant="h4" gutterBottom>Sign Up</Typography>
                         {status?.success && <Typography color="success">{status.success}</Typography>}
-                        {errors.submit && <Typography color="error">{errors.submit}</Typography>}
+                        {status?.error && <Typography color="error">{status.error}</Typography>}
                         <Box mb={2}>
                             <Field
                                 as={TextField}
@@ -67,6 +70,7 @@ const SignUpForm = () => {
                                 fullWidth
                                 required
                                 helperText={<ErrorMessage name="email" />}
+                                autoComplete="email"
                             />
                         </Box>
                         <Box mb={2}>
@@ -78,6 +82,7 @@ const SignUpForm = () => {
                                 fullWidth
                                 required
                                 helperText={<ErrorMessage name="password" />}
+                                autoComplete="new-password"
                             />
                         </Box>
                         <Box mb={2}>
@@ -89,6 +94,7 @@ const SignUpForm = () => {
                                 fullWidth
                                 required
                                 helperText={<ErrorMessage name="verifyPassword" />}
+                                autoComplete="new-password"
                             />
                         </Box>
                         <Box mb={2}>
@@ -100,6 +106,7 @@ const SignUpForm = () => {
                                 fullWidth
                                 required
                                 helperText={<ErrorMessage name="zipCode" />}
+                                autoComplete="postal-code"
                             />
                         </Box>
                         <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
@@ -108,72 +115,7 @@ const SignUpForm = () => {
                     </Box>
                 </Form>
             )}
-        </Formik>
-    );
-};
+        </Formik>);
+}
 
 export default SignUpForm;
-
-
-
-
-
-
-
-
-
-
-// class SignUp extends Component {
-//     handleClick = async (e) => {
-//         e.preventDefault();
-//         const username = e.target.username.value;
-//         const email = e.target.email.value;
-//         const password = e.target.password.value;
-//         const confirmPassword = e.target.confirmPassword.value;
-
-//         const body = {
-//             username,
-//             email,
-//             password
-//         }
-
-//         const url = BACKEND_URL + '/api/signup'
-//         const options = {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(body),
-//         }
-
-//         if (password !== confirmPassword) {
-//             //THROW AN ERROR MESSAGE
-//             console.log("Passwords do not match")
-//             return
-//         }
-
-//         const request = await fetch(url, options);
-//         console.log(`request: ${request}`);
-//         const data = await request.json();
-//         console.log(`data: ${data}`);
-//     };
-
-//     render() {
-//         return (
-//             <div>
-//                 <h1 className="text-center">Sign Up</h1>
-//                 <form className="col-3 mx-auto" onSubmit={this.handleClick}>
-//                     <input className="form-control" type="text" name="username" placeholder="Userame" />
-//                     <input className="form-control" type="text" name="email" placeholder="Email" />
-//                     <input className="form-control" type="new-password" name="password" placeholder="Password" />
-//                     <input className="form-control" type="new-password" name="confirmPassword" placeholder="Confirm Password" />
-//                     <button className="btn btn-success mx-auto">Submit</button>
-//                 </form>
-//             </div>
-//         );
-//     }
-// }
-
-
-
-// export default SignUp;

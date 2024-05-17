@@ -12,12 +12,10 @@ const getTheme = (mode) =>
         palette: {
             mode: mode,
             primary: {
-                main: mode === "dark" ? "#708090" : "#FFC107",
-                dark: mode === "dark" ? "#505A65" : "#FFB300",
+                main: mode === "dark" ? "#DFC57B" : "#FFC107",
             },
             secondary: {
-                main: "#FFBF00",
-                dark: "#CC9A00",
+                main: mode === "dark" ? "#FFBF00" : "#CC9A00",
             },
             background: {
                 default: mode === "dark" ? "#424242" : "#F0F0F0",
@@ -27,7 +25,13 @@ const getTheme = (mode) =>
                 primary: mode === "dark" ? "#FFFFFF" : "#212121",
                 secondary: mode === "dark" ? "#BDBDBD" : "#757575",
             },
-            transitions: {},
+        },
+        transitions: {},
+        spacing: 8,
+        zIndex: {
+            appBar: 1200,
+            drawer: 1100,
+            modal: 1300,
         },
         components: {
             MuiOutlinedInput: {
@@ -57,12 +61,6 @@ const getTheme = (mode) =>
                     },
                 },
             },
-        },
-        spacing: 8,
-        zIndex: {
-            appBar: 1200,
-            drawer: 1100,
-            modal: 1300,
         },
     });
 
