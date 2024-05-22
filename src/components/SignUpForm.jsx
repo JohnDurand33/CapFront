@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Box, Typography, useTheme } from '@mui/material';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useLayout } from '../contexts/LayoutContext';
-
+import { useLogin } from '../contexts/LoginContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-    const theme = useTheme();
+    const { setLoggedIn } = useLogin();
     const { isNavOpen } = useLayout();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setLoggedIn(false);
+        localStorage.removeItem('token');
+    }, []);
 
     const initialValues = {
         email: '',
@@ -24,40 +31,39 @@ const SignUpForm = () => {
         zipCode: Yup.string().required('Required')
     });
 
-    const onSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
+    const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
         console.log('1) Trying to sign up');
         try {
             const response = await axios.post('http://localhost:5000/auth/signup', {
                 email: values.email,
                 password: values.password,
-                zipCode: values.zipCode,
+                zip_code: values.zipCode,
             });
             console.log('2) response:', response);
+            navigate('/login');
 
-            // Set success message
             setStatus({ success: 'Sign up successful! Please log in.', error: null });
-            // Clear any previous errors
             setErrors({});
         } catch (error) {
-            console.error('Error:', error);
-            // Set error message
+            console.error('Sign Up Failed:', error);
+            navigate('/signup');
+
             setStatus({ success: null, error: error.response?.data?.message || 'Sign up failed. Please try again.' });
         } finally {
             // End submitting state
             setSubmitting(false);
         }
-        console.log('3) Sign up complete');
     };
 
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
         >
             {({ isSubmitting, status }) => (
                 <Form>
-                    <Box sx={{ mt: 5, mr: 3, ml: isNavOpen ? '240px' : 3, transition: 'margin-left 0.3s ease-in-out' }}>
+                    <Box >
                         <Typography variant="h4" gutterBottom>Sign Up</Typography>
                         {status?.success && <Typography color="success">{status.success}</Typography>}
                         {status?.error && <Typography color="error">{status.error}</Typography>}
@@ -115,7 +121,8 @@ const SignUpForm = () => {
                     </Box>
                 </Form>
             )}
-        </Formik>);
+        </Formik>
+    );
 }
 
 export default SignUpForm;

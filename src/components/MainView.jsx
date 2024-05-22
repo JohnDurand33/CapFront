@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { Routes } from 'react-router-dom';
-import SignUpForm from './SignUpForm';
+import {useLayout} from '../contexts/LayoutContext';
 
 
 
@@ -15,7 +15,7 @@ const MainView = () => {
             width: '100vw',
             height: '100vh',
             padding: 3,
-            backgroundColor: 'background.default'
+            backgroundColor: 'background.default',
         }}>
             <Grid container spacing={2} sx={{ flex: 1 }}>
                 <Grid item xs={7}>
