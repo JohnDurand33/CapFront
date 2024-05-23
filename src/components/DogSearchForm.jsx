@@ -127,7 +127,7 @@ const DogSearchForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Shedding (1-5)"
+                                label="Shedding (0-5): 0 = n/a, 1 = low, 5 = high"
                                 type="number"
                                 name="shedding"
                                 value={formData.shedding}
@@ -137,7 +137,7 @@ const DogSearchForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Barking (1-5)"
+                                label="Barking (0-5: 0 = n/a, 1 = quiet, 5 = LOUD)"
                                 type="number"
                                 name="barking"
                                 value={formData.barking}
@@ -147,7 +147,7 @@ const DogSearchForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Energy (1-5)"
+                                label="Energy (0-5): 0 = n/a, 1 = calm, 5 = hyperactive"
                                 type="number"
                                 name="energy"
                                 value={formData.energy}
@@ -157,7 +157,7 @@ const DogSearchForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Protectiveness (1-5)"
+                                label="Protectiveness (0-5: 0 = n/a, 1 = friendly, 5 = extremly protective)"
                                 type="number"
                                 name="protectiveness"
                                 value={formData.protectiveness}
@@ -167,7 +167,7 @@ const DogSearchForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Trainability (1-5)"
+                                label="Trainability (0-5: 0 = n/a, 1 = stubborn, 5 = easy to train)"
                                 type="number"
                                 name="trainability"
                                 value={formData.trainability}
