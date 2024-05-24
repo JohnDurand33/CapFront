@@ -62,6 +62,7 @@ export const LoginProvider = ({ children }) => {
                 return response.status === 200;
             } catch (error) {
                 console.error('Token validation failed:', error);
+                localStorage.removeItem('token');
                 navigate('/login');
             }
         }

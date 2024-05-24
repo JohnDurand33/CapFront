@@ -12,7 +12,7 @@ import { useLogin } from '../contexts/LoginContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
-    const { isNavOpen, toggleDogSearch } = useLayout();
+    const { isNavOpen, toggleBreedSearchForm, } = useLayout();
     const { loggedIn, logout } = useLogin();
 
     const handleLogout = async () => {
@@ -40,7 +40,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
             >
                 <List>
                     {/* New Search */}
-                    <ListItemButton onClick={toggleDogSearch}>
+                    <ListItemButton onClick={toggleBreedSearchForm}>
                         <ListItemIcon><Link to="#"><SearchIcon /></Link></ListItemIcon>
                         <ListItemText primary="New Search" />
                     </ListItemButton>

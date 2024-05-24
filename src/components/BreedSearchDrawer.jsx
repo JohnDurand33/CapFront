@@ -1,20 +1,18 @@
-import React from 'react';
-import { Drawer, Box, Typography } from '@mui/material';
-import DogSearchForm from './DogSearchForm';
-import { useLayout } from '../contexts/LayoutContext';
 import { useTheme } from '@emotion/react';
+import { Box, Drawer, Typography } from '@mui/material';
+import React from 'react';
+import { useLayout } from '../contexts/LayoutContext';
+import BreedSearchForm from './BreedSearchForm';
 
-const DogSearchDrawer = ({appBarHeight}) => {
-    const { isDogSearchOpen, toggleDogSearch } = useLayout();
+const BreedSearchDrawer = ({appBarHeight}) => {
+    const { isBreedSearchFormOpen, toggleBreedSearchForm } = useLayout();
     const theme = useTheme();
-    console.log(theme);
-    console.log(appBarHeight);
 
     return (
         <Drawer
             anchor="right"
-            open={isDogSearchOpen}
-            onClose={toggleDogSearch}
+            open={isBreedSearchFormOpen}
+            onClose={toggleBreedSearchForm}
             sx={{
                 '& .MuiDrawer-paper': {
                     width: 450,
@@ -25,12 +23,12 @@ const DogSearchDrawer = ({appBarHeight}) => {
         >
             <Box sx={{ p: 2 }}>
                 <Typography variant="h6" gutterBottom>
-                    Dog Search
+                    Breed Search
                 </Typography>
-                <DogSearchForm />
+                <BreedSearchForm />
             </Box>
         </Drawer>
     );
 };
 
-export default DogSearchDrawer;
+export default BreedSearchDrawer;
