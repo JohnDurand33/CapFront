@@ -33,11 +33,11 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
                 <Routes>
-                <Route path="/*" element={<Layout toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} appBarHeight={appBarHeight} />}>
-                        <Route index element={<Home />} />
-                        <Route path="signup" element={<SignUpForm />} />
-                        <Route path="login" element={<LogIn />} />
-                    <Route path="breedview" element={<BreedView appBarHeight={appBarHeight} />} />
+                <Route path="/*" element={<Layout toggleMode={toggleMode} mode={mode} appBarRef={appBarRef}  appBarHeight={appBarHeight} />}>
+                    <Route index element={<Home />} />
+                    <Route path="signup" element={<SignUpForm />} />
+                    <Route path="login" element={<LogIn />} />
+                    <Route path="breedview" element={<BreedView />} />
                 </Route>
             </Routes>
         </ThemeProvider>

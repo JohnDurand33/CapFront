@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from '@mui/material';
+import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
@@ -17,23 +17,69 @@ const DogSearchForm = () => {
     });
 
     const navigate = useNavigate();
+    const [showNotification, setShowNotification] = useState(false);
     const { setResults } = useDogSearch();
     const { toggleDogSearch } = useLayout();
-    const [breedSearch, setBreedSearch] = useState(false);
+    const [breedNameSearchView, setBreedNameSearchView] = useState(false);
+    const breedNameRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (breedNameRef.current && !breedNameRef.current.contains(event.target)) {
+                if (formData.name) {
+                    setShowNotification(true);
+                } else {
+                    setShowNotification(false);
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [formData.name]);
+
+    const createRadioGroup = (header, name, value) => (
+        <Grid item xs={12}>
+            <FormControl component="fieldset" fullWidth>
+                <FormLabel component="legend" style={{ color: 'inherit' }}>
+                    <Typography variant="h6" style={{ color: 'inherit' }}>{header}</Typography>
+                </FormLabel>
+                <RadioGroup
+                    row
+                    name={name}
+                    value={value}
+                    onChange={handleChange}
+                >
+                    <FormControlLabel value="" control={<Radio color="primary" />} label="Any" />
+                    <FormControlLabel value="1,2" control={<Radio color="primary" />} label="Low" />
+                    <FormControlLabel value="2,3,4" control={<Radio color="primary" />} label="Mid" />
+                    <FormControlLabel value="4,5" control={<Radio color="primary" />} label="High" />
+                </RadioGroup>
+            </FormControl>
+        </Grid>
+    );
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setFormData((prevData) => ({
+            ...prevData, [name]: value
+        }));
 
         // Disable other form fields if a breed name is entered
-        if (name === 'name' && value !== '') {
-            setBreedSearch(true);
-        } else if (name === 'name' && value === '') {
-            setBreedSearch(false);
+        if (name === 'name') {
+            if (value !== '') {
+                setBreedNameSearchView(true);
+                setShowNotification(true);
+            } else {
+                setBreedNameSearchView(false);
+                setShowNotification(false);
+            }
         }
     };
 
-    const handleSearch = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const params = new URLSearchParams();
 
@@ -74,11 +120,10 @@ const DogSearchForm = () => {
 
         try {
             const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?${params.toString()}`, {
-                headers: { 'X-Api-Key': import.meta.env.VITE_API_KEY },
+                headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY },
             });
+            console.log(response.data);
             setResults(response.data);
-
-            // Navigate to BreedView and close the search drawer
             toggleDogSearch();
             navigate('/breedview');
         } catch (error) {
@@ -86,8 +131,10 @@ const DogSearchForm = () => {
         }
     };
 
+    
+
     return (
-        <Box component="form" onSubmit={handleSearch} sx={{ mt: 2 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
@@ -95,8 +142,13 @@ const DogSearchForm = () => {
                 Large: 61 to 100 lbs<br />
                 Extra Large: Over 100 lbs
             </Typography>
+            {showNotification && (
+                <Typography variant="body2" color="error" mt="1" mb={2}>
+                    Please clear the breed name field to search for breeds by their attributes.
+                </Typography>
+            )}
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={12} ref={breedNameRef}>
                     <TextField
                         fullWidth
                         label="Breed name"
@@ -105,7 +157,7 @@ const DogSearchForm = () => {
                         onChange={handleChange}
                     />
                 </Grid>
-                {!breedSearch && (
+                {!breedNameSearchView && (
                     <>
                         <Grid item xs={12}>
                             <FormControl component="fieldset" fullWidth>
@@ -116,64 +168,22 @@ const DogSearchForm = () => {
                                     onChange={handleChange}
                                     row
                                 >
-                                    <FormControlLabel value="small" control={<Radio />} label="Small" />
-                                    <FormControlLabel value="medium" control={<Radio />} label="Medium" />
-                                    <FormControlLabel value="large" control={<Radio />} label="Large" />
-                                    <FormControlLabel value="extra_large" control={<Radio />} label="Extra Large" />
-                                    <FormControlLabel value="not_applicable" control={<Radio />} label="Not Applicable" />
+                                    <FormControlLabel value="small" control={<Radio color="primary" />} label="Small" />
+                                    <FormControlLabel value="medium" control={<Radio color="primary" />} label="Medium" />
+                                    <FormControlLabel value="large" control={<Radio color="primary" />} label="Large" />
+                                    <FormControlLabel value="extra_large" control={<Radio color="primary" />} label="Extra Large" />
+                                    <FormControlLabel value="not_applicable" control={<Radio color="primary" />} label="Not Applicable" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Shedding (0-5): 0 = n/a, 1 = low, 5 = high"
-                                type="number"
-                                name="shedding"
-                                value={formData.shedding}
-                                onChange={handleChange}
-                            />
+                        <Grid item xs={12}>
+                            <FormHelperText>Selecting "Any" will remove the filter from your Search</FormHelperText>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Barking (0-5: 0 = n/a, 1 = quiet, 5 = LOUD)"
-                                type="number"
-                                name="barking"
-                                value={formData.barking}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Energy (0-5): 0 = n/a, 1 = calm, 5 = hyperactive"
-                                type="number"
-                                name="energy"
-                                value={formData.energy}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Protectiveness (0-5: 0 = n/a, 1 = friendly, 5 = extremly protective)"
-                                type="number"
-                                name="protectiveness"
-                                value={formData.protectiveness}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Trainability (0-5: 0 = n/a, 1 = stubborn, 5 = easy to train)"
-                                type="number"
-                                name="trainability"
-                                value={formData.trainability}
-                                onChange={handleChange}
-                            />
-                        </Grid>
+                        {createRadioGroup("Shedding", "shedding", formData.shedding)}
+                        {createRadioGroup("Barking", "barking", formData.barking)}
+                        {createRadioGroup("Energy", "energy", formData.energy)}
+                        {createRadioGroup("Protectiveness", "protectiveness", formData.protectiveness)}
+                        {createRadioGroup("Trainability", "trainability", formData.trainability)}
                     </>
                 )}
                 <Grid item xs={12}>

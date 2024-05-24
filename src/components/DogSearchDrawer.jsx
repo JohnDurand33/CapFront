@@ -17,7 +17,7 @@ const DogSearchDrawer = ({appBarHeight}) => {
             onClose={toggleDogSearch}
             sx={{
                 '& .MuiDrawer-paper': {
-                    width: 400,
+                    width: 450,
                     padding: 2,
                     marginTop: `${appBarHeight}px`
                 },

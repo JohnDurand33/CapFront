@@ -19,7 +19,7 @@ const BreedView = () => {
                                 component="img"
                                 height="140"
                                 image={dog.image_link}
-                                alt={dog.name}
+                                alt="dog.name"
                             />
                             <CardContent>
                                 <Typography variant="h6">{dog.name}</Typography>
