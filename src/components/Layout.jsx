@@ -1,19 +1,25 @@
 import { Box } from '@mui/material';
-import React from 'react';
+import React, { useEffect }from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext';
 import DogSearchDrawer from './BreedSearchDrawer';
 import NavRail from './NavRail';
 import NewAppBar from './NewAppBar';
 
-const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
+const Layout = ({ myBreeds, setMyBreeds, toggleMode, mode, appBarRef, appBarHeight}) => {
     const { isNavOpen, isBreedSearchOpen } = useLayout();
+
+    useEffect(() => {
+        // Log to see what's actually in myBreeds when it attempts to render
+        console.log("Layout myBreeds:", myBreeds);
+    }, [myBreeds]);
     return (
         <>
             <NewAppBar toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} />
             <NavRail toggleMode={toggleMode} mode={mode} appBarHeight={appBarHeight} />
-            <DogSearchDrawer appBarHeight={appBarHeight} />
-            <Box component="main"
+            <DogSearchDrawer appBarHeight={appBarHeight} myBreeds={myBreeds} setMyBreeds={setMyBreeds}/>
+            <Box
+                component="main"
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -23,8 +29,9 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
                     pl: isNavOpen ? '240px' : 10, // Adjust margin based on NavRail state
                     pr: isBreedSearchOpen ? '400px' : 10, // Adjust margin based on DogSearchDrawer state
                     transition: 'padding-left 0.2s ease-in-out, padding-right 0.2s ease-in-out',
+                    mb: myBreeds.length ? 16 : 0, // Adjust margin based on DogSearchDrawer state
                 }}>
-                <Outlet />
+                <Outlet context={{myBreeds, setMyBreeds}} />
             </Box>
         </>
     );

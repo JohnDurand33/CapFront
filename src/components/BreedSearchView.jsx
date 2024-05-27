@@ -1,62 +1,51 @@
-import React from 'react';
+import { useEffect} from 'react';
 import { Box, Grid, Typography, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useTheme } from '@emotion/react';
-import Draggable from 'react-draggable';
+import { useLayout } from '../contexts/LayoutContext';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Draggable } from 'react-beautiful-dnd';
+import BreedCard from './BreedCard';
 
 
 const BreedSearchView = () => {
-    const { currentSearchBreeds } = useDogSearch();
+    const {startFavBreedRail} = useLayout();
     const theme = useTheme();
+    const { myBreeds } = useOutletContext();
 
-    const handleDrop = (action) => (event) => {
-        
-        console.log(`${action} was triggered.`);
-    };
+    useEffect(() => {
+        // Log to see what's actually in myBreeds when it attempts to render
+        startFavBreedRail;
+        console.log("BreedSearchView myBreeds:", myBreeds);
+    }, [startFavBreedRail]);
 
-    return(
+
+    return (
         <Box sx={{ p: 3 }}>
             <Typography variant="h4" gutterBottom>
                 Search Results
             </Typography>
             <Grid container spacing={2}>
-                {currentSearchBreeds.map((dog, index) => (
+                {myBreeds.map((dog, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Draggable>
                         <Card sx={{ backgroundColor: theme.palette.primary.main }}>
                             <CardActionArea>
-                            <CardMedia
-                                component="img"
-                                image={dog.image_link}
-                                alt="dog.name"
-                                sx={{ height:"140", width: '100%', aspectRatio:`3/2` }}
-                                
-                            />
-                            <CardContent sx={{display:'flex', justifyContent:'center'}}>
-                                <Typography sx={{justifySelf:"center"}} variant="h6">{dog.name}</Typography>
+                                <CardMedia
+                                    component="img"
+                                    image={dog.image_link}
+                                    alt={dog.name}
+                                    sx={{ height: "140", width: '100%', aspectRatio: `3/2` }}
+                                />
+                                <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Typography sx={{ justifySelf: "center" }} variant="h6">{dog.name}</Typography>
                                 </CardContent>
                             </CardActionArea>
                         </Card>
-                        </Draggable>
                     </Grid>
                 ))}
             </Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'space-around', padding: 2 }}>
-                <Box
-                    sx={{ width: 300, height: 100, backgroundColor: 'lightgreen' }}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop('keep')}>
-                    logic to save breed to breedSearch list state
-                </Box>
-                <Box
-                    sx={{ width: 300, height: 100, backgroundColor: 'salmon' }}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop('remove')}>
-                    logic to delete object from view
-                </Box>
-            </Box>
         </Box>
-    )
+    );
 };
 
 export default BreedSearchView;

@@ -40,7 +40,7 @@ export const LoginProvider = ({ children }) => {
                     navigate('/login'); // Redirect to login after logout
                 }
             } catch (error) {
-                console.error('Issue with localStorage', error);
+                console.error('Issue with token / localStorage', error);
                 setLoggedIn(false);
                 navigate('/login');
             }
@@ -59,7 +59,12 @@ export const LoginProvider = ({ children }) => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                return response.status === 200;
+                if (response.status === 200) {
+                    return true;
+                } else {
+                    throwNewError('Token not valid')
+                    
+                }
             } catch (error) {
                 console.error('Token validation failed:', error);
                 localStorage.removeItem('token');

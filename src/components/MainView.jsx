@@ -9,6 +9,7 @@ const MainView = () => {
 
 
     return (
+        <>
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -35,7 +36,8 @@ const MainView = () => {
                     </Routes>
                 </Grid>
             </Grid>
-        </Box>
+            </Box>
+        </>
     );
 }
 

@@ -37,7 +37,7 @@ const Login = () => {
         if (success) {
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
-            navigate('/MainView');
+            navigate('/Home');
         } else {
             setStatus({ success: null, error: 'Login failed. Please try again.' });
         }

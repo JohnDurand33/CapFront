@@ -20,13 +20,14 @@
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-draggable": "^4.4.6",
     "react-router-dom": "^6.23.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",

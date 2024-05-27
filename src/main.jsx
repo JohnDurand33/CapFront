@@ -12,14 +12,14 @@ import './styles/index.css'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <LoginProvider>
-                <LayoutProvider>
-                    <DogSearchProvider>
+        <DogSearchProvider>
+            <BrowserRouter>
+                <LoginProvider>
+                    <LayoutProvider>
                         <App />
-                    </DogSearchProvider>
                 </LayoutProvider>
             </LoginProvider>
-        </BrowserRouter>
+            </BrowserRouter>
+        </DogSearchProvider>
     </React.StrictMode>
 )

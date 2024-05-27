@@ -4,7 +4,7 @@ import React from 'react';
 import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchForm from './BreedSearchForm';
 
-const BreedSearchDrawer = ({appBarHeight}) => {
+const BreedSearchDrawer = ({appBarHeight, myBreeds, setMyBreeds}) => {
     const { isBreedSearchFormOpen, toggleBreedSearchForm } = useLayout();
     const theme = useTheme();
 
@@ -25,7 +25,7 @@ const BreedSearchDrawer = ({appBarHeight}) => {
                 <Typography variant="h6" gutterBottom>
                     Breed Search
                 </Typography>
-                <BreedSearchForm />
+                <BreedSearchForm myBreeds={myBreeds} setMyBreeds={setMyBreeds} />
             </Box>
         </Drawer>
     );

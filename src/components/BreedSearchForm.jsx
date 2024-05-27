@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, FormHelperText } from '@mui/material';
 import axios from 'axios';
-import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
 
-const BreedSearchForm = () => {
+const BreedSearchForm = ({myBreeds, setMyBreeds}) => {
+    console.log('BreedSearchForm myBreeds:', myBreeds);
+    console.log('BreedSearchForm setMyBreeds:', setMyBreeds);
     const [formData, setFormData] = useState({
         name: '',
         size: '',
@@ -18,10 +19,11 @@ const BreedSearchForm = () => {
 
     const navigate = useNavigate();
     const [showNotification, setShowNotification] = useState(false);
-    const { setCurrentSearchBreeds } = useDogSearch();
+    // const { favBreeds, setFavBreeds, currentSearchBreeds, setCurrentSearchBreeds } = useDogSearch();
     const { toggleBreedSearchForm } = useLayout();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const breedNameRef = useRef(null);
+    
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -35,6 +37,11 @@ const BreedSearchForm = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [formData.name]);
+
+    useEffect(() => {
+        // Log to see what's actually in myBreeds when it attempts to render
+        console.log("BreedSearchForm myBreeds:", myBreeds);
+    }, [myBreeds]);
 
     const createRadioGroupAttr = (header, name, value) => (
         <Grid item xs={12}>
@@ -80,7 +87,7 @@ const BreedSearchForm = () => {
     const preparePhysicalData = (formData) => {
         if (formData.size && formData.size !== 'not_applicable') {
             const sizeDict = {
-                'small': { min_weight: '0', max_weight_: '10'},
+                'small': { min_weight: '0', max_weight: '10'},
                 'medium': { min_weight: '31', max_weight: '50'},
                 'large': { min_weight: '71', max_weight: '90'},
                 'extra_large': { min_weight: '101', max_weight: '200' }
@@ -95,10 +102,9 @@ const BreedSearchForm = () => {
         const results = [];
         const combine = (index, result) => {
             const key = keys[index];
-            // Check if the value is an array, if not, convert it into an array
+
             const values = Array.isArray(data[key]) ? data[key] : [data[key]];
             values.forEach(value => {
-                // Check if value is an object, and if so, use its properties, otherwise use the value directly
                 if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                     Object.keys(value).forEach(subKey => {
                         const newResult = { ...result, [subKey]: value[subKey] };
@@ -120,7 +126,6 @@ const BreedSearchForm = () => {
         };
 
         combine(0, {});
-        console.log('getAllCombinations results:', results)
         return results;
     };
 
@@ -133,9 +138,10 @@ const BreedSearchForm = () => {
                 const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?name=${encodeURIComponent(formData.name)}`, {
                     headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY },
                 });
-                setCurrentSearchBreeds(response.data);
+                setMyBreeds(response.data);
+                console.log('favBreeds -> with response.data set to this variable:', myBreeds);
                 toggleBreedSearchForm();
-                navigate('/breedsearchview');
+                navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -151,7 +157,7 @@ const BreedSearchForm = () => {
                     const params = new URLSearchParams();
                     for (const [key, value] of Object.entries(combination)) {
                         if (typeof value === 'object' && value !== null) {
-                            // Appending sub-properties directly without 'size' prefix
+        
                             for (const [subKey, subValue] of Object.entries(value)) {
                                 params.append(subKey, subValue);
                             }
@@ -164,15 +170,21 @@ const BreedSearchForm = () => {
                         headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY }
                     });
                     apiResults.push(response.data);
+                    console.log('current run result -> apiResults:', apiResults);
                 }
-                setCurrentSearchBreeds(apiResults.flat());
+                const total = apiResults.flat();
+                console.log('total:', total)
+                setMyBreeds(total);
+                console.log('BSF setMyBreeds -> with total set to this variable:', myBreeds);
                 toggleBreedSearchForm();
-                navigate('/breedsearchview');
+                navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
     };
+
+    
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>

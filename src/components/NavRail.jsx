@@ -12,7 +12,7 @@ import { useLogin } from '../contexts/LoginContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
-    const { isNavOpen, toggleBreedSearchForm, } = useLayout();
+    const { isNavOpen, toggleBreedSearchForm } = useLayout();
     const { loggedIn, logout } = useLogin();
 
     const handleLogout = async () => {

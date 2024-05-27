@@ -14,8 +14,8 @@ import { useLogin } from '../contexts/LoginContext';
 
 
 const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
-    const theme = useTheme();
-    const { isNavOpen, toggleNav } = useLayout();
+    const theme = useTheme();;
+    const { isNavOpen, toggleNav, startFavBreedRail } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
@@ -31,9 +31,10 @@ const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
     const handleLogout = async () => {
         await logout();
         navigate('/login');
-        };
-
+};
+    
     return (
+        <>
         <AppBar position="fixed" ref={appBarRef} sx={{ zIndex: theme.zIndex.drawer + 1, width: '100vw' }}>
             <Toolbar>
                 <IconButton color="inherit" onClick={toggleNav} edge="start">
@@ -41,10 +42,10 @@ const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
                 </IconButton>
                 <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - ${isNavOpen ? 240 : 0}px)` }}>
                     {/* Left Icons */}
-                    <IconButton color="inherit">
+                        <IconButton color="inherit">
                         <AccountBalanceWalletIcon />
                     </IconButton>
-                    <IconButton color="inherit">
+                        <IconButton color="inherit" onClick={startFavBreedRail} edge="false">
                         <PetsIcon />
                     </IconButton>
                 </Box>
@@ -83,7 +84,8 @@ const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
                     </Menu>
                 </Box>
             </Toolbar>
-        </AppBar>
+            </AppBar>
+        </>
     );
 };
 
