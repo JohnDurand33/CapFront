@@ -15,7 +15,7 @@ import { useLogin } from '../contexts/LoginContext';
 
 const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
     const theme = useTheme();;
-    const { isNavOpen, toggleNav, startFavBreedRail } = useLayout();
+    const { isNavOpen, toggleNav, openFavBreedRail } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
                         <IconButton color="inherit">
                         <AccountBalanceWalletIcon />
                     </IconButton>
-                        <IconButton color="inherit" onClick={startFavBreedRail} edge="false">
+                        <IconButton color="inherit" onClick={openFavBreedRail} edge="false">
                         <PetsIcon />
                     </IconButton>
                 </Box>

@@ -1,47 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Droppable, Draggable, DragDropContext } from 'react-beautiful-dnd';
-import axios from 'axios';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import BreedCard from './BreedCard';
+import apiCall from '../utils/apiCall';  // Adjust the import path as necessary
+import { useDogSearch } from '../contexts/DogSearchContext';
 
-const FavBreedsRail = ({ setMyBreeds, yBreeds }) => {
+const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
+    const { userFavBreeds, setUserFavBreeds } = useDogSearch();
+
     useEffect(() => {
-        const fetchDBFavBreeds = async () => {
+        const fetchDBUserFavBreeds = async () => {
             try {
-                const response = await axios.get('/api/fav-breeds');
-                const breeds = response.data.reduce((acc, breed) => {
-                    acc[breed.name] = breed.image_url;
-                    return acc;
-                }, {});
-                setMyBreeds(breeds);
+                const response = await apiCall.get('/fav-breeds');
+                setUserFavBreeds(response.data);  // Directly set the array of objects
             } catch (error) {
                 console.error('Failed to fetch favorite breeds:', error);
             }
         };
-        fetchDBFavBreeds();
-    }, [setMyBreeds]);
+        fetchDBUserFavBreeds();
+    }, [setUserFavBreeds]);
 
-    const handleDrop = (result) => {
+    const handleDrop = async (result) => {
         if (!result.destination) return;
+
         const { source, destination } = result;
-        if (destination.droppableId === "myBreeds") {
-            const newFavBreeds = { ...myBreeds };
-            newFavBreeds[result.draggableId] = currentSearchBreeds[result.draggableId].image_link;
-            delete currentSearchBreeds[result.draggableId];
-            setMyBreeds(newFavBreeds);
+
+        // If the source and destination are the same, return early
+        if (source.droppableId === destination.droppableId) {
+            return;
+        }
+
+        try {
+            // Moving from BreedSearchView to FavBreedsRail
+            if (destination.droppableId === "userFavBreeds") {
+                const draggedBreed = myBreeds[source.index];
+
+                // Remove the breed from the search breeds
+                const updatedSearchBreeds = Array.from(myBreeds);
+                updatedSearchBreeds.splice(source.index, 1);
+                setMyBreeds(updatedSearchBreeds);
+
+                // Add the breed to favorite breeds
+                const updatedFavBreeds = Array.from(userFavBreeds);
+                // Using splice to insert at the specific position where it was dropped
+                updatedFavBreeds.splice(destination.index, 0, draggedBreed);
+                setUserFavBreeds(updatedFavBreeds);
+
+                // Optionally, you can update the backend immediately after the change
+                await apiCall.post('/fav-breeds', { fav_breeds: updatedFavBreeds });
+            }
+        } catch (error) {
+            console.error('Failed to update favorite breeds:', error);
         }
     };
 
     return (
         <DragDropContext onDragEnd={handleDrop}>
-            <Droppable droppableId="favBreeds">
+            <Droppable droppableId="userFavBreeds">
                 {(provided) => (
                     <Box {...provided.droppableProps} ref={provided.innerRef}>
-                        {Object.keys(favBreeds).map((key, index) => (
-                            <Draggable key={key} draggableId={key} index={index}>
+                        {userFavBreeds.map((breed, index) => (
+                            <Draggable key={breed.name} draggableId={breed.name} index={index}>
                                 {(provided) => (
                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                        <BreedCard dog={{ name: key, image_link: favBreeds[key] }} />
+                                        <BreedCard dog={{ name: breed.name, image_link: breed.img_url }} />
                                     </div>
                                 )}
                             </Draggable>
@@ -50,7 +72,19 @@ const FavBreedsRail = ({ setMyBreeds, yBreeds }) => {
                     </Box>
                 )}
             </Droppable>
-            <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
+            <Button
+                variant="contained"
+                color="primary"
+                style={{ marginTop: '10px' }}
+                onClick={async () => {
+                    try {
+                        await apiCall.post('/fav-breeds', { fav_breeds: userFavBreeds });
+                        console.log('Favorite breeds updated');
+                    } catch (error) {
+                        console.error('Failed to update favorite breeds:', error);
+                    }
+                }}
+            >
                 Find My Dog!
             </Button>
         </DragDropContext>

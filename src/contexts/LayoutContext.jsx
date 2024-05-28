@@ -7,11 +7,11 @@ export const useLayout = () => useContext(LayoutContext);
 export const LayoutProvider = ({ children }) => {
     const [isNavOpen, setNavOpen] = useState(true);
     const [isBreedSearchFormOpen, setBreedSearchFormOpen] = useState(false);
-    const [isFavBreedRailOpen, setIsFavBreedRailOpen] = useState(false);
+    const [isFavBreedRailOpen, setFavBreedRailOpen] = useState(false);
 
-    const startFavBreedRail = () => {
-        setIsBreedsRailOpen(true);
+    const openFavBreedRail = () => {
         setNavOpen(false);
+        setFavBreedRailOpen(true);
     };
     const toggleNav = () => { setNavOpen(!isNavOpen) };
     const toggleBreedSearchForm = () => {
@@ -19,7 +19,7 @@ export const LayoutProvider = ({ children }) => {
     };
 
     return (
-        <LayoutContext.Provider value={{ isNavOpen, setNavOpen, toggleNav, isBreedSearchFormOpen, setBreedSearchFormOpen, toggleBreedSearchForm, startFavBreedRail }}>
+        <LayoutContext.Provider value={{ isNavOpen, setNavOpen, toggleNav, isBreedSearchFormOpen, setBreedSearchFormOpen, toggleBreedSearchForm, openFavBreedRail }}>
             {children}
         </LayoutContext.Provider>
     );
