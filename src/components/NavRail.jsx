@@ -12,7 +12,7 @@ import { useLogin } from '../contexts/LoginContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
-    const { isNavOpen, toggleBreedSearchForm } = useLayout();
+    const { isNavOpen, toggleBreedSearchForm, toggleFavBreedRail } = useLayout();
     const { loggedIn, logout } = useLogin();
 
     const handleLogout = async () => {
@@ -25,15 +25,16 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                 variant="persistent"
                 open={isNavOpen}
                 anchor="left"
-                transition="margin-left 1.0s ease-in-out"
+                transition="margin-left 0.3s ease-in-out"
                 sx={{
                     flexShrink: 0,
-                    width: isNavOpen ? '240px' : 0,
+                    width: '240px',
                     transition: 'margin-left 1.0s ease-in-out',
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         mt: `${appBarHeight}px`,
                         zIndex: theme.zIndex.drawer,
+                        width: '240px',
                         transition: 'margin-left 0.2s ease-in-out',
                     }
                 }}
@@ -41,7 +42,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                 <List>
                     {/* New Search */}
                     <ListItemButton onClick={toggleBreedSearchForm}>
-                        <ListItemIcon><Link to="#"><SearchIcon /></Link></ListItemIcon>
+                        <ListItemIcon><SearchIcon /></ListItemIcon>
                         <ListItemText primary="New Search" />
                     </ListItemButton>
 

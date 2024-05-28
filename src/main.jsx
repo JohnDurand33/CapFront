@@ -1,25 +1,25 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import { LoginProvider } from './contexts/LoginContext.jsx'
-import { LayoutProvider } from './contexts/LayoutContext.jsx'
-import { BrowserRouter } from 'react-router-dom'
-import { DogSearchProvider } from './contexts/DogSearchContext.jsx';
-import './styles/index.css'
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './App';
+import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
+import { getTheme } from './styles/theme';
 
+const Main = () => {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [mode, setMode] = React.useState(prefersDarkMode ? 'dark' : 'light');
+    const theme = React.useMemo(() => getTheme(mode), [mode]);
 
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router>
+                <App />
+            </Router>
+        </ThemeProvider>
+    );
+};
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <React.StrictMode>
-        <DogSearchProvider>
-            <BrowserRouter>
-                <LoginProvider>
-                    <LayoutProvider>
-                        <App />
-                </LayoutProvider>
-            </LoginProvider>
-            </BrowserRouter>
-        </DogSearchProvider>
-    </React.StrictMode>
-)
+const rootElement = document.getElementById('root');
+const root = createRoot(rootElement);
+root.render(<Main />);

@@ -4,9 +4,7 @@ import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel,
 import axios from 'axios';
 import { useLayout } from '../contexts/LayoutContext';
 
-const BreedSearchForm = ({myBreeds, setMyBreeds}) => {
-    console.log('BreedSearchForm myBreeds:', myBreeds);
-    console.log('BreedSearchForm setMyBreeds:', setMyBreeds);
+const BreedSearchForm = ({ myBreeds, setMyBreeds }) => {
     const [formData, setFormData] = useState({
         name: '',
         size: '',
@@ -19,12 +17,10 @@ const BreedSearchForm = ({myBreeds, setMyBreeds}) => {
 
     const navigate = useNavigate();
     const [showNotification, setShowNotification] = useState(false);
-    // const { favBreeds, setFavBreeds, currentSearchBreeds, setCurrentSearchBreeds } = useDogSearch();
-    const { toggleBreedSearchForm } = useLayout();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const breedNameRef = useRef(null);
+    const { toggleBreedSearchForm, toggleFavBreedRail } = useLayout();
     
-
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (breedNameRef.current && !breedNameRef.current.contains(event.target)) {
@@ -140,6 +136,7 @@ const BreedSearchForm = ({myBreeds, setMyBreeds}) => {
                 });
                 setMyBreeds(response.data);
                 console.log('favBreeds -> with response.data set to this variable:', myBreeds);
+                toggleFavBreedRail();
                 toggleBreedSearchForm();
                 navigate('/breedview');
             } catch (error) {
@@ -176,6 +173,7 @@ const BreedSearchForm = ({myBreeds, setMyBreeds}) => {
                 console.log('total:', total)
                 setMyBreeds(total);
                 console.log('BSF setMyBreeds -> with total set to this variable:', myBreeds);
+                toggleFavBreedRail();
                 toggleBreedSearchForm();
                 navigate('/breedview');
             } catch (error) {

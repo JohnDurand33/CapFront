@@ -8,13 +8,14 @@ export const useLogin = () => useContext(LoginContext);
 
 export const LoginProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [token, setToken] = useState(null);
     const navigate = useNavigate();
 
     const login = async (email, password) => {
         try {
             const response = await axios.post('http://localhost:5000/auth/login', { email, password });
             if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
+                setToken(response.data.token);
                 setLoggedIn(true);
                 return true;
             }
@@ -25,7 +26,6 @@ export const LoginProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        const token = localStorage.getItem('token');
         if (token) {
             try {
                 const response = await axios.post('http://localhost:5000/auth/logout', '', {
@@ -35,23 +35,24 @@ export const LoginProvider = ({ children }) => {
                 });
 
                 if (response.status === 200) {
-                    localStorage.removeItem('token');
+                    setToken(null);
                     setLoggedIn(false);
-                    navigate('/login'); // Redirect to login after logout
+                    navigate('/login');
                 }
             } catch (error) {
                 console.error('Issue with token / localStorage', error);
+                setToken(null);
                 setLoggedIn(false);
                 navigate('/login');
             }
         } else {
+            setToken(null);
             setLoggedIn(false);
-            navigate('/login'); // Redirect to login if no token is found
+            navigate('/login');
         }
     };
 
     const checkToken = async () => {
-        const token = localStorage.getItem('token');
         if (token) {
             try {
                 const response = await axios.get('http://localhost:5000/auth/protected', {
@@ -62,25 +63,23 @@ export const LoginProvider = ({ children }) => {
                 if (response.status === 200) {
                     return true;
                 } else {
-                    throwNewError('Token not valid')
-                    
+                    throw new Error('Token not valid');
                 }
             } catch (error) {
                 console.error('Token validation failed:', error);
-                localStorage.removeItem('token');
+                setToken(null);
                 navigate('/login');
             }
-        }
-        else {
+        } else {
             navigate('/login');
         }
-};
+    };
 
     return (
-        <LoginContext.Provider value={{ loggedIn, setLoggedIn, login, logout, checkToken }}>
+        <LoginContext.Provider value={{ loggedIn, setLoggedIn, login, logout, checkToken, token }}>
             {children}
         </LoginContext.Provider>
-    )
+    );
 };
 
 export default LoginContext;

@@ -1,50 +1,41 @@
-import { useEffect} from 'react';
-import { Box, Grid, Typography, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
+import React from 'react';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Box, Grid, Typography } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
-import { useTheme } from '@emotion/react';
-import { useLayout } from '../contexts/LayoutContext';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { Draggable } from 'react-beautiful-dnd';
 import BreedCard from './BreedCard';
+import { useLayout } from '../contexts/LayoutContext';
 
-
-const BreedSearchView = () => {
-    const {startFavBreedRail} = useLayout();
-    const theme = useTheme();
-    const { myBreeds } = useOutletContext();
-
-    useEffect(() => {
-        // Log to see what's actually in myBreeds when it attempts to render
-        startFavBreedRail;
-        console.log("BreedSearchView myBreeds:", myBreeds);
-    }, [startFavBreedRail]);
-
+const BreedSearchView = ({ myBreeds = [] }) => {
+    console.log('myBreeds', myBreeds);
+    const {toggleFavBreedRailOpen } = useLayout();
+    const { userFavBreeds, setUserFavBreeds } = useDogSearch();
 
     return (
-        <Box sx={{ p: 3 }}>
-            <Typography variant="h4" gutterBottom>
-                Search Results
-            </Typography>
-            <Grid container spacing={2}>
-                {myBreeds.map((dog, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card sx={{ backgroundColor: theme.palette.primary.main }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    image={dog.image_link}
-                                    alt={dog.name}
-                                    sx={{ height: "140", width: '100%', aspectRatio: `3/2` }}
-                                />
-                                <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Typography sx={{ justifySelf: "center" }} variant="h6">{dog.name}</Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+        <>
+        <Droppable droppableId="breedSearch">
+            {(provided) => (
+                <Box {...provided.droppableProps} ref={provided.innerRef} sx={{ p: 3 }}>
+                    <Typography variant="h4" gutterBottom>
+                        Search Results
+                    </Typography>
+                    <Grid container spacing={2}>
+                        {myBreeds.map((dog, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={dog.id}>
+                                <Draggable draggableId={dog.id} index={index}>
+                                    {(provided) => (
+                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <BreedCard dog={dog} />
+                                        </div>
+                                    )}
+                                </Draggable>
+                            </Grid>
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
-        </Box>
+                    {provided.placeholder}
+                </Box>
+            )}
+            </Droppable>
+        </>
     );
 };
 

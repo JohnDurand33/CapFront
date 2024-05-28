@@ -8,6 +8,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ThemeToggleButton from './ThemeToggleButton';
+import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -15,7 +16,7 @@ import { useLogin } from '../contexts/LoginContext';
 
 const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
     const theme = useTheme();;
-    const { isNavOpen, toggleNav, openFavBreedRail } = useLayout();
+    const { isNavOpen, toggleNav, isFavBreedsRailOpen, toggleFavBreedRail, toggleBreedSearchForm } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
@@ -40,13 +41,19 @@ const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
                 <IconButton color="inherit" onClick={toggleNav} edge="start">
                     <MenuIcon />
                 </IconButton>
-                <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - ${isNavOpen ? 240 : 0}px)` }}>
+                <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - ${isNavOpen  || isFavBreedsRailOpen ? 240 : 0}px)` }}>
                     {/* Left Icons */}
                         <IconButton color="inherit">
                         <AccountBalanceWalletIcon />
                     </IconButton>
-                        <IconButton color="inherit" onClick={openFavBreedRail} edge="false">
+                        <IconButton color="inherit" onClick={toggleFavBreedRail} >
                         <PetsIcon />
+                    </IconButton>
+                        <IconButton
+                            color="inherit"
+                            onClick={toggleBreedSearchForm}
+                        >
+                        <SearchIcon />
                     </IconButton>
                 </Box>
 
