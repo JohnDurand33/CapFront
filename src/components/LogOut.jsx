@@ -1,10 +1,9 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const LogOut = () => {
-    const { setLoggedIn, logout } = useLogin();
+    const { logout } = useLogin();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -16,7 +15,7 @@ const LogOut = () => {
         handleLogout();
     }, []);
 
-    return null; 
+    return null;
 };
 
 export default LogOut;

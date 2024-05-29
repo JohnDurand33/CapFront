@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Button } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 
-const FindMyDogButton = () => {
+const NoThankYouArea = () => {
     const { token } = useDogSearch();
 
     const saveFavBreedsToBackend = async (favBreeds) => {
@@ -27,4 +27,4 @@ const FindMyDogButton = () => {
     )
 };
 
-export default FindMyDogButton;
+export default NoThankYouArea;

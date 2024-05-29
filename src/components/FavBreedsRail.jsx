@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
-import { Droppable, Draggable, DragDropContext } from 'react-beautiful-dnd';
 import { Box, Button, Drawer, Typography } from '@mui/material';
-import BreedCard from './BreedCard';
 import { useDogSearch } from '../contexts/DogSearchContext';
-import { useTheme } from '@mui/material/styles';
 import { useLayout } from '../contexts/LayoutContext';
+import { useTheme } from '@mui/material/styles';
 import { useLogin } from '../contexts/LoginContext';
+import { useNavigate } from 'react-router-dom';
+import DroppableArea from './DroppableArea';
+import DragBreedCard from './DragBreedCard';
 
-const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
-    const theme = useTheme();
+const FavBreedsRail = () => {
     const { isFavBreedRailOpen, appBarHeight } = useLayout();
-    const { userFavBreeds, setUserFavBreeds } = useDogSearch();
+    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds } = useDogSearch();
     const { loggedIn, token } = useLogin();
+    const theme = useTheme();
+    const navigate = useNavigate('/dogsearch');
 
     useEffect(() => {
-        console.log('FavBreedsRail: loggedIn status, token:', loggedIn, token);
         if (loggedIn) {
             const fetchDBUserFavBreeds = async () => {
                 try {
@@ -30,7 +31,6 @@ const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
                     }
                     const data = await response.json();
                     setUserFavBreeds(data);
-                    console.log('Favorite breeds fetched:', data);
                 } catch (error) {
                     console.error('Failed to fetch favorite breeds:', error);
                 }
@@ -39,37 +39,33 @@ const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
         }
     }, [loggedIn, setUserFavBreeds, token]);
 
-    const handleDrop = async (result) => {
-        if (!result.destination) return;
+    const handleDrop = (item) => {
+        console.log('Dropped item:', item);
+        const draggedBreed = myBreeds.find(breed => breed.name === item.dog.name);
 
-        const { source, destination } = result;
-
-        if (source.droppableId === destination.droppableId) {
+        if (!draggedBreed) {
+            console.warn('Breed not found in myBreeds:', item.dog.name);
             return;
         }
+        if (draggedBreed) {
+            const updatedSearchBreeds = myBreeds.filter(breed => breed.name !== item.dog.name);
+            setMyBreeds(updatedSearchBreeds);
 
-        try {
-            if (destination.droppableId === "userFavBreeds") {
-                const draggedBreed = myBreeds[source.index];
-                const updatedSearchBreeds = Array.from(myBreeds);
-                updatedSearchBreeds.splice(source.index, 1);
-                setMyBreeds(updatedSearchBreeds);
+            const updatedFavBreeds = [...userFavBreeds, {
+                name: draggedBreed.name,
+                img_url: draggedBreed.image_link,
+            }];
+            setUserFavBreeds(updatedFavBreeds);
 
-                const updatedFavBreeds = Array.from(userFavBreeds);
-                updatedFavBreeds.splice(destination.index, 0, draggedBreed);
-                setUserFavBreeds(updatedFavBreeds);
-
-                await fetch('http://localhost:5000/auth/updatebreeds', {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ fav_breeds: updatedFavBreeds }),
-                });
-            }
-        } catch (error) {
-            console.error('Failed to update favorite breeds:', error);
+            fetch('http://localhost:5000/auth/updatebreeds', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fav_breeds: updatedFavBreeds }),
+                
+            }).catch(error => console.error('Failed to update favorite breeds:', error));
         }
     };
 
@@ -86,31 +82,36 @@ const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
                     mt: `${appBarHeight}px`,
                     zIndex: theme.zIndex.drawer,
                     width: '360px',
-                }
+                },
             }}
         >
             <Box sx={{ width: 300, padding: 2 }}>
                 <Typography variant="h6" gutterBottom>
                     Favorite Breeds
                 </Typography>
-                <DragDropContext onDragEnd={handleDrop}>
-                    <Droppable droppableId="userFavBreeds">
-                        {(provided) => (
-                            <Box {...provided.droppableProps} ref={provided.innerRef}>
-                                {userFavBreeds.map((breed, index) => (
-                                    <Draggable key={breed.name} draggableId={breed.name} index={index}>
-                                        {(provided) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <BreedCard dog={{ name: breed.name, image_link: breed.img_url }} />
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </Box>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                <DroppableArea id="userFavBreeds" onDrop={handleDrop}>
+                    {userFavBreeds.length === 0 ? (
+                        <Box
+                            sx={{
+                                border: '2px dashed grey',
+                                borderRadius: '4px',
+                                padding: '16px',
+                                textAlign: 'center',
+                            }}
+                        >
+                            Drag breeds here to add to your favorites
+                        </Box>
+                    ) : (
+                        userFavBreeds.map((breed, index) => (
+                            <DragBreedCard
+                                key={breed.name}
+                                id={`fav-${breed.name}`}
+                                index={index}
+                                dog={{ name: breed.name, image_link: breed.img_url }}
+                            />
+                        ))
+                    )}
+                </DroppableArea>
                 <Button
                     variant="contained"
                     color="primary"
@@ -126,9 +127,13 @@ const FavBreedsRail = ({ setMyBreeds, myBreeds }) => {
                                 body: JSON.stringify({ fav_breeds: userFavBreeds }),
                             });
                             console.log('Favorite breeds updated');
+                            setUserFavBreeds([]);
+
                         } catch (error) {
                             console.error('Failed to update favorite breeds:', error);
-                        }
+                        } 
+
+
                     }}
                 >
                     Find My Dog!

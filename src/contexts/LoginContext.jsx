@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// Create the context
 const LoginContext = createContext();
 
 export const useLogin = () => useContext(LoginContext);
@@ -9,15 +8,40 @@ export const useLogin = () => useContext(LoginContext);
 export const LoginProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
-    const navigate = useNavigate();
+    const [zipCode, setZipCode] = useState(null);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const storedZipCode = localStorage.getItem('zip_code');
+        if (storedToken) {
+            setToken(storedToken);
+            setLoggedIn(true);
+        }
+        if (storedZipCode) {
+            setZipCode(storedZipCode);
+        }
+    }, []);
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post('http://localhost:5000/auth/login', { email, password });
-            if (response.status === 200) {
-                setToken(response.data.token);
+            const response = await fetch('http://localhost:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('zip_code', data.zip_code);
+                setToken(data.token);
+                setZipCode(data.zip_code);
                 setLoggedIn(true);
                 return true;
+            } else {
+                return false;
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -25,61 +49,21 @@ export const LoginProvider = ({ children }) => {
         }
     };
 
-    const logout = async () => {
-        if (token) {
-            try {
-                const response = await axios.post('http://localhost:5000/auth/logout', '', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-
-                if (response.status === 200) {
-                    setToken(null);
-                    setLoggedIn(false);
-                    navigate('/login');
-                }
-            } catch (error) {
-                console.error('Issue with token / localStorage', error);
-                setToken(null);
-                setLoggedIn(false);
-                navigate('/login');
-            }
-        } else {
-            setToken(null);
-            setLoggedIn(false);
-            navigate('/login');
-        }
+    const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('zip_code');
+        setToken(null);
+        setZipCode(null);
+        setLoggedIn(false);
     };
 
-    const checkToken = async () => {
-        if (token) {
-            try {
-                const response = await axios.get('http://localhost:5000/auth/protected', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                if (response.status === 200) {
-                    return true;
-                } else {
-                    throw new Error('Token not valid');
-                }
-            } catch (error) {
-                console.error('Token validation failed:', error);
-                setToken(null);
-                navigate('/login');
-            }
-        } else {
-            navigate('/login');
-        }
+    const getZipCode = () => {
+        return zipCode;
     };
 
     return (
-        <LoginContext.Provider value={{ loggedIn, setLoggedIn, login, logout, checkToken, token }}>
+        <LoginContext.Provider value={{ loggedIn, token, login, logout, getZipCode, setLoggedIn }}>
             {children}
         </LoginContext.Provider>
     );
 };
-
-export default LoginContext;

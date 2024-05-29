@@ -2,9 +2,11 @@ import { useTheme } from '@emotion/react';
 import { Box, Drawer, Typography } from '@mui/material';
 import React from 'react';
 import { useLayout } from '../contexts/LayoutContext';
+import { useDogSearch } from '../contexts/DogSearchContext';
 import BreedSearchForm from './BreedSearchForm';
 
-const BreedSearchDrawer = ({appBarHeight, myBreeds, setMyBreeds}) => {
+const BreedSearchDrawer = ({ appBarHeight }) => {
+    const { myBreeds, setMyBreeds } = useDogSearch();
     const { isBreedSearchFormOpen, toggleBreedSearchForm } = useLayout();
     const theme = useTheme();
 
@@ -25,7 +27,7 @@ const BreedSearchDrawer = ({appBarHeight, myBreeds, setMyBreeds}) => {
                 <Typography variant="h6" gutterBottom>
                     Breed Search
                 </Typography>
-                <BreedSearchForm myBreeds={myBreeds} setMyBreeds={setMyBreeds} />
+                <BreedSearchForm />
             </Box>
         </Drawer>
     );

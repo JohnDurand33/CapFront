@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { LoginProvider } from './contexts/LoginContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { DogSearchProvider } from './contexts/DogSearchContext';
-import DragAndDropContextComponent from './contexts/DragAndDropContext';
+import DndContext from './contexts/DndContext';
 import BreedSearchView from './components/BreedSearchView';
-import BreedSearchForm from './components/BreedSearchForm';
 import Home from './components/Home';
 import Layout from './components/Layout';
 import LogIn from './components/LogIn';
@@ -14,25 +13,24 @@ import useAppBarHeight from './hooks/useAppBarHeight';
 
 const App = () => {
     const [appBarHeight, appBarRef] = useAppBarHeight();
-    const [myBreeds, setMyBreeds] = useState([]);
 
     return (
-        <LoginProvider>
-            <LayoutProvider>
-                <DogSearchProvider>
-                    <DragAndDropContextComponent>
+        <DogSearchProvider>
+            <LoginProvider>
+                <LayoutProvider>
+                    <DndContext>
                         <Routes>
-                            <Route path="/*" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} myBreeds={myBreeds} setMyBreeds={setMyBreeds} />}>
+                            <Route path="/*" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} />}>
                                 <Route index element={<Home />} />
                                 <Route path="signup" element={<SignUpForm />} />
                                 <Route path="login" element={<LogIn />} />
-                                <Route path="breedview" element={<BreedSearchView myBreeds={myBreeds} setMyBreeds={setMyBreeds} />} />
+                                <Route path="breedview" element={<BreedSearchView/>} />
                             </Route>
                         </Routes>
-                    </DragAndDropContextComponent>
-                </DogSearchProvider>
-            </LayoutProvider>
-        </LoginProvider>
+                    </DndContext>
+                </LayoutProvider>
+            </LoginProvider>
+        </DogSearchProvider >
     );
 };
 

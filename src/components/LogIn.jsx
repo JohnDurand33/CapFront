@@ -1,30 +1,28 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { TextField, Button, Box, Typography, useTheme } from '@mui/material';
+import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
-
 const Login = () => {
-    const { setLoggedIn, login } = useLogin();
-    const { isNavOpen } = useLayout();
+    const { login, setLoggedIn } = useLogin();
+    const { isNavOpen, setFavBreedRailOpen } = useLayout();
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
+        setFavBreedRailOpen(false);
         if (location.pathname === '/login') {
-            // Should run only if /login route is valid
             setLoggedIn(false);
             localStorage.removeItem('token');
         }
-    }, [location.pathname]);
+    }, [location.pathname, setLoggedIn]);
 
     const initialValues = {
         email: '',
-        password: ''
+        password: '',
     };
 
     const validationSchema = Yup.object({
@@ -37,7 +35,7 @@ const Login = () => {
         if (success) {
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
-            navigate('/Home');
+            navigate('/home');
         } else {
             setStatus({ success: null, error: 'Login failed. Please try again.' });
         }
@@ -46,60 +44,58 @@ const Login = () => {
 
     return (
         <>
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-        >
-            {({ isSubmitting, status }) => (
-                    <Form >
-                        <Box >
-                        <Typography variant="h4" gutterBottom>Log In</Typography>
-                        {status?.success && <Typography color="success">{status.success}</Typography>}
-                        {status?.error && <Typography color="error">{status.error}</Typography>}
-                        <Box mb={2}>
-                            <Field
-                                as={TextField}
-                                label="Email"
-                                name="email"
-                                type="email"
-                                fullWidth
-                                required
-                                helperText={<ErrorMessage name="email" />}
-                                autoComplete="email"
-                            />
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                {({ isSubmitting, status }) => (
+                    <Form>
+                        <Box>
+                            <Typography variant="h4" gutterBottom>Log In</Typography>
+                            {status?.success && <Typography color="success">{status.success}</Typography>}
+                            {status?.error && <Typography color="error">{status.error}</Typography>}
+                            <Box mb={2}>
+                                <Field
+                                    as={TextField}
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    fullWidth
+                                    required
+                                    helperText={<ErrorMessage name="email" />}
+                                    autoComplete="email"
+                                />
+                            </Box>
+                            <Box mb={2}>
+                                <Field
+                                    as={TextField}
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    fullWidth
+                                    required
+                                    helperText={<ErrorMessage name="password" />}
+                                    autoComplete="new-password"
+                                />
+                            </Box>
+                            <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
+                                Log In
+                            </Button>
                         </Box>
-                        <Box mb={2}>
-                            <Field
-                                as={TextField}
-                                label="Password"
-                                name="password"
-                                type="password"
-                                fullWidth
-                                required
-                                helperText={<ErrorMessage name="password" />}
-                                autoComplete="new-password"
-                            />
-                        </Box>
-                        <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
-                            Log In
-                        </Button>
-                    </Box>
-                </Form>
-            )}
+                    </Form>
+                )}
             </Formik>
             <Box>
-                <Typography
-                    pt='10px'
-                    sx={{ml:isNavOpen ? '240px' : 3}}
-                    fontSize={'12px'}>Not a member?{' '}
-                        <Link
-                        to="/signup"
-                        style={{ color: 'blue', textDecoration: 'underline' }}
-                        >Click here to Sign Up!</Link>
+                <Typography pt="10px" sx={{ ml: isNavOpen ? '240px' : 3 }} fontSize="12px">
+                    Not a member?{' '}
+                    <Link to="/signup" style={{ color: 'blue', textDecoration: 'underline' }}>
+                        Click here to Sign Up!
+                    </Link>
                 </Typography>
             </Box>
-            </>);
-}
+        </>
+    );
+};
 
 export default Login;

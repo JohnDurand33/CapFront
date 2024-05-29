@@ -3,8 +3,9 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import { useLayout } from '../contexts/LayoutContext';
+import { useDogSearch } from '../contexts/DogSearchContext';
 
-const BreedSearchForm = ({ myBreeds, setMyBreeds }) => {
+const BreedSearchForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         size: '',
@@ -20,6 +21,7 @@ const BreedSearchForm = ({ myBreeds, setMyBreeds }) => {
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const breedNameRef = useRef(null);
     const { toggleBreedSearchForm, toggleFavBreedRail } = useLayout();
+    const { myBreeds, setMyBreeds } = useDogSearch();   
     
     useEffect(() => {
         const handleClickOutside = (event) => {
