@@ -1,9 +1,8 @@
-import React from 'react';
 import { Grid } from '@mui/material';
+import React from 'react';
 import { useDogSearch } from '../contexts/DogSearchContext';
-import DraggableBreedCard from './DragBreedCard'; 
 import DroppableArea from './DroppableArea';
-import DragBreedCard from './DragBreedCard';
+import DraggableBreedCard from './DragBreedCard';
 
 const BreedSearchView = () => {
     const { myBreeds } = useDogSearch();

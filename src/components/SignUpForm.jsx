@@ -8,26 +8,33 @@ import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-    const { setLoggedIn } = useLogin();
+    const { loggedIn, setLoggedIn, setToken } = useLogin();
     const { isNavOpen } = useLayout();
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoggedIn(false);
-        localStorage.removeItem('token');
+        if (!loggedIn)
+            setLoggedIn(false);
+            setToken(null);
     }, [setLoggedIn]);
 
     const initialValues = {
         email: '',
         password: '',
         verifyPassword: '',
+        state: '',
         zipCode: '',
     };
+
+    const stateAbbreviations = [
+        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    ];
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Required'),
         password: Yup.string().min(8, 'Password must be at least 8 characters').required('Required'),
         verifyPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
+        state: Yup.string().oneOf(stateAbbreviations, 'Invalid state abbreviation').required('Required'),
         zipCode: Yup.string().required('Required'),
     });
 
@@ -36,6 +43,7 @@ const SignUpForm = () => {
             const response = await axios.post('http://localhost:5000/auth/signup', {
                 email: values.email,
                 password: values.password,
+                state: values.state,
                 zip_code: values.zipCode,
             });
             setStatus({ success: 'Sign up successful! Please log in.', error: null });
@@ -95,6 +103,18 @@ const SignUpForm = () => {
                                     required
                                     helperText={<ErrorMessage name="verifyPassword" />}
                                     autoComplete="new-password"
+                                />
+                            </Box>
+                            <Box mb={2}>
+                                <Field
+                                    as={TextField}
+                                    label="State Abbreviation"
+                                    name="state"
+                                    type="text"
+                                    fullWidth
+                                    required
+                                    helperText={<ErrorMessage name="state" />}
+                                    autoComplete="state-abbreviation"
                                 />
                             </Box>
                             <Box mb={2}>

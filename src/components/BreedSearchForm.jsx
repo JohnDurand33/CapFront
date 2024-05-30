@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { TextField, Button, Grid, Box, Typography, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, FormHelperText } from '@mui/material';
+import { Box, Button, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import { useLayout } from '../contexts/LayoutContext';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import { useLayout } from '../contexts/LayoutContext';
 
 const BreedSearchForm = () => {
     const [formData, setFormData] = useState({

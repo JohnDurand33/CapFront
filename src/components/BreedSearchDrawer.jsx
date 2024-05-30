@@ -1,8 +1,8 @@
 import { useTheme } from '@emotion/react';
 import { Box, Drawer, Typography } from '@mui/material';
 import React from 'react';
-import { useLayout } from '../contexts/LayoutContext';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchForm from './BreedSearchForm';
 
 const BreedSearchDrawer = ({ appBarHeight }) => {

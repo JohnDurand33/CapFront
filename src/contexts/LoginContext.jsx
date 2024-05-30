@@ -9,18 +9,7 @@ export const LoginProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
     const [zipCode, setZipCode] = useState(null);
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        const storedZipCode = localStorage.getItem('zip_code');
-        if (storedToken) {
-            setToken(storedToken);
-            setLoggedIn(true);
-        }
-        if (storedZipCode) {
-            setZipCode(storedZipCode);
-        }
-    }, []);
+    const [state, setState] = useState(null);
 
     const login = async (email, password) => {
         try {
@@ -34,14 +23,12 @@ export const LoginProvider = ({ children }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('zip_code', data.zip_code);
                 setToken(data.token);
                 setZipCode(data.zip_code);
+                setState(data.state);
                 setLoggedIn(true);
                 return true;
-            } else {
-                return false;
+
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -57,12 +44,8 @@ export const LoginProvider = ({ children }) => {
         setLoggedIn(false);
     };
 
-    const getZipCode = () => {
-        return zipCode;
-    };
-
     return (
-        <LoginContext.Provider value={{ loggedIn, token, login, logout, getZipCode, setLoggedIn }}>
+        <LoginContext.Provider value={{ loggedIn, token, login, logout, setToken, setState, setZipCode, setLoggedIn }}>
             {children}
         </LoginContext.Provider>
     );
