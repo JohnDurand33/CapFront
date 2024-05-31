@@ -12,8 +12,15 @@ import { useLogin } from '../contexts/LoginContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
-    const { isNavOpen, toggleBreedSearchForm, toggleFavBreedRail } = useLayout();
+    const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen } = useLayout();
     const { loggedIn, logout } = useLogin();
+
+    const handleNewSearchRequest = () => {
+        console.log('New Search Requested');
+        setNavOpen(false)
+        setBreedSearchFormOpen(true);
+        setFavBreedRailOpen(true);
+    };
 
     const handleLogout = async () => {
         await logout();
@@ -41,7 +48,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
             >
                 <List>
                     {/* New Search */}
-                    <ListItemButton onClick={toggleBreedSearchForm}>
+                    <ListItemButton onClick={handleNewSearchRequest}>
                         <ListItemIcon><SearchIcon /></ListItemIcon>
                         <ListItemText primary="New Search" />
                     </ListItemButton>

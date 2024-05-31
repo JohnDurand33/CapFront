@@ -1,25 +1,31 @@
-import React from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { getTheme } from './styles/theme';
 import App from './App';
 import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
-import { getTheme } from './styles/theme';
 
 const Main = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [mode, setMode] = React.useState(prefersDarkMode ? 'dark' : 'light');
-    const theme = React.useMemo(() => getTheme(mode), [mode]);
+    const [mode, setMode] = useState(prefersDarkMode ? 'dark' : 'light');
+
+    const theme = useMemo(() => getTheme(mode), [mode]);
+
+    const toggleMode = () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    };
+
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Router>
-                <App />
+                <App mode={mode} toggleMode={toggleMode} />
             </Router>
         </ThemeProvider>
     );
 };
 
-const rootElement = document.getElementById('root');
-const root = createRoot(rootElement);
-root.render(<Main />);
+createRoot(document.getElementById('root')).render(<Main />);
+
+

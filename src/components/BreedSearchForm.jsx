@@ -20,7 +20,7 @@ const BreedSearchForm = () => {
     const [showNotification, setShowNotification] = useState(false);
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const breedNameRef = useRef(null);
-    const { toggleBreedSearchForm, toggleFavBreedRail } = useLayout();
+    const { setBreedSearchFormOpen, setFavBreedRailOpen, toggleFavBreedRail } = useLayout();
     const { myBreeds, setMyBreeds } = useDogSearch();   
     
     useEffect(() => {
@@ -136,10 +136,11 @@ const BreedSearchForm = () => {
                 const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?name=${encodeURIComponent(formData.name)}`, {
                     headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY },
                 });
-                setMyBreeds(response.data);
+                const total = response.data;
+                setMyBreeds(total);
                 console.log('favBreeds -> with response.data set to this variable:', myBreeds);
                 toggleFavBreedRail();
-                toggleBreedSearchForm();
+                setBreedSearchFormOpen(false);
                 navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -172,11 +173,10 @@ const BreedSearchForm = () => {
                     console.log('current run result -> apiResults:', apiResults);
                 }
                 const total = apiResults.flat();
-                console.log('total:', total)
                 setMyBreeds(total);
-                console.log('BSF setMyBreeds -> with total set to this variable:', myBreeds);
+                console.log('favBreeds -> with response.data set to this variable:', myBreeds);
                 toggleFavBreedRail();
-                toggleBreedSearchForm();
+                setBreedSearchFormOpen(false);
                 navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);

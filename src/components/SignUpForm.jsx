@@ -46,6 +46,7 @@ const SignUpForm = () => {
                 state: values.state,
                 zip_code: values.zipCode,
             });
+            console.log('Sign Up Successful:', response.data);
             setStatus({ success: 'Sign up successful! Please log in.', error: null });
             setErrors({});
             navigate('/login');

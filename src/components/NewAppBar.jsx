@@ -9,17 +9,17 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ThemeToggleButton from './ThemeToggleButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { useTheme } from '@mui/material/styles';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
+import { useTheme } from '@mui/material';
 
 
-const NewAppBar = ({ toggleMode, mode, appBarRef }) => {
-    const theme = useTheme();;
+const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
     const { isNavOpen, toggleNav, isFavBreedsRailOpen, toggleFavBreedRail, toggleBreedSearchForm } = useLayout();
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);

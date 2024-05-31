@@ -1,8 +1,10 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
+import { useTheme } from '@emotion/react';
 import BreedCard from './BreedCard';
 
 const DragBreedCard = ({ id, dog }) => {
+    const theme = useTheme();
     const [{ isDragging }, drag] = useDrag({
         type: 'breed',
         item: { id, dog },
@@ -19,7 +21,8 @@ const DragBreedCard = ({ id, dog }) => {
                 cursor: 'move',
             }}
         >
-            <BreedCard dog={dog} />
+            <BreedCard dog={dog}
+                sx={{ backgroundColor:theme.palette.secondary.main }} />
         </div>
     );
 };

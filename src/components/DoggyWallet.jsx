@@ -9,35 +9,36 @@ import DragBreedCard from './BreedSearch/DragBreedCard';
 import DroppableArea from './DroppableArea';
 
 const DoggyWallet = () => {
-    const { isFavBreedRailOpen, appBarHeight } = useLayout();
+    const { isDoggyWalletOpen, appBarHeight, setNavOpen, setFavBreedsRailOpen, setBreedSearchFormOpen, setDoggyWalletOpen } = useLayout();
     const { userFavDogs, setUserFavDogs, myDogs, setMyDogs } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
     const navigate = useNavigate('/dogsearch');
 
-    useEffect(() => {
-        if (loggedIn) {
-            const fetchDBUserFavBreeds = async () => {
-                try {
-                    const response = await fetch('http://localhost:5000/auth/getbreeds', {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+        useEffect(() => {
+            if (loggedIn) {
+                const fetchDBUserFavBreeds = async () => {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/matchbreeds', {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await response.json();
+                        setUserFavDogs(data);
+                        console.log('Favorite dogs fetched from user\'s database with api:', data);
+                    } catch (error) {
+                        console.error('Failed to fetch favorite dogs:', error);
                     }
-                    const data = await response.json();
-                    setUserFavBreeds(data);
-                } catch (error) {
-                    console.error('Failed to fetch favorite breeds:', error);
-                }
-            };
-            fetchDBUserFavBreeds();
-        }
-    }, [loggedIn, setUserFavBreeds, token]);
+                };
+                fetchDBUserFavBreeds();
+            }
+        }, [loggedIn, setUserFavBreeds, token]);
 
     const handleDrop = (item, dropResult) => {
         if (!dropResult) return;
@@ -58,7 +59,7 @@ const DoggyWallet = () => {
                 name: draggedBreed.name,
                 img_url: draggedBreed.image_link,
             }];
-            setUserFavBreeds(updatedFavBreeds);
+            setUserFavDogs(updatedFavBreeds);
 
             fetch('http://localhost:5000/auth/updatebreeds', {
                 method: 'POST',

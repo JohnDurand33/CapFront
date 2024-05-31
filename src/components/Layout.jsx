@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useEffect }from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -11,14 +11,20 @@ import FavBreedsRail from './FavBreedsRail';
 
 const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
     const { myBreeds, userFavBreeds } = useDogSearch();
-    const { loggedIn, token } = useLogin();
-    const { isNavOpen, isBreedSearchOpen, isFavBreedRailOpen } = useLayout();
+    const { loggedIn, token, setLoggedIn } = useLogin();
+    const { isNavOpen, isBreedSearchOpen, isFavBreedRailOpen, setFavBreedRailOpen, setNavOpen } = useLayout();
+
 
     useEffect(() => {
-        // Log to see what's actually in myBreeds when it attempts to render
+        setFavBreedRailOpen(false);
+        setNavOpen(true);
+    }, []);
+
+    useEffect(() => {
         console.log("Layout myBreeds:", myBreeds);
         console.log('FavBreedsRail: loggedIn status, token, userBreedArray:', loggedIn, token, userFavBreeds);
     }, [myBreeds]);
+
     return (
         <>
             <NewAppBar toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} />
@@ -32,9 +38,9 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
                     flexDirection: 'column',
                     width: '100%',
                     height: '100%',
-                    mt: 11, // Adjust top margin to avoid AppBar overlap
-                    pl: isNavOpen ? 35 : isFavBreedRailOpen ? '400px' : 10, // Adjust margin based on NavRail state
-                    pr: isBreedSearchOpen ? '400px' : 10, // Adjust margin based on DogSearchDrawer state
+                    mt: 11,
+                    pl: isFavBreedRailOpen ? '400px' : isNavOpen ? 35 : 10,
+                    pr: isBreedSearchOpen ? '400px' : 10,
                     transition: 'padding-left 0.2s ease-in-out, padding-right 0.2s ease-in-out',
                 }}>
                 <Outlet />

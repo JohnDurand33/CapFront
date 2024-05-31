@@ -7,14 +7,14 @@ import BreedSearchForm from './BreedSearchForm';
 
 const BreedSearchDrawer = ({ appBarHeight }) => {
     const { myBreeds, setMyBreeds } = useDogSearch();
-    const { isBreedSearchFormOpen, toggleBreedSearchForm } = useLayout();
+    const { isBreedSearchFormOpen, toggleBreedSearchForm, setBreedSearchFormOpen } = useLayout();
     const theme = useTheme();
 
     return (
         <Drawer
             anchor="right"
             open={isBreedSearchFormOpen}
-            onClose={toggleBreedSearchForm}
+
             sx={{
                 '& .MuiDrawer-paper': {
                     width: 450,

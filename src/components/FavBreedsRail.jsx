@@ -9,7 +9,7 @@ import DroppableArea from './DroppableArea';
 import DragBreedCard from './DragBreedCard';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight } = useLayout();
+    const { isFavBreedRailOpen, appBarHeight, } = useLayout();
     const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
@@ -19,7 +19,7 @@ const FavBreedsRail = () => {
         if (loggedIn) {
             const fetchDBUserFavBreeds = async () => {
                 try {
-                    const response = await fetch('http://localhost:5000/auth/getbreeds', {
+                    const response = await fetch('http://localhost:5000/api/getbreeds', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -31,6 +31,7 @@ const FavBreedsRail = () => {
                     }
                     const data = await response.json();
                     setUserFavBreeds(data);
+                    console.log('Favorite breeds fetched from user\'s database with api:', data);
                 } catch (error) {
                     console.error('Failed to fetch favorite breeds:', error);
                 }
@@ -57,7 +58,7 @@ const FavBreedsRail = () => {
             }];
             setUserFavBreeds(updatedFavBreeds);
 
-            fetch('http://localhost:5000/auth/updatebreeds', {
+            fetch('http://localhost:5000/api/updatebreeds', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -70,10 +71,13 @@ const FavBreedsRail = () => {
     };
 
     return (
+        <>
         <Drawer
             variant="persistent"
             open={isFavBreedRailOpen}
             anchor="left"
+            display="flex-column"
+            alignItems="center"
             sx={{
                 flexShrink: 0,
                 width: '300px',
@@ -85,7 +89,7 @@ const FavBreedsRail = () => {
                 },
             }}
         >
-            <Box sx={{ width: 300, padding: 2 }}>
+            <Box sx={{ width: 300, alignSelf: 'center', pt: 11, display:"flex", flexDirection:"column", alignItems:'center' }}>
                 <Typography variant="h6" gutterBottom>
                     Favorite Breeds
                 </Typography>
@@ -97,6 +101,8 @@ const FavBreedsRail = () => {
                                 borderRadius: '4px',
                                 padding: '16px',
                                 textAlign: 'center',
+                                backgroundColor: theme.palette.background.paper,
+                                color: theme.palette.text.primary
                             }}
                         >
                             Drag breeds here to add to your favorites
@@ -104,6 +110,8 @@ const FavBreedsRail = () => {
                     ) : (
                         userFavBreeds.map((breed, index) => (
                             <DragBreedCard
+                                sx={{backgroundColor: theme.palette.background.paper,
+                                    color: theme.palette.text.primary}}
                                 key={breed.name}
                                 id={`fav-${breed.name}`}
                                 index={index}
@@ -114,32 +122,16 @@ const FavBreedsRail = () => {
                 </DroppableArea>
                 <Button
                     variant="contained"
+                    display="flex"
                     color="primary"
-                    style={{ marginTop: '10px' }}
-                    onClick={async () => {
-                        try {
-                            await fetch('http://localhost:5000/auth/updatebreeds', {
-                                method: 'POST',
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ fav_breeds: userFavBreeds }),
-                            });
-                            console.log('Favorite breeds updated');
-                            setUserFavBreeds([]);
-
-                        } catch (error) {
-                            console.error('Failed to update favorite breeds:', error);
-                        } 
-
-
-                    }}
+                    sx={{ marginTop: '10px'}}
+                        onClick={() => { navigate('dogsearch') }}
                 >
                     Find My Dog!
                 </Button>
             </Box>
-        </Drawer>
+            </Drawer>
+        </>
     );
 };
 

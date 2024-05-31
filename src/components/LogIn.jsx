@@ -7,18 +7,13 @@ import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
 const Login = () => {
-    const { login, setLoggedIn } = useLogin();
-    const { isNavOpen, setFavBreedRailOpen } = useLayout();
+    const { login, setLoggedIn, setToken } = useLogin();
+    const { isNavOpen, setFavBreedRailOpen, setNavOpen } = useLayout();
     const navigate = useNavigate();
     const location = useLocation();
 
-    useEffect(() => {
-        setFavBreedRailOpen(false);
-        if (location.pathname === '/login') {
-            setLoggedIn(false);
-            localStorage.removeItem('token');
-        }
-    }, [location.pathname, setLoggedIn]);
+    setFavBreedRailOpen(false);
+    setNavOpen(true);
 
     const initialValues = {
         email: '',
@@ -33,10 +28,12 @@ const Login = () => {
     const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
         const success = await login(values.email, values.password);
         if (success) {
+            console.log('Login successful');
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
             navigate('/home');
         } else {
+            console.error('Login failed');
             setStatus({ success: null, error: 'Login failed. Please try again.' });
         }
         setSubmitting(false);

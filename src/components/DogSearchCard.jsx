@@ -28,12 +28,12 @@ const DogSearchCard = ({ dog }) => {
                     Sex: {dog.sex}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                    Location: {dog.city_state} ({dog.dog_zip_code})
+                    Location: {dog.city}, {dog.city} ({dog.dog_zip_code})
                 </Typography>
             </CardContent>
             <CardActions>
                 <Button size="small" color="primary">
-                    Learn More
+                    Contact Adoption Agency
                 </Button>
                 <Button size="small" color="secondary">
                     Adopt

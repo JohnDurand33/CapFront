@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
+import DogSearchCard from './DogSearchCard';
 
 const DragSearchDogCard = ({ id, dog }) => {
     const [{ isDragging }, drag] = useDrag({
