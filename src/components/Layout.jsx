@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -10,20 +10,7 @@ import NewAppBar from './NewAppBar';
 import FavBreedsRail from './FavBreedsRail';
 
 const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
-    const { myBreeds, userFavBreeds } = useDogSearch();
-    const { loggedIn, token, setLoggedIn } = useLogin();
-    const { isNavOpen, isBreedSearchOpen, isFavBreedRailOpen, setFavBreedRailOpen, setNavOpen } = useLayout();
-
-
-    useEffect(() => {
-        setFavBreedRailOpen(false);
-        setNavOpen(true);
-    }, []);
-
-    useEffect(() => {
-        console.log("Layout myBreeds:", myBreeds);
-        console.log('FavBreedsRail: loggedIn status, token, userBreedArray:', loggedIn, token, userFavBreeds);
-    }, [myBreeds]);
+    const { isNavOpen, isBreedSearchOpen, isFavBreedRailOpen } = useLayout();
 
     return (
         <>

@@ -7,11 +7,20 @@ export const LayoutProvider = ({ children }) => {
     const [isBreedSearchFormOpen, setBreedSearchFormOpen] = useState(false);
     const [isFavBreedRailOpen, setFavBreedRailOpen] = useState(false);
     const [appBarHeight, setAppBarHeight] = useState(0);
-    const [isDoggyWalltOpen, setDoggyWalletOpen] = useState(false);
+    const [isDoggyWalletOpen, setDoggyWalletOpen] = useState(false);
 
-    const toggleNav = () => setNavOpen(!isNavOpen);
-    const toggleBreedSearchForm = () => setBreedSearchFormOpen(!isBreedSearchFormOpen);
-    const toggleFavBreedRail = () => setFavBreedRailOpen(!isFavBreedRailOpen);
+    const toggleNav = () => {
+        setFavBreedRailOpen(false);
+        setNavOpen(!isNavOpen);
+    }
+
+    const toggleBreedSearchForm = () => setBreedSearchFormOpen
+    (!isBreedSearchFormOpen);
+    
+    const toggleFavBreedRail = () => {
+        setNavOpen(false);
+        setFavBreedRailOpen(!isFavBreedRailOpen);
+    }
 
     return (
         <LayoutContext.Provider value={{

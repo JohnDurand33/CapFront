@@ -8,6 +8,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ThemeToggleButton from './ThemeToggleButton';
+import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -15,7 +16,8 @@ import { useTheme } from '@mui/material';
 
 
 const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
-    const { isNavOpen, toggleNav, isFavBreedsRailOpen, toggleFavBreedRail, toggleBreedSearchForm } = useLayout();
+    const { isNavOpen, toggleNav, isFavBreedsRailOpen, toggleFavBreedRail, toggleBreedSearchForm, setNavOpen, setFavBreedRailOpen } = useLayout();
+
     const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
@@ -32,7 +34,13 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
     const handleLogout = async () => {
         await logout();
         navigate('/login');
-};
+    };
+    
+    const handleBreedButtonClick = () => {
+        toggleBreedSearchForm();
+        setNavOpen(false);
+    }
+
     
     return (
         <>
@@ -51,10 +59,16 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                     </IconButton>
                         <IconButton
                             color="inherit"
-                            onClick={toggleBreedSearchForm}
+                            onClick={handleBreedButtonClick}
                         >
                         <SearchIcon />
-                    </IconButton>
+                        </IconButton>
+                        <IconButton
+                            color="inherit"
+                            component={Link} to='/home'
+                        >
+                            <HomeIcon />
+                        </IconButton>
                 </Box>
 
                 {/* Right Section */}

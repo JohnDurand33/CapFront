@@ -1,17 +1,25 @@
 import { Grid } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../contexts/LoginContext';
 import DroppableArea from './DroppableArea';
 import DraggableBreedCard from './DragBreedCard';
+import api from './ApiBackBP';
 
 const BreedSearchView = () => {
-
+    const navigate = useNavigate();
+    const { loggedIn } = useLogin();
     const { myBreeds, userFavBreeds, setMyBreeds, setUserFavBreeds } = useDogSearch();
     const { setFavBreedRailOpen } = useLayout();
     const { user, token } = useLayout();
 
     useEffect(() => {
+        if (!loggedIn) {
+            navigate('/login');
+            return; 
+        }
         setFavBreedRailOpen(true);
     }, [setFavBreedRailOpen]);
 
@@ -33,7 +41,7 @@ const BreedSearchView = () => {
             }];
             setMyBreeds(updatedFavBreeds);
 
-            fetch('http://localhost:5000/api/updatebreeds', {
+            api.get('/api/updatebreeds', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,

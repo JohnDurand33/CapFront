@@ -240,7 +240,7 @@ const BreedSearchForm = () => {
                     </>
                 )}
                 <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
+                    <Button type="submit" onClick variant="contained" color="primary" fullWidth>
                         Search
                     </Button>
                 </Grid>

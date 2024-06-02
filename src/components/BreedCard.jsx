@@ -6,7 +6,13 @@ const BreedCard = ({ dog }) => {
     const theme = useTheme();
 
     return (
-        <Card color={theme.palette.secondary.main}>
+        <>
+            <Card sx={{
+                backgroundColor: {
+                    xs: theme.palette.secondary.main, // Applies background color at the xs breakpoint
+                    sm: theme.palette.secondary.light
+                }
+}}>
             <CardActionArea>
                 <CardMedia
                     component="img"
@@ -15,10 +21,11 @@ const BreedCard = ({ dog }) => {
                     sx={{ height: "140", width: '100%', aspectRatio: `3/2`}}
                 />
                 <CardContent >
-                    <Typography variant="h6">{dog.name}</Typography>
+                    <Typography variant="h6" fontWeight="600"  textAlign="center">{dog.name}</Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
+        </>
     );
 };
 

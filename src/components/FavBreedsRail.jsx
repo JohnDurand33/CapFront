@@ -9,7 +9,7 @@ import DroppableArea from './DroppableArea';
 import DragBreedCard from './DragBreedCard';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, } = useLayout();
+    const { isFavBreedRailOpen, appBarHeight, appBarRef} = useLayout();
     const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
@@ -77,8 +77,8 @@ const FavBreedsRail = () => {
             open={isFavBreedRailOpen}
             anchor="left"
             display="flex-column"
-            alignItems="center"
-            sx={{
+                sx={{
+                alignItems: 'center',
                 flexShrink: 0,
                 width: '300px',
                 '& .MuiDrawer-paper': {

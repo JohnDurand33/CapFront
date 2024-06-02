@@ -15,31 +15,6 @@ const DoggyWallet = () => {
     const theme = useTheme();
     const navigate = useNavigate('/dogsearch');
 
-        useEffect(() => {
-            if (loggedIn) {
-                const fetchDBUserFavBreeds = async () => {
-                    try {
-                        const response = await fetch('http://localhost:5000/api/matchbreeds', {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                        });
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        const data = await response.json();
-                        setUserFavDogs(data);
-                        console.log('Favorite dogs fetched from user\'s database with api:', data);
-                    } catch (error) {
-                        console.error('Failed to fetch favorite dogs:', error);
-                    }
-                };
-                fetchDBUserFavBreeds();
-            }
-        }, [loggedIn, setUserFavBreeds, token]);
-
     const handleDrop = (item, dropResult) => {
         if (!dropResult) return;
 
@@ -61,7 +36,7 @@ const DoggyWallet = () => {
             }];
             setUserFavDogs(updatedFavBreeds);
 
-            fetch('http://localhost:5000/auth/updatebreeds', {
+            fetch('http://localhost:5000/auth/updatedogs', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,

@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
-import axios from 'axios';
+import api from './ApiBackBP.jsx';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
     const { loggedIn, setLoggedIn, setToken } = useLogin();
-    const { isNavOpen } = useLayout();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,7 +39,7 @@ const SignUpForm = () => {
 
     const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
         try {
-            const response = await axios.post('http://localhost:5000/auth/signup', {
+            const response = await api.post('auth/signup', {
                 email: values.email,
                 password: values.password,
                 state: values.state,

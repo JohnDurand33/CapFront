@@ -7,13 +7,14 @@ import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
 const Login = () => {
-    const { login, setLoggedIn, setToken } = useLogin();
-    const { isNavOpen, setFavBreedRailOpen, setNavOpen } = useLayout();
+    const { login } = useLogin();
+    const { setFavBreedRailOpen, setNavOpen, isNavOpen } = useLayout();
     const navigate = useNavigate();
-    const location = useLocation();
 
-    setFavBreedRailOpen(false);
-    setNavOpen(true);
+    useEffect(() => {
+        setFavBreedRailOpen(false);
+        setNavOpen(true);
+    }, [setFavBreedRailOpen, setNavOpen]);
 
     const initialValues = {
         email: '',
@@ -31,7 +32,7 @@ const Login = () => {
             console.log('Login successful');
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
-            navigate('/home');
+            navigate("/home")
         } else {
             console.error('Login failed');
             setStatus({ success: null, error: 'Login failed. Please try again.' });

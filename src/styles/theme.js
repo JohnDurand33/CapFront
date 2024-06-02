@@ -45,11 +45,6 @@ const getTheme = (mode) => {
                     outlined: customBorderStyles,
                 },
             },
-            MuiCard: {
-                styleOverrides: {
-                    root: customBorderStyles,
-                },
-            },
             MuiAppBar: {
                 styleOverrides: {
                     root: {
