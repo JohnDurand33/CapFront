@@ -13,53 +13,55 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material';
+import { useDogSearch } from '../contexts/DogSearchContext';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 
 const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
-    const { isNavOpen, toggleNav, isFavBreedsRailOpen, toggleFavBreedRail, toggleBreedSearchForm, setNavOpen, setFavBreedRailOpen } = useLayout();
+    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen , } = useLayout();
+    const {userFavBreeds} = useDogSearch();
 
-    const [anchorEl, setAnchorEl] = useState(null);
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const handleMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
+    const handleBreedSearchForm = () => {
+        if (isBreedSearchFormOpen) {
+            setBreedSearchFormOpen(false);
+            return;
+        } else {
+            setBreedSearchFormOpen(true);
+            setNavOpen(false);
+            setFavBreedRailOpen(false)
+            setDoggyWalletOpen(false);
+        }
     };
 
     const handleLogout = async () => {
         await logout();
         navigate('/login');
     };
-    
-    const handleBreedButtonClick = () => {
-        toggleBreedSearchForm();
-        setNavOpen(false);
-    }
+
 
     
     return (
         <>
         <AppBar position="fixed" ref={appBarRef} sx={{ zIndex: theme.zIndex.drawer + 1, width: '100vw' }}>
-            <Toolbar>
-                <IconButton color="inherit" onClick={toggleNav} edge="start">
+            <Toolbar sx={{ml:2}}>
+                <IconButton color="inherit" onClick={handleNavToggle} edge="start">
                     <MenuIcon />
                 </IconButton>
-                <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - ${isNavOpen  || isFavBreedsRailOpen ? 240 : 0}px)` }}>
-                    {/* Left Icons */}
-                        <IconButton color="inherit">
+                <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - 0px)` }}>
+
+                        <IconButton color="inherit" onClick={handleDoggyWallet}>
                         <AccountBalanceWalletIcon />
                     </IconButton>
-                        <IconButton color="inherit" onClick={toggleFavBreedRail} >
+                        <IconButton color="inherit" onClick={handleFavBreedRail} >
                         <PetsIcon />
                     </IconButton>
                         <IconButton
                             color="inherit"
-                            onClick={handleBreedButtonClick}
+                            onClick={handleBreedSearchForm}
                         >
                         <SearchIcon />
                         </IconButton>
@@ -71,7 +73,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                         </IconButton>
                 </Box>
 
-                {/* Right Section */}
+
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {loggedIn ? (
                         <>
@@ -90,19 +92,10 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                         </>
                     )}
 
-                    {/* Menu Icon for future functionalities */}
                     <ThemeToggleButton toggleMode={toggleMode} mode={mode} />
-                    <IconButton color="inherit" onClick={handleMenuOpen}>
-                        <MenuIcon />
+                        <IconButton color="inherit" onClick={() => navigate('/instructions')}>
+                            <HelpOutlineIcon />
                     </IconButton>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
-                    >
-                        <MenuItem onClick={handleMenuClose}>Option 1</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Option 2</MenuItem>
-                    </Menu>
                 </Box>
             </Toolbar>
             </AppBar>

@@ -1,75 +1,67 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, Typography, Button, Box, Grid, useTheme } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
 
-const HomeDogCard = ({ dog }) => {
-    const theme = useTheme();
-
+const DogSearchCard = ({ dog }) => {
     return (
-        <Box sx={{ m: 2 }}>
-            <Card sx={{ boxShadow: 6, borderRadius: 4, border: '2px solid gray', overflow: 'hidden', width: '420px' }}>
-                <Box className='searchdog-image' sx={{ display: 'flex', height: '240px' }}>
-                    <Box sx={{ flex: '1 1 50%', overflow: 'hidden', borderTopLeftRadius: 12, borderBottomLeftRadius: 12 }}>
-                        <CardMedia
-                            component="img"
-                            alt={dog.animalName}
-                            image={dog.animalThumbnailUrl}
-                            title={dog.animalName}
-                            sx={{
-                                objectFit: 'cover',
-                                height: '240px',
-                                width: '100%',
-                            }}
-                        />
-                    </Box>
-                    <Box sx={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', background: 'linear-gradient(to right, #ADC8FF, #EED959)' }}>
-                        <CardContent sx={{ p: 2 }}>
-                            <Typography
-                                gutterBottom
-                                variant="h5"
-                                component="div"
-                                sx={{ fontWeight: 'bold', color: '#333' }}
-                            >
-                                {dog.animalName}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5 }}>
-                                Age: {dog.animalAgeString ? dog.animalAgeString : 'Not Listed'}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5 }}>
-                                Breed: <br />{dog.animalBreed}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5 }}>
-                                Color: {dog.animalColor}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5 }}>
-                                Sex: {dog.animalSex}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5 }}>
-                                Location: {dog.animalLocationCitystate} {dog.animalLocation}
-                            </Typography>
-                        </CardContent>
-                    </Box>
-                </Box>
-                <Box sx={{ width: '100%' }}>
+        <Card sx={{ boxShadow: 6, borderRadius: 4, border: '2px solid gray', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
+            <Grid container>
+                <Grid item xs={12}>
+                    <CardMedia
+                        component="img"
+                        alt={dog.name}
+                        image={dog.img_url}
+                        title={dog.name}
+                        sx={{
+                            width: '100%',
+                            height: '300px', // Set the desired height
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <CardContent sx={{ textAlign: 'center' }}>
+                        <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold', color: '#333' }}>
+                            {dog.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Age: {dog.age ? dog.age : 'Not Listed'}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Breed: {dog.breed}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Color: {dog.color}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Sex: {dog.sex}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Location: {dog.city}, {dog.state}
+                        </Typography>
+                    </CardContent>
+                </Grid>
+                <Grid item xs={12}>
                     <Button
                         size="large"
                         variant="contained"
+                        color="primary"
                         sx={{
                             borderRadius: 0,
                             width: '100%',
                             height: '60px', // Adjust height as needed
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.primary.contrastText,
+                            background: 'theme.palette.primary.main',
                             fontWeight: 'bold',
                             textAlign: 'center',
                         }}
-                        onClick={() => window.location.href = `mailto:adoption@agency.com?subject=Adoption Inquiry for ${dog.animalName}`}
+                        onClick={() => window.location.href = `mailto:adoption@agency.com?subject=Adoption Inquiry for ${dog.name}`}
                     >
                         CONTACT ADOPTION AGENCY
                     </Button>
-                </Box>
-            </Card>
-        </Box>
+                </Grid>
+            </Grid>
+        </Card>
     );
 };
 
-export default HomeDogCard;
+export default DogSearchCard;

@@ -1,5 +1,5 @@
 import {jwtDecode} from "jwt-decode";
-import api from "../components/ApiBackBP"
+import api from "../contexts/api.jsx"
 
 
 // Utility to get token from localStorage
@@ -27,6 +27,18 @@ export function setLocalState(state) {
     localStorage.setItem("state", state);
 }
 
+export function removeLocalToken(token) {
+    localStorage.removeItem("token", token)
+}
+
+export function removeLocalZipCode(zipCode) {
+    localStorage.removeItem("zipCode", zipCode);
+}
+
+export function removeLocalState(state) {
+    localStorage.removeItem("state", state);
+}
+
 // Utility to check token expiry
 export function isTokenExpired(token) {
     if (!token || token.split(".").length !== 3) {
@@ -42,7 +54,7 @@ export function isTokenExpired(token) {
 }
 
 // Function to refresh token
-export async function refreshToken(currentToken, setToken) {
+export async function refreshToken(currentToken, setToken, setState, setZipCode) {
     try {
         console.log("Current Token:", currentToken); // Log the current token
         const response = await api.post("/auth/refresh",
@@ -51,9 +63,15 @@ export async function refreshToken(currentToken, setToken) {
             }
         );
         const newToken = response.data.token;
+        const newZipCode = response.data.zip_code;
+        const newState = response.data.state;
         console.log("New Token:", newToken); // Log the new token
         setLocalToken(newToken);
-        setToken(newToken);
+        setToken(newToken)
+        setLocalState(newState);
+        setState(newState);
+        setLocalZipCode(newZipCode);
+        setZipCode(newZipCode);
         return newToken;
     } catch (error) {
         console.error(

@@ -2,10 +2,10 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import DogSearchCard from './DogSearchCard';
 
-const DragSearchDogCard = ({ id, dog }) => {
+const DragDogSearchCard = ({ dog }) => {
     const [{ isDragging }, drag] = useDrag({
-        type: 'searchdog',
-        item: { id, dog },
+        type: 'dog',
+        item: { dog },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
@@ -24,4 +24,4 @@ const DragSearchDogCard = ({ id, dog }) => {
     );
 };
 
-export default DragSearchDogCard;
+export default DragDogSearchCard;

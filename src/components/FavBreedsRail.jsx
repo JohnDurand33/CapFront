@@ -7,77 +7,81 @@ import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 import DroppableArea from './DroppableArea';
 import DragBreedCard from './DragBreedCard';
+import api from '../contexts/api';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, appBarRef} = useLayout();
-    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds } = useDogSearch();
+    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen } = useLayout();
+    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
-    const navigate = useNavigate('/dogsearch');
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (loggedIn) {
             const fetchDBUserFavBreeds = async () => {
                 try {
-                    const response = await fetch('http://localhost:5000/api/getbreeds', {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    setUserFavBreeds(data);
-                    console.log('Favorite breeds fetched from user\'s database with api:', data);
+                    const response = await api.get('/api/getbreeds');
+                    console.log('GET response:', response.data);
+                    setUserFavBreeds(response.data);
+                    console.log('Favorite breeds fetched from user\'s database with api:', response.data);
                 } catch (error) {
                     console.error('Failed to fetch favorite breeds:', error);
                 }
             };
             fetchDBUserFavBreeds();
         }
-    }, [loggedIn, setUserFavBreeds, token]);
+    }, [loggedIn, setUserFavBreeds, setFavBreedRailOpen]);
 
-    const handleDrop = (item) => {
+    const handleDrop = async (item) => {
         console.log('Dropped item:', item);
-        const draggedBreed = myBreeds.find(breed => breed.name === item.dog.name);
+        const draggedBreed = myBreeds.find(breed => breed.name === item.breed.name);
 
         if (!draggedBreed) {
-            console.warn('Breed not found in myBreeds:', item.dog.name);
+            console.warn('Breed not found in myBreeds:', item.breed.name);
             return;
         }
-        if (draggedBreed) {
-            const updatedSearchBreeds = myBreeds.filter(breed => breed.name !== item.dog.name);
-            setMyBreeds(updatedSearchBreeds);
 
-            const updatedFavBreeds = [...userFavBreeds, {
-                name: draggedBreed.name,
-                img_url: draggedBreed.image_link,
-            }];
-            setUserFavBreeds(updatedFavBreeds);
+        const updatedSearchBreeds = myBreeds.filter(breed => breed.name !== item.breed.name);
+        setMyBreeds(updatedSearchBreeds);
 
-            fetch('http://localhost:5000/api/updatebreeds', {
-                method: 'POST',
+        const updatedFavBreeds = [...userFavBreeds, draggedBreed];
+        setUserFavBreeds(updatedFavBreeds);
+
+        try {
+            const response = await api.post('/api/updatebreeds', {
+                fav_breeds: updatedFavBreeds
+            });
+            console.log('Favorite breeds updated successfully:', response.data);
+        } catch (error) {
+            console.error('Error updating favorite breeds:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    const handleFindMyDog = async () => {
+        try {
+            const response = await api.post('/api/find_dogs', {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ fav_breeds: updatedFavBreeds }),
-                
-            }).catch(error => console.error('Failed to update favorite breeds:', error));
+                body: JSON.stringify({ fav_breeds: userFavBreeds }),
+            });
+            console.log('Matched dogs:', response.data);
+            setNavOpen(false);
+            setFavBreedRailOpen(false);
+            setDoggyWalletOpen(true);
+            setMyDogs(response.data);
+            navigate('/dogsearch', { state: { myDogs: response.data } });
+        } catch (error) {
+            console.error('Failed to fetch matched dogs:', error);
         }
     };
 
     return (
-        <>
         <Drawer
             variant="persistent"
             open={isFavBreedRailOpen}
             anchor="left"
-            display="flex-column"
-                sx={{
+            sx={{
                 alignItems: 'center',
                 flexShrink: 0,
                 width: '300px',
@@ -89,11 +93,11 @@ const FavBreedsRail = () => {
                 },
             }}
         >
-            <Box sx={{ width: 300, alignSelf: 'center', pt: 11, display:"flex", flexDirection:"column", alignItems:'center' }}>
+            <Box sx={{ width: 300, alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
                 <Typography variant="h6" gutterBottom>
                     Favorite Breeds
                 </Typography>
-                <DroppableArea id="userFavBreeds" onDrop={handleDrop}>
+                <DroppableArea id="userFavBreeds" onDrop={handleDrop} acceptType='breed'>
                     {userFavBreeds.length === 0 ? (
                         <Box
                             sx={{
@@ -110,28 +114,25 @@ const FavBreedsRail = () => {
                     ) : (
                         userFavBreeds.map((breed, index) => (
                             <DragBreedCard
-                                sx={{backgroundColor: theme.palette.background.paper,
-                                    color: theme.palette.text.primary}}
-                                key={breed.name}
+                                sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }}
+                                key={`${breed.name}-${index}`}
                                 id={`fav-${breed.name}`}
                                 index={index}
-                                dog={{ name: breed.name, image_link: breed.img_url }}
+                                breed={breed}
                             />
                         ))
                     )}
                 </DroppableArea>
                 <Button
                     variant="contained"
-                    display="flex"
                     color="primary"
-                    sx={{ marginTop: '10px'}}
-                        onClick={() => { navigate('dogsearch') }}
+                    sx={{ marginTop: '10px' }}
+                    onClick={handleFindMyDog}
                 >
                     Find My Dog!
                 </Button>
             </Box>
-            </Drawer>
-        </>
+        </Drawer>
     );
 };
 

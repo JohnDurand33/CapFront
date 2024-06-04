@@ -1,68 +1,44 @@
-import { Grid } from '@mui/material';
 import React, { useEffect } from 'react';
+import { Grid } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
-import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
-import { useNavigate } from 'react-router-dom';
 import DroppableArea from './DroppableArea';
-import DragSearchDogCard from './DragSearchDogCard';
+import DragDogSearchCard from './DragDogSearchCard';
+import api from '../contexts/api';
 
 const DogSearchView = () => {
-    const { myDogs, setMyDogs, userFavDogs, setUserFavDogs } = useDogSearch();
-    const { setFavBreedRailOpen } = useLayout();
-    const { loggedIn, token } = useLogin();
-    const navigate = useNavigate();
+    const { myDogs, userFavDogs, setMyDogs, setUserFavDogs } = useDogSearch();
+    const { setDoggyWalletOpen } = useLayout();
 
-    if (!loggedIn) {
-        navigate('/login');
-        return null;
-    }
-
-    useEffect(() => {
-        setFavBreedRailOpen(true);
-        const fetchDogs = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/matchbreeds', {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const result = await response.json();
-                console.log("Favorite dogs fetched from user's database with api:", result);
-                setMyDogs(result);
-            } catch (error) {
-                console.error('Failed to fetch favorite dogs:', error);
-            }
-        };
-        fetchDogs();
-    }, [loggedIn, navigate, setMyDogs, setFavBreedRailOpen, token]);
-
-    const handleDrop = (item) => {
+    const handleDrop = async (item) => {
         console.log('Dropped item:', item);
-        const draggedDog = userFavDogs.find((searchDog) => searchDog.name === item.dog.name);
+        const draggedDog = userFavDogs.find(dog => dog.api_id === item.dog.api_id);
 
         if (!draggedDog) {
-            console.warn(`Failed to find a dog:`, item.dog.name);
+            console.warn(`Dog not found in user's Dogs:`, item.dog.api_id);
             return;
         }
 
-        const updatedUserFavDogs = userFavDogs.filter((searchDog) => searchDog.name !== item.dog.name);
+        const updatedUserFavDogs = userFavDogs.filter(dog => dog.api_id !== item.dog.api_id);
         setUserFavDogs(updatedUserFavDogs);
 
         const updatedMyDogs = [...myDogs, draggedDog];
         setMyDogs(updatedMyDogs);
 
-        // Fetch to update dogs (more complicated with adding and removing relationships)
+        try {
+            await api.delete(`/api/rem_favdog/${draggedDog.api_id}`);
+            console.log('Favorite dog removed successfully');
+        } catch (error) {
+            console.error('Failed to remove favorite dog:', error);
+        }
     };
 
     return (
-        <DroppableArea id="searchDogView" onDrop={handleDrop}>
+        <DroppableArea id="dogSearch" onDrop={handleDrop} acceptType="dog">
             <Grid container spacing={2}>
-                {myDogs.map((dog) => (
-                    <Grid item xs={12} sm={6} md={4} key={dog.id}>
-                        <DragSearchDogCard dog={dog} />
+                {myDogs.map((dog, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={dog.api_id}>
+                        <DragDogSearchCard dog={dog} />
                     </Grid>
                 ))}
             </Grid>

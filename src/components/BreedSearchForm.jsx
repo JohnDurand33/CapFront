@@ -1,9 +1,10 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
+import { useTheme } from '@mui/material';
 
 const BreedSearchForm = () => {
     const [formData, setFormData] = useState({
@@ -20,9 +21,10 @@ const BreedSearchForm = () => {
     const [showNotification, setShowNotification] = useState(false);
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const breedNameRef = useRef(null);
-    const { setBreedSearchFormOpen, setFavBreedRailOpen, toggleFavBreedRail } = useLayout();
-    const { myBreeds, setMyBreeds } = useDogSearch();   
-    
+    const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, toggleFavBreedRail } = useLayout();
+    const { myBreeds, setMyBreeds, toggleIsBreedSearchOn } = useDogSearch();
+    const theme = useTheme();
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (breedNameRef.current && !breedNameRef.current.contains(event.target)) {
@@ -37,7 +39,6 @@ const BreedSearchForm = () => {
     }, [formData.name]);
 
     useEffect(() => {
-        // Log to see what's actually in myBreeds when it attempts to render
         console.log("BreedSearchForm myBreeds:", myBreeds);
     }, [myBreeds]);
 
@@ -62,7 +63,6 @@ const BreedSearchForm = () => {
         </Grid>
     );
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -85,9 +85,9 @@ const BreedSearchForm = () => {
     const preparePhysicalData = (formData) => {
         if (formData.size && formData.size !== 'not_applicable') {
             const sizeDict = {
-                'small': { min_weight: '0', max_weight: '10'},
-                'medium': { min_weight: '31', max_weight: '50'},
-                'large': { min_weight: '71', max_weight: '90'},
+                'small': { min_weight: '0', max_weight: '10' },
+                'medium': { min_weight: '31', max_weight: '50' },
+                'large': { min_weight: '71', max_weight: '90' },
                 'extra_large': { min_weight: '101', max_weight: '200' }
             };
             return sizeDict[formData.size];
@@ -129,24 +129,29 @@ const BreedSearchForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handling direct name searches
         if (formData.name) {
             try {
-                // Direct API call with name parameter
                 const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?name=${encodeURIComponent(formData.name)}`, {
                     headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY },
                 });
-                const total = response.data;
+                const total = response.data.map(breed => ({
+                    name: breed.name,
+                    image_link: breed.image_link,
+                }));
                 setMyBreeds(total);
-                console.log('favBreeds -> with response.data set to this variable:', myBreeds);
-                toggleFavBreedRail();
+                console.log('myBreeds:', total);
+
+                if (total.length === 0) {
+                    console.log('No breeds found with this name:', formData.name);
+                    return;
+                }
                 setBreedSearchFormOpen(false);
+                setFavBreedRailOpen(true);
                 navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         } else {
-            // Prepare data for API call when searching by attributes
             const behavioralData = prepareBehavioralData(formData);
             const physicalData = preparePhysicalData(formData);
             const combinedData = { ...behavioralData, ...physicalData };
@@ -157,7 +162,7 @@ const BreedSearchForm = () => {
                     const params = new URLSearchParams();
                     for (const [key, value] of Object.entries(combination)) {
                         if (typeof value === 'object' && value !== null) {
-        
+
                             for (const [subKey, subValue] of Object.entries(value)) {
                                 params.append(subKey, subValue);
                             }
@@ -165,26 +170,30 @@ const BreedSearchForm = () => {
                             params.append(key, value);
                         }
                     }
+
                     console.log('params.toString()):', params.toString());
                     const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?${params.toString()}`, {
                         headers: { 'X-Api-Key': import.meta.env.VITE_NINJA_API_KEY }
                     });
-                    apiResults.push(response.data);
+                    apiResults.push(response.data.map(breed => ({
+                        name: breed.name,
+                        image_link: breed.image_link,
+                    })));
                     console.log('current run result -> apiResults:', apiResults);
                 }
                 const total = apiResults.flat();
+                console.log('total before setting to myBreeds state:', total);
                 setMyBreeds(total);
-                console.log('favBreeds -> with response.data set to this variable:', myBreeds);
-                toggleFavBreedRail();
+                setNavOpen(false);
+                setFavBreedRailOpen(true);
                 setBreedSearchFormOpen(false);
                 navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
+        console.log('myBreeds -> with response.data set to this variable:', myBreeds);
     };
-
-    
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
@@ -196,7 +205,9 @@ const BreedSearchForm = () => {
                 Extra Large: Over 100 lbs
             </Typography>
             {showNotification && (
-                <Typography variant="body2" color="error" mt="1" mb={2}>
+                <Typography variant="body2" color="error" mt="1" mb={2} sx={{
+                    color: theme.palette.error.main,
+                }}>
                     Please clear the breed name field to search for breeds by their attributes.
                 </Typography>
             )}
@@ -240,7 +251,7 @@ const BreedSearchForm = () => {
                     </>
                 )}
                 <Grid item xs={12}>
-                    <Button type="submit" onClick variant="contained" color="primary" fullWidth>
+                    <Button type="submit" variant="contained" color="primary" fullWidth>
                         Search
                     </Button>
                 </Grid>

@@ -9,32 +9,59 @@ export const LayoutProvider = ({ children }) => {
     const [appBarHeight, setAppBarHeight] = useState(0);
     const [isDoggyWalletOpen, setDoggyWalletOpen] = useState(false);
 
-    const toggleNav = () => {
-        setFavBreedRailOpen(false);
-        setNavOpen(!isNavOpen);
-    }
+    const handleNavToggle = () => {
+        if (isNavOpen) {
+            setFavBreedRailOpen(false);
+            setDoggyWalletOpen(false);
+            setNavOpen(false);
+        } else {
+            setFavBreedRailOpen(false);
+            setDoggyWalletOpen(false);
+            setNavOpen(true);
+        }
+    };
 
-    const toggleBreedSearchForm = () => setBreedSearchFormOpen
-    (!isBreedSearchFormOpen);
-    
-    const toggleFavBreedRail = () => {
-        setNavOpen(false);
-        setFavBreedRailOpen(!isFavBreedRailOpen);
-    }
+    const handleFavBreedRail = () => {
+        if (isFavBreedRailOpen) {
+            setFavBreedRailOpen(false)
+            setDoggyWalletOpen(false);
+            setNavOpen(false);
+            return;
+        } else {
+            setFavBreedRailOpen(true);
+            setDoggyWalletOpen(false);
+            setNavOpen(false);
+        }
+    };
+
+    const handleDoggyWallet = () => {
+        if (isDoggyWalletOpen) {
+            setNavOpen(false);
+            setFavBreedRailOpen(false)
+            setDoggyWalletOpen(false);
+            return;
+        } else {
+            setNavOpen(false);
+            setFavBreedRailOpen(false)
+            setDoggyWalletOpen(true);
+        }
+    };
 
     return (
         <LayoutContext.Provider value={{
             isNavOpen,
             setNavOpen,
-            toggleNav,
+            handleNavToggle,
             isBreedSearchFormOpen,
             setBreedSearchFormOpen,
-            toggleBreedSearchForm,
             isFavBreedRailOpen,
             setFavBreedRailOpen,
-            toggleFavBreedRail,
+            handleFavBreedRail,
             appBarHeight,
-            setAppBarHeight
+            setAppBarHeight,
+            isDoggyWalletOpen,
+            setDoggyWalletOpen,
+            handleDoggyWallet
         }}>
             {children}
         </LayoutContext.Provider>

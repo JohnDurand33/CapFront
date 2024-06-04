@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken, isTokenExpired } from '../utils/auth';
+import { useLogin } from '../contexts/LoginContext';
 
 const ProtectedRoute = ({ children }) => {
     const navigate = useNavigate();
-    const token = getToken();
+    const { token, isTokenExpired, loggedIn } = useLogin();
 
     useEffect(() => {
         if (!token || isTokenExpired(token)) {
@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
         }
     }, [token, navigate]);
 
-    return token && !isTokenExpired(token) ? children : null;
+    return token && loggedIn ? children : null;
 };
 
 export default ProtectedRoute;

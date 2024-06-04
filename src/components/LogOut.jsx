@@ -6,16 +6,10 @@ const LogOut = () => {
     const { logout } = useLogin();
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        await logout();
-        navigate('/login');
-    };
-
     useEffect(() => {
-        handleLogout();
+        logout();
+        navigate('/login');
     }, []);
-
-    return null;
 };
 
 export default LogOut;

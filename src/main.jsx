@@ -1,9 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { CssBaseline, ThemeProvider,  } from '@mui/material';
+import './styles/index.css';
 
 const Main = () => {
-
     return (
             <App />
     );

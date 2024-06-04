@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
-import api from './ApiBackBP.jsx';
+import api from '../contexts/api.jsx';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
@@ -44,16 +44,19 @@ const SignUpForm = () => {
                 password: values.password,
                 state: values.state,
                 zip_code: values.zipCode,
-            });
+            })
             console.log('Sign Up Successful:', response.data);
             setStatus({ success: 'Sign up successful! Please log in.', error: null });
             setErrors({});
             navigate('/login');
         } catch (error) {
+            // Handle error during the API call
             console.error('Sign Up Failed:', error);
             setStatus({ success: null, error: error.response?.data?.message || 'Sign up failed. Please try again.' });
+        } finally {
+            // Ensure that setSubmitting is called to finish the form submission process
+            setSubmitting(false);
         }
-        setSubmitting(false);
     };
 
     return (

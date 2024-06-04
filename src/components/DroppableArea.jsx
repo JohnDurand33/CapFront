@@ -1,8 +1,8 @@
 import { useDrop } from 'react-dnd';
 
-const DroppableArea = ({ id, children, onDrop }) => {
+const DroppableArea = ({ id, children, onDrop, className, acceptType }) => {
     const [{ isOver }, drop] = useDrop({
-        accept: 'breed',
+        accept: acceptType,
         drop: (item, monitor) => {
             console.log('Item dropped in DroppableArea:', item);
             if (onDrop) {
@@ -18,12 +18,7 @@ const DroppableArea = ({ id, children, onDrop }) => {
     return (
         <div
             ref={drop}
-            style={{
-                border: '2px dashed grey',
-                padding: '16px',
-                borderRadius: '4px',
-                backgroundColor: isOver ? '#e0e0e0' : '#fff',
-            }}
+            className={className}
         >
             {children}
         </div>

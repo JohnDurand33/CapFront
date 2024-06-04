@@ -1,5 +1,5 @@
-import { useState, useMemo, createContext}from 'react';
-import { Route, Routes, BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { LoginProvider } from './contexts/LoginContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { DogSearchProvider } from './contexts/DogSearchContext';
@@ -14,6 +14,7 @@ import DogSearchView from './components/DogSearchView';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './components/NotFound';
 import { ThemeProvider, useMediaQuery, CssBaseline } from '@mui/material';
+import Instructions from './components/Instructions';
 import { getTheme } from './styles/theme'
 
 const App = () => {
@@ -26,35 +27,36 @@ const App = () => {
     const toggleMode = () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
     };
-    
 
     return (
         <Router>
             <LoginProvider>
-                <ThemeProvider theme={theme}>  
-                    <CssBaseline />        
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
                     <LayoutProvider>
                         <DogSearchProvider>
                             <DndContext>
                                 <Routes>
-                                    <Route path="/*" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
+                                    <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
                                         <Route index element={<Home />} />
                                         <Route path="signup" element={<SignUpForm />} />
                                         <Route path="login" element={<LogIn />} />
-                                            <Route element={<ProtectedRoute />}>
-                                                <Route path="home" element={<Home />} />
-                                                <Route path="breedview" element={<BreedSearchView />} />
-                                                <Route path="dogsearch" element={<DogSearchView />} />
+                                        <Route path="home" element={<Home />} />
+                                        <Route path="breedview" element={<BreedSearchView />} />
+                                        <Route path="dogsearch" element={<DogSearchView />} />
+                                        <Route path="instructions" element={<Instructions />} />
+                                        <Route element={<ProtectedRoute />}>
+                                            {/* Add protected routes here */}
                                         </Route>
                                         <Route path="*" element={<NotFound />} />
                                     </Route>
                                 </Routes>
-                        </DndContext>
-                    </DogSearchProvider>
-                </LayoutProvider>
-            </ThemeProvider>
-        </LoginProvider>
-        </Router >
+                            </DndContext>
+                        </DogSearchProvider>
+                    </LayoutProvider>
+                </ThemeProvider>
+            </LoginProvider>
+        </Router>
     );
 };
 

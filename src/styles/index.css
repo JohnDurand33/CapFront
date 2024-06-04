@@ -8,3 +8,15 @@ body, html, #root {
 .searchdog-image {
     height: 240px;
 }
+
+.breeds {
+    background-color: #f0f0f0; 
+    padding: 16px; 
+    transition: background-color 0.3s ease-in-out;
+    border: 2px dashed grey; 
+    border-radius: 4px;
+}
+
+.breeds.is-over {
+    background-color: #e0e0e0;
+}

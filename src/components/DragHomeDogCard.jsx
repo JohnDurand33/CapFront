@@ -1,11 +1,13 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import BreedCard from './BreedCard';
+import { useTheme } from '@emotion/react';
+import HomeDogCard from './HomeDogCard';
 
-const DragBreedCard = ({ id, dog }) => {
+const DragHomeDogCard = ({ dog }) => {
+    const theme = useTheme();
     const [{ isDragging }, drag] = useDrag({
-        type: 'breed',
-        item: { id, dog },
+        type: 'dog',
+        item: { dog },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
@@ -17,11 +19,12 @@ const DragBreedCard = ({ id, dog }) => {
             style={{
                 opacity: isDragging ? 0.5 : 1,
                 cursor: 'move',
+                backgroundColor: theme.palette.background.paper
             }}
         >
-            <DogSearchCard dog={dog} />
+            <HomeDogCard dog={dog}/>
         </div>
     );
 };
 
-export default DragBreedCard;
+export default DragHomeDogCard;

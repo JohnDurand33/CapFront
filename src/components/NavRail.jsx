@@ -6,14 +6,17 @@ import PetsIcon from '@mui/icons-material/Pets';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
+import { useMediaQuery } from '@mui/material';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
     const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen } = useLayout();
     const { loggedIn, logout } = useLogin();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleNewSearchRequest = () => {
         console.log('New Search Requested');
@@ -25,6 +28,10 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
     const handleLogout = async () => {
         await logout();
     };
+
+    if (isSmallScreen) {
+        return null;
+    }
 
     return (
         <>
@@ -82,7 +89,11 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                     <ListItemButton onClick={handleLogout}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary="Sign Out" />
-                    </ListItemButton>)}
+                        </ListItemButton>)}
+                    <ListItemButton component={Link} to='/instructions'>
+                        <ListItemIcon>
+                            <HelpOutlineIcon /></ListItemIcon>
+                    </ListItemButton>
                     <ListItem>
                         <ThemeToggler mode={mode} toggleMode={toggleMode} />
                     </ListItem>

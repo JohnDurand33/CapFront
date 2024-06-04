@@ -9,7 +9,6 @@ const useAppBarHeight = () => {
             if (appBarRef.current) {
                 const height = appBarRef.current.clientHeight;
                 setAppBarHeight(height);
-                console.log(height)
             }
         };
 

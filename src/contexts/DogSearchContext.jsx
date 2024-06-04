@@ -1,20 +1,20 @@
 import React, { createContext, useState, useContext } from 'react';
 
+
 const DogSearchContext = createContext();
 
 export const DogSearchProvider = ({ children }) => {
-    const [userWalletDogs, setUserWalletDogs] = useState([]);
+    const [userFavDogs, setUserFavDogs] = useState([]);
     const [userFavBreeds, setUserFavBreeds] = useState([]);
     const [myBreeds, setMyBreeds] = useState([]);
     const [myDogs, setMyDogs] = useState([]);
+    const [homeDogs, setHomeDogs] = useState([]);
 
     const updateBreeds = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/updatebreeds', {
-                method: 'POST',
+            const response = api.post('/api/updatebreeds', {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ fav_breeds: userFavBreeds }),
             });
@@ -30,11 +30,8 @@ export const DogSearchProvider = ({ children }) => {
             console.error('Failed to update favorite breeds:', error);
         }
     }
-
-    
-
     return (
-        <DogSearchContext.Provider value={{ userWalletDogs, setUserWalletDogs, userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs, updateBreeds}}>
+        <DogSearchContext.Provider value={{ userFavDogs, setUserFavDogs, userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs, updateBreeds, homeDogs, setHomeDogs }}>
             {children}
         </DogSearchContext.Provider>
     );

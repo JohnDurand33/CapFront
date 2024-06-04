@@ -7,7 +7,7 @@ import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
 const Login = () => {
-    const { login } = useLogin();
+    const { login, token, logToken } = useLogin();
     const { setFavBreedRailOpen, setNavOpen, isNavOpen } = useLayout();
     const navigate = useNavigate();
 
@@ -38,6 +38,7 @@ const Login = () => {
             setStatus({ success: null, error: 'Login failed. Please try again.' });
         }
         setSubmitting(false);
+        logToken();
     };
 
     return (
