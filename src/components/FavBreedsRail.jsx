@@ -63,6 +63,7 @@ const FavBreedsRail = () => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                method:'POST',
                 body: JSON.stringify({ fav_breeds: userFavBreeds }),
             });
             console.log('Matched dogs:', response.data);
@@ -74,6 +75,14 @@ const FavBreedsRail = () => {
         } catch (error) {
             console.error('Failed to fetch matched dogs:', error);
         }
+    };
+
+    const handleClearFavBreeds = async () => {
+        try {
+            const response = await api.delete('api/clear_fav_breeds');
+            console.log('Favorite breeds cleared successfully');
+            setUserFavBreeds([]);
+        } catch (error) { console.error('Failed to clear favorite breeds:', error); }
     };
 
     return (
@@ -130,6 +139,13 @@ const FavBreedsRail = () => {
                     onClick={handleFindMyDog}
                 >
                     Find My Dog!
+                </Button >
+                <Button variant="outlined"
+                    color="secondary"
+                    sx={{ marginTop: "20px" }}
+                    onClick={handleClearFavBreeds}
+                >
+                    Clear my Favorite Breeds List!
                 </Button>
             </Box>
         </Drawer>

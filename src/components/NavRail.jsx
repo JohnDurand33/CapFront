@@ -93,8 +93,8 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                     <ListItemButton component={Link} to='/instructions'>
                         <ListItemIcon>
                             <HelpOutlineIcon /></ListItemIcon>
-                    </ListItemButton>
-                    <ListItem>
+                    </ListItemButton >
+                    <ListItem sx={{ml:-1}}>
                         <ThemeToggler mode={mode} toggleMode={toggleMode} />
                     </ListItem>
                 </List>

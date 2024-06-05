@@ -54,18 +54,18 @@ const DoggyWalletRail = () => {
         }
     };
 
-    const handleFindMyDog = async () => {
-        try {
-            const response = await api.post('/api/find_dogs');
-            console.log('Matched dogs:', response.data);
-            setNavOpen(false);
-            setFavBreedRailOpen(false);
-            setDoggyWalletOpen(true);
-            setMyDogs(response.data);
-        } catch (error) {
-            console.error('Failed to fetch matched dogs:', error);
+    const handleClearFavDogs = async () => {
+        const response = await api.delete('/api/clear_fav_dogs');
+        if (response.status === 200) {
+            console.log('Favorite dogs cleared successfully');
+            setUserFavDogs([]);
+        } else {
+            console.error('Failed to clear favorite dogs:', response.statusText);
         }
     };
+        
+        
+
 
     return (
         <Drawer
@@ -118,7 +118,7 @@ const DoggyWalletRail = () => {
                     variant="contained"
                     color="primary"
                     sx={{ marginTop: '10px' }}
-                    onClick={handleFindMyDog}
+                    onClick={handleClearFavDogs}
                 >
                     Clear my Favorites List!
                 </Button>
