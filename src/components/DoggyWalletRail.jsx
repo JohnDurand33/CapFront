@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Box, Button, Drawer, Typography } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
+import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material/styles';
 import DroppableArea from './DroppableArea';
 import DragDogSearchCard from './DragDogSearchCard';
@@ -9,21 +10,23 @@ import api from '../contexts/api';
 
 const DoggyWalletRail = () => {
     const { isDoggyWalletOpen, appBarHeight, setDoggyWalletOpen, setNavOpen, setFavBreedRailOpen } = useLayout();
+    const { loggedIn } = useLogin();
     const { userFavDogs, setUserFavDogs, myDogs, setMyDogs, homeDogs, setHomeDogs } = useDogSearch();
     const theme = useTheme();
 
     useEffect(() => {
-        const fetchUserFavDogs = async () => {
-            try {
-                const response = await api.get('/api/get_favdogs');
-                console.log('GET /api/get_favdogs response:', response.data);
-                setUserFavDogs(response.data);
-            } catch (error) {
-                console.error('Failed to fetch favorite dogs:', error);
-            }
-        };
-
-        fetchUserFavDogs();
+        if (loggedIn) {
+            const fetchUserFavDogs = async () => {
+                try {
+                    const response = await api.get('/api/get_favdogs');
+                    console.log('GET /api/get_favdogs response:', response.data);
+                    setUserFavDogs(response.data);
+                } catch (error) {
+                    console.error('Failed to fetch favorite dogs:', error);
+                }
+            };
+            fetchUserFavDogs();
+        }
     }, [setUserFavDogs]);
 
     const handleDrop = async (item) => {

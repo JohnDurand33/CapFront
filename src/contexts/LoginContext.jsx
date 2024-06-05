@@ -1,72 +1,67 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken, getZipCode, getState, setLocalToken, setLocalZipCode, setLocalState, removeLocalToken, removeLocalState, removeLocalZipCode, isTokenExpired, refreshToken } from '../utils/auth';
+import { getToken, setSessionToken, removeSessionToken, isTokenExpired, refreshToken } from '../utils/auth';
 import api from '../contexts/api';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const [state, setState] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         console.log('LoginProvider: Initial authentication check');
         const storedToken = getToken();
-        const storedZip = getZipCode();
-        const storedState = getState();
 
         if (!storedToken) {
+            console.log('No token found');
+            setLoggedIn(false);
             logout();
-        } else if (storedZip) {
-            setZipCode(storedZip);
-        } else if (storedState) {
-            setState(storedState);
         } else {
             if (!isTokenExpired(storedToken)) {
-                setToken(storedToken);
-                setLoggedIn(true);
+                refreshToken(storedToken, setToken, setLoggedIn);
+                console.log('Token is now valid');
             } else {
                 console.log('Token is expired');
                 logout();
-            };
-        };
-        return () => {
-            logout();
+            }
         }
-    }, []); 
+    }, []);
 
-    // Periodic token refresh check
     useEffect(() => {
-        const interval = setInterval(async () => {
-            if (token && isTokenExpired(token)) {
-                console.log(`Token is expired, trying to refresh token`);
-                const currToken = token;
-                const newToken = await refreshToken(currToken, setToken, setState, setZipCode);
-                if (!newToken) {
-                    console.log('Token refresh failed, if this keeps happening make sure newToken has been given enough time to set before logging out.');
-                    logout();
+        const checkAndRefreshToken = async () => {
+            if (loggedIn && token) {
+                console.log('LoginProvider: Token check interval');
+                if (isTokenExpired(token)) {
+                    console.log('Token is expired, trying to refresh token');
+                    const success = await refreshToken(token, setToken, setLoggedIn);
+                    if (success) {
+                        console.log('Token refresh successful');
+                    } else {
+                        console.log('Token refresh failed. Logging out.');
+                        logout();
+                    }
                 } else {
-                    console.log('Token refresh successful');
-                }}
-        }, 60 * 1000); 
+                    console.log('Token is still valid');
+                }
+            } else {
+                console.log('No token found');
+            }
+        };
+        const interval = setInterval(checkAndRefreshToken, 60 * 1000);
         return () => clearInterval(interval);
-    }), [token];
+    }, [token, loggedIn]);
 
     const login = async (email, password) => {
         try {
             const response = await api.post('/auth/login', { email, password });
             if (response.status === 200) {
-                const { token, zip_code, state } = response.data;
+                const { token } = response.data;
                 console.log('Login successful:', response.data);
-                setLocalToken(token);
-                setLocalState(state);
-                setLocalZipCode(zip_code);
+                setSessionToken(token);
                 setToken(token);
-                setZipCode(zip_code);
-                setState(state);
                 setLoggedIn(true);
                 logToken();
                 return true;
@@ -77,23 +72,27 @@ export const LoginProvider = ({ children }) => {
         }
     };
 
-const logout = () => {
-    removeLocalToken('token');
-    removeLocalState('state');
-    removeLocalZipCode('zipCode');
-    setZipCode(null);
-    setState(null);
-    setToken(null)
-    setLoggedIn(false);
-    navigate('/login');
+    const logout = () => {
+        removeSessionToken();
+        setToken(null);
+        setLoggedIn(false);
+        navigate('/home');
     };
 
     const logToken = () => {
         console.log('Token:', token);
-    }
+    };
+
+    const getUserInfo = () => {
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            return { email: decodedToken.email, state: decodedToken.state, zip_code: decodedToken.zip_code };
+        }
+        return null;
+    };
 
     return (
-        <LoginContext.Provider value={{ loggedIn, token, zipCode, state, getToken, getState, getZipCode, setLoggedIn, setToken, setZipCode, setLocalToken, setState, login, logout, logToken }}>
+        <LoginContext.Provider value={{ loggedIn, token, getToken, setLoggedIn, setToken, setSessionToken, login, logout, logToken, getUserInfo }}>
             {children}
         </LoginContext.Provider>
     );

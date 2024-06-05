@@ -31,7 +31,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
             return;
         } else {
             setBreedSearchFormOpen(true);
-            setNavOpen(false);
+            setNavOpen(true);
             setFavBreedRailOpen(false)
             setDoggyWalletOpen(false);
         }
@@ -39,7 +39,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/login');
+        navigate('/home');
     };
 
 
@@ -48,15 +48,15 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
         <>
         <AppBar position="fixed" ref={appBarRef} sx={{ zIndex: theme.zIndex.drawer + 1, width: '100vw' }}>
             <Toolbar sx={{ml:2}}>
-                <IconButton color="inherit" onClick={handleNavToggle} edge="start">
+                <IconButton color="inherit" onClick={handleNavToggle} edge="start" >
                     <MenuIcon />
                 </IconButton>
                 <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - 0px)` }}>
 
-                        <IconButton color="inherit" onClick={handleDoggyWallet}>
+                        <IconButton color="inherit" onClick={handleDoggyWallet} disabled={!loggedIn}>
                         <AccountBalanceWalletIcon />
                     </IconButton>
-                        <IconButton color="inherit" onClick={handleFavBreedRail} >
+                        <IconButton color="inherit" onClick={handleFavBreedRail} disabled={!loggedIn}>
                         <PetsIcon />
                     </IconButton>
                         <IconButton

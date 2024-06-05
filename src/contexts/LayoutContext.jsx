@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const LayoutContext = createContext();
 
@@ -8,6 +8,11 @@ export const LayoutProvider = ({ children }) => {
     const [isFavBreedRailOpen, setFavBreedRailOpen] = useState(false);
     const [appBarHeight, setAppBarHeight] = useState(0);
     const [isDoggyWalletOpen, setDoggyWalletOpen] = useState(false);
+
+    useEffect(() => {
+        setFavBreedRailOpen(false);
+        setNavOpen(true);
+    }, []);
 
     const handleNavToggle = () => {
         if (isNavOpen) {

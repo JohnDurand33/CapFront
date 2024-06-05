@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -6,18 +6,21 @@ import DragHomeDogCard from './DragHomeDogCard';
 import DroppableArea from './DroppableArea';
 import api from '../contexts/api';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import {jwtDecode} from 'jwt-decode';
+import { getRandomZip } from '../utils/randomZip'; // Import the utility function
 
 const Home = () => {
-    const { zipCode } = useLogin();
+    const { token, loggedIn } = useLogin();
     const { homeDogs, setHomeDogs, userFavDogs, setUserFavDogs } = useDogSearch();
     const { setNavOpen } = useLayout();
+    const [fetchZip, setFetchZip] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setHomeDogs([]);
         setNavOpen(true);
-        const homePageCall = async () => {
-            console.log('Inside homePageCall');
 
+        const fetchDogs = async (zipCode) => {
             const payload = {
                 "apikey": "t4mQWFjp",
                 "objectType": "animals",
@@ -46,7 +49,7 @@ const Home = () => {
                         {
                             "fieldName": "animalLocation",
                             "operation": "equals",
-                            "criteria": zipCode ? zipCode : "90210"
+                            "criteria": zipCode
                         }
                     ],
                     "fields": [
@@ -63,7 +66,7 @@ const Home = () => {
             };
 
             try {
-                console.log('Fetching dogs from RescueGroups...');
+                console.log(`Fetching dogs from RescueGroups for zip code: ${zipCode}...`);
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: headers,
@@ -77,6 +80,10 @@ const Home = () => {
 
                 const data = await response.json();
                 console.log('Dogs fetched from RescueGroups:', data);
+
+                if (data.message === "Unexpected system error") {
+                    return false;
+                }
 
                 if (data.data && typeof data.data === 'object') {
                     const dogsArray = Object.values(data.data)
@@ -97,17 +104,36 @@ const Home = () => {
                         }));
                     setHomeDogs(dogsArray);
                     console.log('Filtered Dogs Array:', dogsArray);
-                } else {
-                    console.error('Unexpected response format:', data);
-                    setHomeDogs([]); // Set an empty array if the response format is unexpected
+                    return true;
                 }
             } catch (error) {
                 console.error('Failed to fetch dogs:', error);
-                setHomeDogs([]); // Set an empty array in case of an error
+                setHomeDogs([]);
+                return false;
             }
-        }
-        homePageCall();
-    }, [zipCode]);
+        };
+
+        const homePageCall = async () => {
+            let zipCode = loggedIn ? jwtDecode(token).zip_code : getRandomZip();
+            let success = false;
+
+            while (!success) {
+                success = await fetchDogs(zipCode);
+                if (!success) {
+                    zipCode = getRandomZip();
+                }
+            }
+
+            console.log('Zip Code:', zipCode);
+            return zipCode;
+        };
+
+        homePageCall().then((finalZipCode) => {
+            setFetchZip(finalZipCode);
+            console.log('Final Zip Code:', finalZipCode);
+            setLoading(false); // Set loading to false after fetch is successful
+        })
+    }, [loggedIn]);
 
     const handleDrop = async (item) => {
         const draggedDog = userFavDogs.find(dog => dog.api_id === item.dog.api_id);
@@ -128,10 +154,14 @@ const Home = () => {
         }
     };
 
+    if (loading) {
+        return <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>Loading...</Typography>;
+    }
+
     return (
         <Box sx={{ width: '100%', height: '100%', overflow: 'auto', padding: '16px' }}>
             <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
-                Available Dogs Near You!!!
+                Available Dogs Near {fetchZip}!!!
             </Typography>
             <DroppableArea onDrop={handleDrop} className="custom-droppable-area" acceptType='dog'>
                 <Grid container spacing={2}>

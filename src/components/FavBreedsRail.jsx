@@ -79,7 +79,7 @@ const FavBreedsRail = () => {
 
     const handleClearFavBreeds = async () => {
         try {
-            const response = await api.delete('api/clear_fav_breeds');
+            const response = await api.delete('api/clearbreeds');
             console.log('Favorite breeds cleared successfully');
             setUserFavBreeds([]);
         } catch (error) { console.error('Failed to clear favorite breeds:', error); }
@@ -107,7 +107,18 @@ const FavBreedsRail = () => {
                     Favorite Breeds
                 </Typography>
                 <DroppableArea id="userFavBreeds" onDrop={handleDrop} acceptType='breed'>
-                    {userFavBreeds.length === 0 ? (
+                    {!loggedIn ? (<Box
+                        sx={{
+                            border: '2px dashed grey',
+                            borderRadius: '4px',
+                            padding: '16px',
+                            textAlign: 'center',
+                            backgroundColor: theme.palette.background.paper,
+                            color: theme.palette.text.primary
+                        }}
+                    >
+                        Sign Up or Sign In To Use this Feature!
+                    </Box>) : userFavBreeds.length === 0 ? (
                         <Box
                             sx={{
                                 border: '2px dashed grey',
@@ -140,13 +151,16 @@ const FavBreedsRail = () => {
                 >
                     Find My Dog!
                 </Button >
-                <Button variant="outlined"
-                    color="secondary"
-                    sx={{ marginTop: "20px" }}
-                    onClick={handleClearFavBreeds}
-                >
-                    Clear my Favorite Breeds List!
-                </Button>
+                {userFavBreeds.length > 0 && (
+                    <Button variant="outlined"
+                        color="secondary"
+                        sx={{
+                            marginTop: "20px"
+                        }}
+                        onClick={handleClearFavBreeds}
+                    >
+                        Clear my Favorite Breeds List!
+                    </Button>)}
             </Box>
         </Drawer>
     );

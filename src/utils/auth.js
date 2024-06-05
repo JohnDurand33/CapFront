@@ -1,52 +1,30 @@
-import {jwtDecode} from "jwt-decode";
-import api from "../contexts/api.jsx"
+import { jwtDecode } from "jwt-decode";
+import api from "../contexts/api.jsx";
 
-
-// Utility to get token from localStorage
+// Utility to get token from sessionStorage
 export function getToken() {
-    return localStorage.getItem("token");
+    return sessionStorage.getItem("token");
 }
 
-export function getZipCode() {
-    return localStorage.getItem("zipCode");
+// Utility to set token in sessionStorage
+export function setSessionToken(token) {
+    sessionStorage.setItem("token", token);
 }
 
-export function getState() {
-    return localStorage.getItem("state");
-}
-
-export function setLocalToken(token) {
-    localStorage.setItem("token", token);
-}
-
-export function setLocalZipCode(zipCode) {
-    localStorage.setItem("zipCode", zipCode);
-}
-
-export function setLocalState(state) {
-    localStorage.setItem("state", state);
-}
-
-export function removeLocalToken(token) {
-    localStorage.removeItem("token", token)
-}
-
-export function removeLocalZipCode(zipCode) {
-    localStorage.removeItem("zipCode", zipCode);
-}
-
-export function removeLocalState(state) {
-    localStorage.removeItem("state", state);
+// Utility to remove token from sessionStorage
+export function removeSessionToken() {
+    sessionStorage.removeItem("token");
 }
 
 // Utility to check token expiry
 export function isTokenExpired(token) {
-    if (!token || token.split(".").length !== 3) {
+    if (!token) {
         return true;
     }
     try {
         const decodedToken = jwtDecode(token);
-        return decodedToken.exp * 1000 < Date.now();
+        const isExpired = decodedToken.exp * 1000 < Date.now();
+        return isExpired;
     } catch (error) {
         console.error("Invalid token:", error);
         return true;
@@ -54,30 +32,26 @@ export function isTokenExpired(token) {
 }
 
 // Function to refresh token
-export async function refreshToken(currentToken, setToken, setState, setZipCode) {
+export async function refreshToken(currentToken, setToken, setLoggedIn) {
     try {
-        console.log("Current Token:", currentToken); // Log the current token
-        const response = await api.post("/auth/refresh",
-            {
-                token: currentToken,
-            }
-        );
-        const newToken = response.data.token;
-        const newZipCode = response.data.zip_code;
-        const newState = response.data.state;
-        console.log("New Token:", newToken); // Log the new token
-        setLocalToken(newToken);
-        setToken(newToken)
-        setLocalState(newState);
-        setState(newState);
-        setLocalZipCode(newZipCode);
-        setZipCode(newZipCode);
-        return newToken;
+        console.log("Current Token:", currentToken);
+        const response = await api.post("/auth/refresh", {
+            token: currentToken,
+        });
+        const { token: newToken } = response.data;
+
+        console.log("New Token:", newToken);
+
+        setSessionToken(newToken);
+        setToken(newToken);
+        setLoggedIn(true);
+
+        return true;
     } catch (error) {
         console.error(
             "Error refreshing token:",
             error.response?.data || error.message
         );
-        return null;
+        return false;
     }
 }

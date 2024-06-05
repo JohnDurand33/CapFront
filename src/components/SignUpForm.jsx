@@ -3,19 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
 import api from '../contexts/api.jsx';
-import { useLayout } from '../contexts/LayoutContext';
-import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-    const { loggedIn, setLoggedIn, setToken } = useLogin();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!loggedIn)
-            setLoggedIn(false);
-            setToken(null);
-    }, [setLoggedIn]);
 
     const initialValues = {
         email: '',

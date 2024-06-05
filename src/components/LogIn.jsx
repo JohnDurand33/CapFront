@@ -7,14 +7,9 @@ import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
 const Login = () => {
-    const { login, token, logToken } = useLogin();
-    const { setFavBreedRailOpen, setNavOpen, isNavOpen } = useLayout();
+    const { isNavOpen, setNavOpen, setFavBreedsRailOpen, setDoggyWalletOpen } = useLayout();
+    const { login } = useLogin();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setFavBreedRailOpen(false);
-        setNavOpen(true);
-    }, [setFavBreedRailOpen, setNavOpen]);
 
     const initialValues = {
         email: '',
@@ -26,28 +21,26 @@ const Login = () => {
         password: Yup.string().min(8, 'Password must be at least 8 characters').required('Required'),
     });
 
-    const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
+    const handleLogin = async (values, { setSubmitting, setErrors, setStatus }) => {
         const success = await login(values.email, values.password);
         if (success) {
             console.log('Login successful');
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
-            navigate("/home")
+            setNavOpen(true);
+            setFavBreedsRailOpen(false);
+            setDoggyWalletOpen(false);
+            navigate("/home");
         } else {
             console.error('Login failed');
             setStatus({ success: null, error: 'Login failed. Please try again.' });
         }
         setSubmitting(false);
-        logToken();
     };
 
     return (
         <>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
                 {({ isSubmitting, status }) => (
                     <Form>
                         <Box>
@@ -55,28 +48,10 @@ const Login = () => {
                             {status?.success && <Typography color="success">{status.success}</Typography>}
                             {status?.error && <Typography color="error">{status.error}</Typography>}
                             <Box mb={2}>
-                                <Field
-                                    as={TextField}
-                                    label="Email"
-                                    name="email"
-                                    type="email"
-                                    fullWidth
-                                    required
-                                    helperText={<ErrorMessage name="email" />}
-                                    autoComplete="email"
-                                />
+                                <Field as={TextField} label="Email" name="email" type="email" fullWidth required helperText={<ErrorMessage name="email" />} autoComplete="email" />
                             </Box>
                             <Box mb={2}>
-                                <Field
-                                    as={TextField}
-                                    label="Password"
-                                    name="password"
-                                    type="password"
-                                    fullWidth
-                                    required
-                                    helperText={<ErrorMessage name="password" />}
-                                    autoComplete="new-password"
-                                />
+                                <Field as={TextField} label="Password" name="password" type="password" fullWidth required helperText={<ErrorMessage name="password" />} autoComplete="new-password" />
                             </Box>
                             <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
                                 Log In
