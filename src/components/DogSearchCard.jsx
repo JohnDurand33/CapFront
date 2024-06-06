@@ -13,7 +13,7 @@ const DogSearchCard = ({ dog }) => {
                         title={dog.name}
                         sx={{
                             width: '100%',
-                            height: '300px', // Set the desired height
+                            height: '140px',
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
@@ -49,7 +49,7 @@ const DogSearchCard = ({ dog }) => {
                         sx={{
                             borderRadius: 0,
                             width: '100%',
-                            height: '60px', // Adjust height as needed
+                            height: '60px', 
                             background: 'theme.palette.primary.main',
                             fontWeight: 'bold',
                             textAlign: 'center',

@@ -13,7 +13,7 @@ const BreedCard = ({ breed }) => {
                         component="img"
                         image={breed.image_link}
                         alt={breed.name}
-                        sx={{ height: "140", width: '100%', aspectRatio: `3/2` }}
+                        sx={{ height: "140px", width: '100%', aspectRatio: `3/2` }}
                     />
                     <CardContent>
                         <Typography variant="h6" fontWeight="600" textAlign="center">{breed.name}</Typography>
