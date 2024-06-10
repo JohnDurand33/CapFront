@@ -39,7 +39,7 @@ const SignUpForm = () => {
             console.log('Sign Up Successful:', response.data);
             setStatus({ success: 'Sign up successful! Please log in.', error: null });
             setErrors({});
-            navigate('/login');
+            navigate('/home');
         } catch (error) {
             // Handle error during the API call
             console.error('Sign Up Failed:', error);
