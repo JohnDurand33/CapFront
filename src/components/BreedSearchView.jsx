@@ -42,14 +42,15 @@ const BreedSearchView = () => {
     console.log('Computed maxCardWidth:', maxCardWidth);
 
     return (
-        <DroppableArea id="breedSearch" acceptType="breed" onDrop={handleDrop}>
+        <DroppableArea id="breedSearch" acceptType="breed" onDrop={handleDrop} >
             {myBreeds.length === 0 ? (
-                <Grid container spacing={2} 
+                <Grid container spacing={3}
                     sx={{
                         height: '100%',
                         display: 'flex',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        paddingTop: theme.spacing(8)
                     }}
                 >
                     <Box
@@ -85,7 +86,8 @@ const BreedSearchView = () => {
                     ))}
                 </Box>
             )}
-        </DroppableArea>
+            </DroppableArea>
+
     );
 };
 

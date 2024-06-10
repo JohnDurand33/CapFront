@@ -7,7 +7,7 @@ const BreedCard = ({ breed }) => {
 
     return (
         <>
-            <Card sx={{ backgroundColor: theme.palette.secondary.main }}>
+            <Card sx={{ border: `3px solid ${theme.palette.secondary.main}` }}>
                 <CardActionArea>
                     <CardMedia
                         component="img"

@@ -25,7 +25,7 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
 
     return (
         <>
-            <NewAppBar toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} />
+            <NewAppBar toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} appBarHeight={appBarHeight} />
             {screenType !== 'phone' && <NavRail toggleMode={toggleMode} mode={mode} appBarHeight={appBarHeight} />}
             <BreedSearchDrawer appBarHeight={appBarHeight} />
             {isFavBreedRailOpen && <FavBreedsRail />}

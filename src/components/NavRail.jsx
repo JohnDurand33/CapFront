@@ -12,6 +12,8 @@ import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import BrandLogo from '../static/Brand.png'
+
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
@@ -109,7 +111,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                         <ThemeToggler mode={mode} toggleMode={toggleMode} />
                     </ListItem>
                 </List>
-                <img src="../static/Brand.png" alt="Brand" />
+                <img src={BrandLogo} alt="Brand" />
             </Drawer>
         </>
     );

@@ -15,9 +15,10 @@ import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import BrandLogo from '../static/Brand.png';
 
 
-const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
+const NewAppBar = ({ appBarRef, toggleMode, mode, appBarHeight }) => {
     const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeconfig } = useLayout();
     const {userFavBreeds} = useDogSearch();
 
@@ -83,7 +84,9 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                             <HomeIcon />
                         </IconButton>
                 </Box>
-
+                    <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', height: '100%', display: 'flex', alignItems: 'center' }}>
+                        <img src={BrandLogo} alt="Brand" style={{ height: '80%', width: 'auto', pointerEvents: 'none' }} />
+                    </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {loggedIn ? (
