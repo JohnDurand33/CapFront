@@ -1,14 +1,13 @@
-import axios from 'axios';
 import { Button } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import api from '../contexts/api';
 
 const FindMyDogButton = () => {
     const { token } = useDogSearch();
 
     const saveFavBreedsToBackend = async (favBreeds) => {
         try {
-            await axios.post('/api/updatebreeds', favBreeds, {
-                headers: { 'X-Api-Key': token },
+            await api.post('/api/updatebreeds', favBreeds, {
                 'Content-Type': 'application/json'
             });
             console.log('Favorites saved successfully!');

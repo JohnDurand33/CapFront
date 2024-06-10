@@ -45,11 +45,8 @@ const App = () => {
                                         <Route path="breedview" element={<BreedSearchView />} />
                                         <Route path="dogsearch" element={<DogSearchView />} />
                                         <Route path="instructions" element={<Instructions />} />
-                                        <Route element={<ProtectedRoute />}>
-                                            {/* Add protected routes here */}
                                         </Route>
                                         <Route path="*" element={<NotFound />} />
-                                    </Route>
                                 </Routes>
                             </DndContext>
                         </DogSearchProvider>
