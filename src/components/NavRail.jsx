@@ -1,3 +1,4 @@
+import React from 'react'; 
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton, useTheme, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,7 +24,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
         console.log('New Search Requested');
         setNavOpen(false)
         setBreedSearchFormOpen(true);
-        if (myBreeds.length !== 0) {
+        if (myBreeds && myBreeds.length > 0) {
             setFavBreedRailOpen(true);
         }
     };

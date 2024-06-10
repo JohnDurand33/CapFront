@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
 
 const HomeDogCard = ({ dog }) => {
+    const theme = useTheme();
+    
     const [orgEmail, setOrgEmail] = useState('');
 
 
@@ -62,7 +65,7 @@ Thank you!`;
     };
 
     return (
-        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4, border: '2px solid gray', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
+        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4, border: `3px solid ${theme.palette.secondary.main}`, overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
             <Grid container>
                 <Grid item xs={12}>
                     <CardMedia

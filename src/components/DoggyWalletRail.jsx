@@ -92,7 +92,7 @@ const DoggyWalletRail = () => {
         >
             <Box sx={{ width: "100%", alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
                 <Typography variant="h6" gutterBottom>
-                    POTENTIAL PETS!
+                    DOGGY WALLET
                 </Typography>
                 <DroppableArea id="userFavDogs" onDrop={handleDrop} acceptType='dog'>
                     {userFavDogs.length === 0 ? (

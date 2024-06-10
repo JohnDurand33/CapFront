@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchDrawer from './BreedSearchDrawer';

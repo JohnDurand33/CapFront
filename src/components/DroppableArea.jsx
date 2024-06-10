@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDrop } from 'react-dnd';
 
 const DroppableArea = ({ id, children, onDrop, className, acceptType }) => {
