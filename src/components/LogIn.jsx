@@ -7,7 +7,7 @@ import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
 
 const Login = () => {
-    const { isNavOpen, setNavOpen, setFavBreedsRailOpen, setDoggyWalletOpen } = useLayout();
+    const { isNavOpen, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen } = useLayout();
     const { login } = useLogin();
     const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const Login = () => {
             setStatus({ success: 'Login successful', error: null });
             setErrors({});
             setNavOpen(true);
-            setFavBreedsRailOpen(false);
+            setFavBreedRailOpen(false);
             setDoggyWalletOpen(false);
             navigate("/home");
         } else {
@@ -39,7 +39,13 @@ const Login = () => {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                width: '100%',
+                mx: 'auto',
+                pt:5
+            }}
+        >
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
                 {({ isSubmitting, status }) => (
                     <Form>
@@ -68,7 +74,7 @@ const Login = () => {
                     </Link>
                 </Typography>
             </Box>
-        </>
+        </Box>
     );
 };
 

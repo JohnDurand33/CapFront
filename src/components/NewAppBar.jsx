@@ -18,7 +18,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 
 const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
-    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen , } = useLayout();
+    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeconfig } = useLayout();
     const {userFavBreeds} = useDogSearch();
 
     const { loggedIn, logout } = useLogin();
@@ -48,9 +48,9 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
         <>
         <AppBar position="fixed" ref={appBarRef} sx={{ zIndex: theme.zIndex.drawer + 1, width: '100vw' }}>
             <Toolbar sx={{ml:2}}>
-                <IconButton color="inherit" onClick={handleNavToggle} edge="start" >
-                    <MenuIcon />
-                </IconButton>
+                    {screenType !== 'phone' && <IconButton color="inherit" onClick={handleNavToggle} edge="start" >
+                        <MenuIcon />
+                    </IconButton>}
                 <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - 0px)` }}>
 
                         <IconButton color="inherit" onClick={handleDoggyWallet} disabled={!loggedIn}>

@@ -6,10 +6,11 @@ import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material/styles';
 import DroppableArea from './DroppableArea';
 import DragDogSearchCard from './DragDogSearchCard';
+import DragDoggyWalletCard from './DragDoggyWalletCard';
 import api from '../contexts/api';
 
 const DoggyWalletRail = () => {
-    const { isDoggyWalletOpen, appBarHeight, setDoggyWalletOpen, setNavOpen, setFavBreedRailOpen } = useLayout();
+    const { isFavBreedRailOpen, isDoggyWalletOpen, appBarHeight, sizeConfig } = useLayout();
     const { loggedIn } = useLogin();
     const { userFavDogs, setUserFavDogs, myDogs, setMyDogs, homeDogs, setHomeDogs } = useDogSearch();
     const theme = useTheme();
@@ -78,16 +79,16 @@ const DoggyWalletRail = () => {
             sx={{
                 alignItems: 'center',
                 flexShrink: 0,
-                width: '300px',
+                width: sizeConfig.doggyWalletRailWidth,
                 '& .MuiDrawer-paper': {
                     boxSizing: 'border-box',
                     mt: `${appBarHeight}px`,
                     zIndex: theme.zIndex.drawer,
-                    width: '360px',
+                    width: sizeConfig.doggyWalletRailWidth,
                 },
             }}
         >
-            <Box sx={{ width: 300, alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
+            <Box sx={{ width: "100%", alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
                 <Typography variant="h6" gutterBottom>
                     Favorite Dogs
                 </Typography>
@@ -107,8 +108,8 @@ const DoggyWalletRail = () => {
                         </Box>
                     ) : (
                         userFavDogs.map((dog, index) => (
-                            <DragDogSearchCard
-                                sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }}
+                            <DragDoggyWalletCard
+                                sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary, maxWidth: sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen) }}
                                 key={`${dog.api_id}-${index}`} // Ensure unique key
                                 id={`fav-${dog.api_id}`}
                                 index={index}
@@ -120,7 +121,7 @@ const DoggyWalletRail = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    sx={{ marginTop: '10px' }}
+                    sx={{ marginTop: '10px', width: '70%'}}
                     onClick={handleClearFavDogs}
                 >
                     Clear my Favorites List!

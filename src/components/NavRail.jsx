@@ -14,9 +14,8 @@ import { useMediaQuery } from '@mui/material';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
-    const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen } = useLayout();
+    const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen, screenType, sizeConfig, handleDoggyWallet, handleFavBreedRail } = useLayout();
     const { loggedIn, logout } = useLogin();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleNewSearchRequest = () => {
         console.log('New Search Requested');
@@ -29,7 +28,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
         await logout();
     };
 
-    if (isSmallScreen) {
+    if (screenType === 'phone') {
         return null;
     }
 
@@ -42,13 +41,13 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                 transition="margin-left 0.3s ease-in-out"
                 sx={{
                     flexShrink: 0,
-                    width: '240px',
+                    width: sizeConfig.navRailWidth,
                     transition: 'margin-left 1.0s ease-in-out',
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         mt: `${appBarHeight}px`,
                         zIndex: theme.zIndex.drawer,
-                        width: '240px',
+                        width: sizeConfig.navRailWidth,
                         transition: 'margin-left 0.2s ease-in-out',
                     }
                 }}
@@ -61,16 +60,16 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                     </ListItemButton>
 
                     {/* DoggyWallet */}
-                    <ListItem onClick={() => alert('Navigate to DoggyWallet')}>
+                    <ListItemButton onClick={handleDoggyWallet} disabled={!loggedIn}>
                         <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
                         <ListItemText primary="DoggyWallet" />
-                    </ListItem>
+                </ListItemButton>
 
                     {/* MyBreeds */}
-                    <ListItem onClick={() => alert('Navigate to MyBreeds')}>
+                    <ListItemButton color="inherit" onClick={handleFavBreedRail} disabled={!loggedIn}>
                         <ListItemIcon><PetsIcon /></ListItemIcon>
                         <ListItemText primary="MyBreeds" />
-                    </ListItem>
+                    </ListItemButton>
                 </List>
                 <Divider />
                 <List>

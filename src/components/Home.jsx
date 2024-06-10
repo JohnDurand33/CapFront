@@ -2,17 +2,20 @@ import { useState, useEffect } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
+import {useTheme } from '@mui/material/styles';
 import DragHomeDogCard from './DragHomeDogCard';
 import DroppableArea from './DroppableArea';
+import axios from 'axios';
 import api from '../contexts/api';
 import { useDogSearch } from '../contexts/DogSearchContext';
-import {jwtDecode} from 'jwt-decode';
-import { getRandomZip } from '../utils/randomZip'; // Import the utility function
+import { jwtDecode } from 'jwt-decode';
+import { getRandomZip } from '../utils/randomZip'; 
 
 const Home = () => {
+    const theme = useTheme();
     const { token, loggedIn } = useLogin();
     const { homeDogs, setHomeDogs, userFavDogs, setUserFavDogs } = useDogSearch();
-    const { setNavOpen } = useLayout();
+    const { setNavOpen, sizeConfig, isFavBreedRailOpen, isDoggyWalletOpen } = useLayout();
     const [fetchZip, setFetchZip] = useState('');
     const [loading, setLoading] = useState(true);
 
@@ -22,7 +25,7 @@ const Home = () => {
 
         const fetchDogs = async (zipCode) => {
             const payload = {
-                "apikey": "t4mQWFjp",
+                "apikey": import.meta.env.VITE_RESCUEGROUPS_API_KEY,
                 "objectType": "animals",
                 "objectAction": "publicSearch",
                 "search": {
@@ -118,6 +121,7 @@ const Home = () => {
             let success = false;
 
             while (!success) {
+                setFetchZip(zipCode);
                 success = await fetchDogs(zipCode);
                 if (!success) {
                     zipCode = getRandomZip();
@@ -129,9 +133,8 @@ const Home = () => {
         };
 
         homePageCall().then((finalZipCode) => {
-            setFetchZip(finalZipCode);
             console.log('Final Zip Code:', finalZipCode);
-            setLoading(false); // Set loading to false after fetch is successful
+            setLoading(false);
         })
     }, [loggedIn]);
 
@@ -147,12 +150,13 @@ const Home = () => {
         setUserFavDogs(updatedUserFavDogs);
 
         try {
-            await api.delete(`/api/rem_favdogs/${draggedDog.api_id}`);
+            console.log('Removing FavDog:', draggedDog.api_id);
+            await api.delete(`api/rem_favdog/${draggedDog.api_id}`);
             console.log('FavDog removed successfully');
         } catch (error) {
             console.error('Failed to remove FavDog:', error);
         }
-    };
+    }
 
     if (loading) {
         return <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>Loading...</Typography>;
@@ -160,17 +164,25 @@ const Home = () => {
 
     return (
         <Box sx={{ width: '100%', height: '100%', overflow: 'auto', padding: '16px' }}>
-            <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
-                Available Dogs Near {fetchZip}!!!
-            </Typography>
+            {!loading && (
+                <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
+                    Available Dogs Near Zip Code {fetchZip}
+                </Typography>
+            )}
             <DroppableArea onDrop={handleDrop} className="custom-droppable-area" acceptType='dog'>
-                <Grid container spacing={2}>
-                    {homeDogs.map(dog => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={dog.api_id}>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: sizeConfig.gridTemplateColumns,
+                        gap: theme.spacing(sizeConfig.spacing),
+                    }}
+                >
+                    {homeDogs.map((dog) => (
+                        <Box key={dog.api_id} sx={{ gridColumn: 'span 1', maxWidth: sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen) }}>
                             <DragHomeDogCard dog={dog} />
-                        </Grid>
+                        </Box>
                     ))}
-                </Grid>
+                </Box>
             </DroppableArea>
         </Box>
     );

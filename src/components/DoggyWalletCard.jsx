@@ -1,62 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
+import api from '../contexts/api';
 
-const HomeDogCard = ({ dog }) => {
-    const [orgEmail, setOrgEmail] = useState('');
-
-    const handleFetchOrgDetails = async () => {
-        const payload = {
-            "apikey": import.meta.env.VITE_RESCUEGROUPS_API_KEY,
-            "objectType": "orgs",
-            "objectAction": "publicSearch",
-            "search": {
-                "resultStart": "0",
-                "resultLimit": "1",
-                "resultSort": "orgID",
-                "resultOrder": "asc",
-                "filters": [
-                    {
-                        "fieldName": "orgID",
-                        "operation": "equals",
-                        "criteria": dog.org_id
-                    }
-                ],
-                "fields": [
-                    "orgEmail"
-                ]
-            }
-        };
-
-        const url = 'https://api.rescuegroups.org/http/v2.json';
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-
+const DoggyWalletCard = ({ dog }) => {
+    const handleContactClick = async () => {
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(payload),
-                cache: 'no-cache'
-            });
+            const response = await api.get(`/api/get_org_details/${dog.api_id}`);
+            const org = response.data;
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const orgDetails = data.data[Object.keys(data.data)[0]];
-            setOrgEmail(orgDetails.orgEmail);
-
-            const emailSubject = `Adoption Inquiry for ${dog.name}`;
-            const emailBody = `Hello,
-
-I am interested in adopting ${dog.name} (Animal ID: ${dog.api_id}). Could you please provide more information about the adoption process?
-
-Thank you!`;
-            window.location.href = `mailto:${orgDetails.orgEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            const emailBody = `Hello,\n\nI am interested in adopting ${dog.name} (ID: ${dog.api_id}).\n\nThank you!`;
+            window.location.href = `mailto:${org.orgEmail}?subject=Adoption Inquiry for ${dog.name}&body=${encodeURIComponent(emailBody)}`;
         } catch (error) {
-            console.error('Error fetching organization details:', error);
+            console.error('Failed to fetch organization details:', error);
         }
     };
 
@@ -94,7 +49,8 @@ Thank you!`;
                             Sex: {dog.sex}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Location: {dog.city}</Typography>
+                            Location: {dog.city}, {dog.state}
+                        </Typography>
                     </CardContent>
                 </Grid>
                 <Grid item xs={12}>
@@ -110,7 +66,7 @@ Thank you!`;
                             fontWeight: 'bold',
                             textAlign: 'center',
                         }}
-                        onClick={handleFetchOrgDetails}
+                        onClick={handleContactClick}
                     >
                         CONTACT ADOPTION AGENCY
                     </Button>
@@ -120,4 +76,4 @@ Thank you!`;
     );
 };
 
-export default HomeDogCard;
+export default DoggyWalletCard;

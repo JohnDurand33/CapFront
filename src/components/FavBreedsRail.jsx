@@ -10,7 +10,7 @@ import DragBreedCard from './DragBreedCard';
 import api from '../contexts/api';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen } = useLayout();
+    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen, sizeConfig } = useLayout();
     const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
@@ -93,17 +93,17 @@ const FavBreedsRail = () => {
             sx={{
                 alignItems: 'center',
                 flexShrink: 0,
-                width: '300px',
+                width: sizeConfig.favBreedsRailWidth,
                 '& .MuiDrawer-paper': {
                     boxSizing: 'border-box',
                     mt: `${appBarHeight}px`,
                     zIndex: theme.zIndex.drawer,
-                    width: '360px',
+                    width: sizeConfig.favBreedsRailWidth,
                 },
             }}
         >
-            <Box sx={{ width: 300, alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
-                <Typography variant="h6" gutterBottom>
+            <Box sx={{ pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
+                <Typography variant="h6" gutterBottom textAlign='center'>
                     Favorite Breeds
                 </Typography>
                 <DroppableArea id="userFavBreeds" onDrop={handleDrop} acceptType='breed'>
@@ -120,7 +120,9 @@ const FavBreedsRail = () => {
                         Sign Up or Sign In To Use this Feature!
                     </Box>) : userFavBreeds.length === 0 ? (
                         <Box
-                            sx={{
+                                sx={{
+                                ml: '10%',
+                                width: '80%',
                                 border: '2px dashed grey',
                                 borderRadius: '4px',
                                 padding: '16px',
@@ -133,13 +135,14 @@ const FavBreedsRail = () => {
                         </Box>
                     ) : (
                         userFavBreeds.map((breed, index) => (
-                            <DragBreedCard
-                                sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }}
-                                key={`${breed.name}-${index}`}
-                                id={`fav-${breed.name}`}
-                                index={index}
-                                breed={breed}
-                            />
+                            <Box key={`${breed.name}-${index}`} sx={{ mb: 2 }}>
+                                <DragBreedCard
+                                    sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }}
+                                    id={`fav-${breed.name}`}
+                                    index={index}
+                                    breed={breed}
+                                />
+                            </Box>
                         ))
                     )}
                 </DroppableArea>

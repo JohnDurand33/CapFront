@@ -10,7 +10,7 @@ import api from '../contexts/api';
 const BreedSearchView = () => {
     const theme = useTheme();
     const { myBreeds, userFavBreeds, setMyBreeds, setUserFavBreeds } = useDogSearch();
-    const { setFavBreedRailOpen } = useLayout();
+    const { isFavBreedRailOpen, isDoggyWalletOpen, sizeConfig } = useLayout();
 
     const handleDrop = async (item) => {
         console.log('Dropped item:', item);
@@ -38,6 +38,9 @@ const BreedSearchView = () => {
         }
     };
 
+    const maxCardWidth = sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen);
+    console.log('Computed maxCardWidth:', maxCardWidth);
+
     return (
         <DroppableArea id="breedSearch" acceptType="breed" onDrop={handleDrop}>
             {myBreeds.length === 0 ? (
@@ -60,14 +63,28 @@ const BreedSearchView = () => {
                         }}
                     >
                         No Breeds Found or You Have Preferred Them All!
-                    </Box></Grid>) : (<Grid container spacing={2}>
-                {myBreeds.map((breed, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={breed.image_link}>
-                        <DragBreedCard breed={breed} />
-                    </Grid>
-                ))}
-            </Grid>
-    )}
+                    </Box></Grid>) : (
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: sizeConfig.gridTemplateColumns,
+                        gap: theme.spacing(sizeConfig.spacing),
+                        maxWidth: '100%', 
+                    }}
+                >
+                    {myBreeds.map((breed, index) => (
+                        <Box
+                            key={breed.id}
+                            sx={{
+                                gridColumn: 'span 1',
+                                maxWidth: maxCardWidth, 
+                            }}
+                        >
+                            <DragBreedCard breed={breed} />
+                        </Box>
+                    ))}
+                </Box>
+            )}
         </DroppableArea>
     );
 };

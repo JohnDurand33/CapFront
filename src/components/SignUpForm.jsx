@@ -51,7 +51,13 @@ const SignUpForm = () => {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                width: '100%',
+                mx: 'auto',
+                pt: 5
+            }}
+        >
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -130,7 +136,7 @@ const SignUpForm = () => {
                     </Form>
                 )}
             </Formik>
-        </>
+        </Box>
     );
 };
 

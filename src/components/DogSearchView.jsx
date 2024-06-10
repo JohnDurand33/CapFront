@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
 import DroppableArea from './DroppableArea';
 import DragDogSearchCard from './DragDogSearchCard';
+import { useTheme } from '@emotion/react';
 import api from '../contexts/api';
 
 const DogSearchView = () => {
     const { myDogs, userFavDogs, setMyDogs, setUserFavDogs } = useDogSearch();
-    const { setDoggyWalletOpen } = useLayout();
+    const { isFavBreedRailOpen, isDoggyWalletOpen, sizeConfig } = useLayout();
+    const theme = useTheme();
 
     const handleDrop = async (item) => {
         console.log('Dropped item:', item);
@@ -34,15 +36,23 @@ const DogSearchView = () => {
     };
 
     return (
+        <Box sx={{ width: '100%', height: '100%', overflow: 'auto', padding: '16px' }}>
         <DroppableArea id="dogSearch" onDrop={handleDrop} acceptType="dog">
-            <Grid container spacing={2}>
-                {myDogs.map((dog, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={dog.api_id}>
-                        <DragDogSearchCard dog={dog} />
-                    </Grid>
-                ))}
-            </Grid>
-        </DroppableArea>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: sizeConfig.gridTemplateColumns,
+                        gap: theme.spacing(sizeConfig.spacing),
+                    }}
+                >
+                    {myDogs.map((dog) => (
+                        <Box key={dog.api_id} sx={{ gridColumn: 'span 1', maxWidth: sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen) }}>
+                            <DragDogSearchCard dog={dog} />
+                        </Box>
+                    ))}
+                </Box>
+            </DroppableArea>
+        </Box>
     );
 };
 

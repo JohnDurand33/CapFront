@@ -13,7 +13,6 @@ const DogSearchCard = ({ dog }) => {
                         title={dog.name}
                         sx={{
                             width: '100%',
-                            height: '140px',
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
