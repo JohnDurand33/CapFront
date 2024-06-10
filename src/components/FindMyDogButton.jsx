@@ -1,9 +1,7 @@
 import { Button } from '@mui/material';
-import { useDogSearch } from '../contexts/DogSearchContext';
 import api from '../contexts/api';
 
 const FindMyDogButton = () => {
-    const { token } = useDogSearch();
 
     const saveFavBreedsToBackend = async (favBreeds) => {
         try {

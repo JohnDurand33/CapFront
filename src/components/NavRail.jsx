@@ -11,7 +11,6 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
-import { useMediaQuery } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
@@ -110,6 +109,7 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                         <ThemeToggler mode={mode} toggleMode={toggleMode} />
                     </ListItem>
                 </List>
+                <img src="../static/Brand.png" alt="Brand" />
             </Drawer>
         </>
     );
