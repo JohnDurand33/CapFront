@@ -1,7 +1,22 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
+import api from '../contexts/api';
 
 const DogSearchCard = ({ dog }) => {
+
+    const handleContactClick = async () => {
+        try {
+            const response = await api.get(`/api/get_org_details/${dog.api_id}`);
+            const org = response.data;
+
+            const emailBody = `Hello,\n\nI am interested in adopting ${dog.name} (ID: ${dog.api_id}).\n\nThank you!`;
+            window.location.href = `mailto:${org.orgEmail}?subject=Adoption Inquiry for ${dog.name}&body=${encodeURIComponent(emailBody)}`;
+        } catch (error) {
+            console.error('Failed to fetch organization details:', error);
+        }
+    };
+
+
     return (
         <Card sx={{ boxShadow: 6, borderRadius: 4, border: '2px solid gray', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
             <Grid container>
@@ -53,7 +68,7 @@ const DogSearchCard = ({ dog }) => {
                             fontWeight: 'bold',
                             textAlign: 'center',
                         }}
-                        onClick={() => window.location.href = `mailto:adoption@agency.com?subject=Adoption Inquiry for ${dog.name}`}
+                        onClick={handleContactClick}
                     >
                         CONTACT ADOPTION AGENCY
                     </Button>

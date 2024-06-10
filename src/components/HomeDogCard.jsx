@@ -4,6 +4,7 @@ import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/mat
 const HomeDogCard = ({ dog }) => {
     const [orgEmail, setOrgEmail] = useState('');
 
+
     const handleFetchOrgDetails = async () => {
         const payload = {
             "apikey": import.meta.env.VITE_RESCUEGROUPS_API_KEY,

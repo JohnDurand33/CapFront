@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Typography, Box, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Box, Menu, MenuItem, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -42,7 +42,11 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
         navigate('/home');
     };
 
-
+    const handleDisabledClick = () => {
+        if (!loggedIn) {
+            alert('Please Sign Up for Free to Access This Feature');
+        }
+    };
     
     return (
         <>
@@ -51,14 +55,21 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                     {screenType !== 'phone' && <IconButton color="inherit" onClick={handleNavToggle} edge="start" >
                         <MenuIcon />
                     </IconButton>}
-                <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - 0px)` }}>
-
+                    <Box sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: `calc(100% - 0px)` }}>
+                        <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                            <span>
                         <IconButton color="inherit" onClick={handleDoggyWallet} disabled={!loggedIn}>
                         <AccountBalanceWalletIcon />
-                    </IconButton>
+                                </IconButton>
+                            </span>
+                        </Tooltip>
+                        <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                            <span>
                         <IconButton color="inherit" onClick={handleFavBreedRail} disabled={!loggedIn}>
                         <PetsIcon />
-                    </IconButton>
+                                </IconButton>
+                            </span>
+                            </Tooltip>
                         <IconButton
                             color="inherit"
                             onClick={handleBreedSearchForm}

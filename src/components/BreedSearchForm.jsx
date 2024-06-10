@@ -10,11 +10,13 @@ const BreedSearchForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         size: '',
+        good_with_children: '',
+        good_with_other_dogs: '',
         shedding: '',
         barking: '',
         energy: '',
         protectiveness: '',
-        trainability: '',
+        trainability: ''
     });
 
     const navigate = useNavigate();
@@ -73,7 +75,7 @@ const BreedSearchForm = () => {
     };
 
     const prepareBehavioralData = (formData) => {
-        const attributes = ['shedding', 'barking', 'energy', 'protectiveness', 'trainability'];
+        const attributes = ['shedding', 'barking', 'energy', 'protectiveness', 'trainability', 'good_with_children', 'good_with_other_dogs'];
         return attributes.reduce((acc, attr) => {
             if (formData[attr] && formData[attr] !== 'Any') {
                 acc[attr] = formData[attr].includes(',') ? formData[attr].split(',') : [formData[attr]];
@@ -183,7 +185,14 @@ const BreedSearchForm = () => {
                 }
                 const total = apiResults.flat();
                 console.log('total before setting to myBreeds state:', total);
-                setMyBreeds(total);
+
+                const uniqueBreeds = Array.from(new Set(total.map(breed => breed.name)))
+                    .map(name => {
+                        return total.find(breed => breed.name === name);
+                    });
+                
+                console.log('filtered breeds:', uniqueBreeds);
+                setMyBreeds(uniqueBreeds);
                 setNavOpen(false);
                 setFavBreedRailOpen(true);
                 setBreedSearchFormOpen(false);
@@ -196,7 +205,7 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, mt: 2, maxHeight: '80vh', overflowY: 'auto' }}>
             <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
@@ -206,8 +215,9 @@ const BreedSearchForm = () => {
             </Typography>
             {showNotification && (
                 <Typography variant="body2" color="error" mt="1" mb={2} sx={{
-                    color: theme.palette.error.main,
-                }}>
+                    color: theme.palette.error.main
+                }}
+                >
                     Please clear the breed name field to search for breeds by their attributes.
                 </Typography>
             )}
@@ -243,6 +253,8 @@ const BreedSearchForm = () => {
                         <Grid item xs={12}>
                             <FormHelperText>Selecting "Any" will remove the filter from your Search</FormHelperText>
                         </Grid>
+                        <Grid item xs={12}>{createRadioGroupAttr("Good With Children", "good_with_children", formData.good_with_children)}</Grid>
+                        <Grid item xs={12}>{createRadioGroupAttr("Good With Dogs", "good_with_other_dogs", formData.good_with_other_dogs)}</Grid>
                         <Grid item xs={12}>{createRadioGroupAttr("Shedding", "shedding", formData.shedding)}</Grid>
                         <Grid item xs={12}>{createRadioGroupAttr("Barking", "barking", formData.barking)}</Grid>
                         <Grid item xs={12}>{createRadioGroupAttr("Energy", "energy", formData.energy)}</Grid>

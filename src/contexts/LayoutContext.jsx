@@ -34,7 +34,8 @@ const sizeConfigs = {
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {
             const railWidth = isFavBreedRailOpen ? sizeConfigs.phone.favBreedsRailWidth : isDoggyWalletOpen ? sizeConfigs.phone.doggyWalletRailWidth : '0px';
             return `calc(100vw - ${railWidth} - 40px)`;
-        }
+        },
+        cardHeight: '500px'
     },
     tablet: {
         navRailWidth: '60px',
@@ -45,7 +46,8 @@ const sizeConfigs = {
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {
             const railWidth = isFavBreedRailOpen ? sizeConfigs.tablet.favBreedsRailWidth : isDoggyWalletOpen ? sizeConfigs.tablet.doggyWalletRailWidth : '0px';
             return `calc((100vw - ${railWidth} - 40px) / 2)`;
-        }
+        },
+        cardHeight: '500px'
     },
     laptop: {
         navRailWidth: '200px',
@@ -56,7 +58,8 @@ const sizeConfigs = {
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {
             const railWidth = isFavBreedRailOpen ? sizeConfigs.laptop.favBreedsRailWidth : isDoggyWalletOpen ? sizeConfigs.laptop.doggyWalletRailWidth : '0px';
             return `calc((100vw - ${railWidth} - 40px) / 3)`;
-        }
+        },
+        cardHeight: '600px'
     },
     largeLaptop: {
         navRailWidth: '220px',
@@ -67,7 +70,8 @@ const sizeConfigs = {
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {
             const railWidth = isFavBreedRailOpen ? sizeConfigs.largeLaptop.favBreedsRailWidth : isDoggyWalletOpen ? sizeConfigs.largeLaptop.doggyWalletRailWidth : '0px';
             return `calc((100vw - ${railWidth} - 40px) / 4)`;
-        }
+        },
+        cardHeight: '650px'
     },
     desktop: {
         navRailWidth: '240px',
@@ -78,7 +82,8 @@ const sizeConfigs = {
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {
             const railWidth = isFavBreedRailOpen ? sizeConfigs.desktop.favBreedsRailWidth : isDoggyWalletOpen ? sizeConfigs.desktop.doggyWalletRailWidth : '0px';
             return `calc((100vw - ${railWidth} - 40px) / 5)`;
-        }
+        },
+        cardHeight: '700px'
     }
 };
 

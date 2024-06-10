@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
 import api from '../contexts/api';
+import { useTheme } from '@mui/material/styles';
 
 const DoggyWalletCard = ({ dog }) => {
+    const theme = useTheme();
     const handleContactClick = async () => {
         try {
             const response = await api.get(`/api/get_org_details/${dog.api_id}`);
@@ -16,7 +18,10 @@ const DoggyWalletCard = ({ dog }) => {
     };
 
     return (
-        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4, border: dog.status === "1" ? '5px solid green' : 'none', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
+        <Card sx={{
+            display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4,
+            border: `3px solid ${theme.palette.secondary.main}`, overflow: 'hidden', width: '100%', mt: 4, mb: 4
+        }}>
             <Grid container>
                 <Grid item xs={12}>
                     <CardMedia

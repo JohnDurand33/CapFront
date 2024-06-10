@@ -1,4 +1,4 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton, useTheme } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListItemButton, useTheme, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -60,16 +60,24 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                     </ListItemButton>
 
                     {/* DoggyWallet */}
+                    <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                        <span>
                     <ListItemButton onClick={handleDoggyWallet} disabled={!loggedIn}>
                         <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
                         <ListItemText primary="DoggyWallet" />
-                </ListItemButton>
+                            </ListItemButton>
+                        </span>
+                        </Tooltip>
 
                     {/* MyBreeds */}
+                    <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                        <span>
                     <ListItemButton color="inherit" onClick={handleFavBreedRail} disabled={!loggedIn}>
                         <ListItemIcon><PetsIcon /></ListItemIcon>
                         <ListItemText primary="MyBreeds" />
-                    </ListItemButton>
+                            </ListItemButton>
+                        </span>
+                        </Tooltip>
                 </List>
                 <Divider />
                 <List>
