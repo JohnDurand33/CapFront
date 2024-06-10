@@ -73,8 +73,7 @@ Thank you!`;
                         image={dog.img_url}
                         title={dog.name}
                         sx={{
-                            height: 0,
-                            paddingTop: '56.25%', // 16:9 aspect ratio
+                            height:" 100%",
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-    baseURL: 'https://capback-tvy5.onrender.com',
+    baseURL: 'http://localhost:5000',
     headers: {
         'Content-Type': 'application/json'
     }
