@@ -205,7 +205,7 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, mt: 2, maxHeight: '80vh', overflowY: 'auto' }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80vh', overflowY: 'auto' }}>
             <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
