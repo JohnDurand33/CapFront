@@ -16,7 +16,7 @@ const DoggyWalletCard = ({ dog }) => {
     };
 
     return (
-        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4, border: '2px solid gray', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
+        <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 6, borderRadius: 4, border: dog.status === "1" ? '5px solid green' : 'none', overflow: 'hidden', width: '100%', mt: 4, mb: 4 }}>
             <Grid container>
                 <Grid item xs={12}>
                     <CardMedia

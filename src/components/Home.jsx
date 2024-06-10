@@ -159,13 +159,13 @@ const Home = () => {
     }
 
     if (loading) {
-        return <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>Loading...</Typography>;
+        return <Typography variant="h4" component="h1" align="center" gutterBottom >Loading...</Typography>;
     }
 
     return (
-        <Box sx={{ width: '100%', height: '100%', overflow: 'auto', padding: '16px' }}>
+        <Box sx={{ width: '100%', height: '100%', overflow: 'auto', paddingTop: 8 }}>
             {!loading && (
-                <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
+                <Typography variant="h2" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
                     Available Dogs Near Zip Code {fetchZip}
                 </Typography>
             )}

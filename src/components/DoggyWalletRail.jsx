@@ -80,17 +80,19 @@ const DoggyWalletRail = () => {
                 alignItems: 'center',
                 flexShrink: 0,
                 width: sizeConfig.doggyWalletRailWidth,
+                p:5,
                 '& .MuiDrawer-paper': {
                     boxSizing: 'border-box',
                     mt: `${appBarHeight}px`,
                     zIndex: theme.zIndex.drawer,
                     width: sizeConfig.doggyWalletRailWidth,
+                    p:5
                 },
             }}
         >
             <Box sx={{ width: "100%", alignSelf: 'center', pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
                 <Typography variant="h6" gutterBottom>
-                    Favorite Dogs
+                    POTENTIAL PETS!
                 </Typography>
                 <DroppableArea id="userFavDogs" onDrop={handleDrop} acceptType='dog'>
                     {userFavDogs.length === 0 ? (
