@@ -6,11 +6,13 @@ import DroppableArea from './DroppableArea';
 import DragDogSearchCard from './DragDogSearchCard';
 import { useTheme } from '@emotion/react';
 import api from '../contexts/api';
+import { useNavigate } from 'react-router-dom';
 
 const DogSearchView = () => {
     const { myDogs, userFavDogs, setMyDogs, setUserFavDogs } = useDogSearch();
-    const { isFavBreedRailOpen, isDoggyWalletOpen, sizeConfig } = useLayout();
+    const { isFavBreedRailOpen, isDoggyWalletOpen, sizeConfig, setNavOpen } = useLayout();
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const handleDrop = async (item) => {
         console.log('Dropped item:', item);
@@ -34,6 +36,12 @@ const DogSearchView = () => {
             console.error('Failed to remove favorite dog:', error);
         }
     };
+
+    useEffect(() => {
+        if (!myDogs || myDogs.length === 0) {
+            navigate('/home');
+        }
+    }, []);
 
     return (
         <Box sx={{ width: '100%', height: '100%', overflow: 'auto', padding: '16px' }}>

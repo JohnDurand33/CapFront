@@ -11,9 +11,11 @@ import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
 import { useMediaQuery } from '@mui/material';
+import { useDogSearch } from '../contexts/DogSearchContext';
 
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
+    const { myBreeds } = useDogSearch
     const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen, screenType, sizeConfig, handleDoggyWallet, handleFavBreedRail } = useLayout();
     const { loggedIn, logout } = useLogin();
 
@@ -21,7 +23,9 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
         console.log('New Search Requested');
         setNavOpen(false)
         setBreedSearchFormOpen(true);
-        setFavBreedRailOpen(true);
+        if (myBreeds.length !== 0) {
+            setFavBreedRailOpen(true);
+        }
     };
 
     const handleLogout = async () => {
