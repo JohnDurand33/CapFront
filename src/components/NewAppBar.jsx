@@ -43,6 +43,14 @@ const NewAppBar = ({ appBarRef, toggleMode, mode, appBarHeight }) => {
         navigate('/home');
     };
 
+    const handleHome = async () => {
+        setBreedSearchFormOpen(false);
+        setDoggyWalletOpen(false);
+        setFavBreedRailOpen(false);
+        setNavOpen(true);
+        navigate('/home');
+    };
+
     const handleDisabledClick = () => {
         if (!loggedIn) {
             alert('Please Sign Up for Free to Access This Feature');
@@ -79,6 +87,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode, appBarHeight }) => {
                         </IconButton>
                         <IconButton
                             color="inherit"
+                            onClick={handleHome}
                             component={Link} to='/home'
                         >
                             <HomeIcon />
