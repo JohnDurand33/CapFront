@@ -18,7 +18,7 @@ import BrandLogo from '../static/Brand.png'
 function NavRail({ mode, toggleMode, appBarHeight }) {
     const theme = useTheme();
     const { myBreeds } = useDogSearch
-    const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen, screenType, sizeConfig, handleDoggyWallet, handleFavBreedRail } = useLayout();
+    const { isNavOpen, setFavBreedRailOpen, setBreedSearchFormOpen, setNavOpen, screenType, sizeConfig, handleDoggyWallet, handleFavBreedRail, handleHome } = useLayout();
     const { loggedIn, logout } = useLogin();
 
     const handleNewSearchRequest = () => {
@@ -59,6 +59,14 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                 }}
             >
                 <List>
+                    {/* Home */}
+                    <IconButton
+                        color="inherit"
+                        onClick={handleHome}
+                        component={Link} to='/home'
+                    >
+                        <HomeIcon />
+                    </IconButton>
                     {/* New Search */}
                     <ListItemButton onClick={handleNewSearchRequest}>
                         <ListItemIcon><SearchIcon /></ListItemIcon>

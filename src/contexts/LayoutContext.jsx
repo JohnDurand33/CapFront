@@ -163,6 +163,14 @@ export const LayoutProvider = ({ children }) => {
         setBreedSearchFormOpen(prevState => !prevState);
     };
 
+    const handleHome = async () => {
+        setBreedSearchFormOpen(false);
+        setDoggyWalletOpen(false);
+        setFavBreedRailOpen(false);
+        setNavOpen(true);
+        navigate('/home');
+    };
+
     return (
         <LayoutContext.Provider value={{
             isNavOpen,
@@ -182,6 +190,7 @@ export const LayoutProvider = ({ children }) => {
             screenType,
             screenSize,
             sizeConfig: sizeConfigs[screenType] || sizeConfigs.desktop,
+            handleHome,
         }}>
             {children}
         </LayoutContext.Provider>

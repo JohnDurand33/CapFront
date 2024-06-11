@@ -18,8 +18,8 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import BrandLogo from '../static/Brand.png';
 
 
-const NewAppBar = ({ appBarRef, toggleMode, mode, appBarHeight }) => {
-    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeconfig } = useLayout();
+const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
+    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeconfig, handleHome } = useLayout();
     const {userFavBreeds} = useDogSearch();
 
     const { loggedIn, logout } = useLogin();
@@ -40,14 +40,6 @@ const NewAppBar = ({ appBarRef, toggleMode, mode, appBarHeight }) => {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/home');
-    };
-
-    const handleHome = async () => {
-        setBreedSearchFormOpen(false);
-        setDoggyWalletOpen(false);
-        setFavBreedRailOpen(false);
-        setNavOpen(true);
         navigate('/home');
     };
 
