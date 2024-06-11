@@ -8,6 +8,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HomeIcon from '@mui/icons-material/Home';
 import ThemeToggler from './ThemeToggleButton';
 import { useLayout } from '../contexts/LayoutContext';
 import { useLogin } from '../contexts/LoginContext';
@@ -60,13 +61,14 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
             >
                 <List>
                     {/* Home */}
-                    <IconButton
+                    <ListItemButton
                         color="inherit"
                         onClick={handleHome}
                         component={Link} to='/home'
-                    >
-                        <HomeIcon />
-                    </IconButton>
+                    ><ListItemIcon>
+                            <HomeIcon /></ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </ListItemButton>
                     {/* New Search */}
                     <ListItemButton onClick={handleNewSearchRequest}>
                         <ListItemIcon><SearchIcon /></ListItemIcon>

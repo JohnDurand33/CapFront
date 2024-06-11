@@ -10,7 +10,7 @@ import DragBreedCard from './DragBreedCard';
 import api from '../contexts/api';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen, sizeConfig } = useLayout();
+    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen, sizeConfig, handleHome } = useLayout();
     const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs } = useDogSearch();
     const { loggedIn, token } = useLogin();
     const theme = useTheme();
@@ -33,6 +33,7 @@ const FavBreedsRail = () => {
     }, [loggedIn, setUserFavBreeds, setFavBreedRailOpen]);
 
     const handleDrop = async (item) => {
+
         console.log('Dropped item:', item);
         const draggedBreed = myBreeds.find(breed => breed.name === item.breed.name);
 

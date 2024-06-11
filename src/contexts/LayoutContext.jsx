@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LayoutContext = createContext();
 
@@ -99,6 +100,7 @@ export const LayoutProvider = ({ children }) => {
         height: window.innerHeight,
     });
     const [screenType, setScreenType] = useState(getScreenType(window.innerWidth));
+    const navigate = useNavigate();
 
     useEffect(() => {
 

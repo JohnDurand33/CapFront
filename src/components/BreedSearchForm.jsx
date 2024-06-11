@@ -20,29 +20,27 @@ const BreedSearchForm = () => {
     });
 
     const navigate = useNavigate();
-    const [showNotification, setShowNotification] = useState(false);
     const [searchingBreedName, setSearchingBreedName] = useState(false);
-    const breedNameRef = useRef(null);
-    const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, toggleFavBreedRail } = useLayout();
-    const { myBreeds, setMyBreeds, toggleIsBreedSearchOn } = useDogSearch();
+    const formRef = useRef(null);
+    const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, isBreedSearchFormOpen } = useLayout();
+    const { myBreeds, setMyBreeds, userFavBreeds } = useDogSearch();
     const theme = useTheme();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (breedNameRef.current && !breedNameRef.current.contains(event.target)) {
-                setShowNotification(!!formData.name);
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                setBreedSearchFormOpen(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [formData.name]);
+    }, [setBreedSearchFormOpen]);
 
     useEffect(() => {
-        console.log("BreedSearchForm myBreeds:", myBreeds);
-    }, [myBreeds]);
+        setSearchingBreedName(!!formData.name);
+    }, [formData.name]);
 
     const createRadioGroupAttr = (header, name, value) => (
         <Grid item xs={12}>
@@ -70,8 +68,6 @@ const BreedSearchForm = () => {
         setFormData((prevData) => ({
             ...prevData, [name]: value
         }));
-        setSearchingBreedName(value && name === 'name');
-        setShowNotification(value && name === 'name');
     };
 
     const prepareBehavioralData = (formData) => {
@@ -147,7 +143,8 @@ const BreedSearchForm = () => {
                     console.log('No breeds found with this name:', formData.name);
                     return;
                 }
-                setBreedSearchFormOpen(false);
+
+                if (userFavBreeds && userFavBreeds.length > 0) setBreedSearchFormOpen(false);
                 setFavBreedRailOpen(true);
                 navigate('/breedview');
             } catch (error) {
@@ -205,15 +202,15 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80vh', overflowY: 'auto' }}>
-            <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80vh', overflowY: 'auto', color:'inherit' }} ref={formRef}>
+            <Typography variant="body1" gutterBottom sx={{ mt: 2, color:'inherit'}}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
                 Medium: 21 to 60 lbs<br />
                 Large: 61 to 100 lbs<br />
                 Extra Large: Over 100 lbs
             </Typography>
-            {showNotification && (
+            {searchingBreedName && (
                 <Typography variant="body2" color="error" mt="1" mb={2} sx={{
                     color: theme.palette.error.main
                 }}
@@ -222,7 +219,7 @@ const BreedSearchForm = () => {
                 </Typography>
             )}
             <Grid container spacing={2}>
-                <Grid item xs={12} ref={breedNameRef}>
+                <Grid item xs={12} >
                     <TextField
                         fullWidth
                         label="Breed name"
@@ -242,11 +239,11 @@ const BreedSearchForm = () => {
                                     onChange={handleChange}
                                     row
                                 >
+                                    <FormControlLabel value="not_applicable" control={<Radio color="primary" />} label="Any" />
                                     <FormControlLabel value="small" control={<Radio color="primary" />} label="Small" />
                                     <FormControlLabel value="medium" control={<Radio color="primary" />} label="Medium" />
                                     <FormControlLabel value="large" control={<Radio color="primary" />} label="Large" />
                                     <FormControlLabel value="extra_large" control={<Radio color="primary" />} label="Extra Large" />
-                                    <FormControlLabel value="not_applicable" control={<Radio color="primary" />} label="Any" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
