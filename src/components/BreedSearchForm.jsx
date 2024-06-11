@@ -30,6 +30,7 @@ const BreedSearchForm = () => {
         const handleClickOutside = (event) => {
             if (formRef.current && !formRef.current.contains(event.target)) {
                 setBreedSearchFormOpen(false);
+                setNavOpen(true);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
