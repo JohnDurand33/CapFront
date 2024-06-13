@@ -10,9 +10,21 @@ const DndContext = ({ children }) => {
         enableTouchEvents: true,
         delayTouchStart: 0,
     };
-    const backend = isMobile ? TouchBackend(touchBackendOptions) : HTML5Backend;
 
-    return <DndProvider backend={backend}>{children}</DndProvider>;
+    const getBackend = (manager) => {
+        if (isMobile) {
+            console.log('Using TouchBackend for mobile devices');
+            return TouchBackend(manager, {}, touchBackendOptions); // Correct instantiation
+        }
+        console.log('Using HTML5Backend for non-mobile devices');
+        return HTML5Backend;
+    };
+
+    return (
+        <DndProvider backend={getBackend}>
+            {children}
+        </DndProvider>
+    );
 };
 
 export default DndContext;

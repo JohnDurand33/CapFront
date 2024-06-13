@@ -16,6 +16,7 @@ import NotFound from './components/NotFound';
 import { ThemeProvider, useMediaQuery, CssBaseline } from '@mui/material';
 import Instructions from './components/Instructions';
 import { getTheme } from './styles/theme'
+import ErrorBoundary from './components/ErrorBoundary';
 
 const App = () => {
     const [appBarHeight, appBarRef] = useAppBarHeight();
@@ -36,8 +37,9 @@ const App = () => {
                     <LayoutProvider>
                         <DogSearchProvider>
                             <DndContext>
-                                <Routes>
-                                    <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
+                                <ErrorBoundary>
+                                    <Routes>
+                                        <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
                                         <Route index element={<Home />} />
                                         <Route path="signup" element={<SignUpForm />} />
                                         <Route path="login" element={<LogIn />} />
@@ -47,7 +49,8 @@ const App = () => {
                                         <Route path="instructions" element={<Instructions />} />
                                         </Route>
                                         <Route path="*" element={<NotFound />} />
-                                </Routes>
+                                    </Routes>
+                                </ErrorBoundary>
                             </DndContext>
                         </DogSearchProvider>
                     </LayoutProvider>
