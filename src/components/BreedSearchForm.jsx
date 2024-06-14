@@ -22,7 +22,7 @@ const BreedSearchForm = () => {
     const navigate = useNavigate();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const formRef = useRef(null);
-    const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, isBreedSearchFormOpen } = useLayout();
+    const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, sizeConfig } = useLayout();
     const { myBreeds, setMyBreeds, userFavBreeds } = useDogSearch();
     const theme = useTheme();
 
@@ -203,7 +203,7 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80vh', overflowY: 'auto', color:'inherit' }} ref={formRef}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80%', overflowY: 'auto', color:'inherit' }} ref={formRef}>
             <Typography variant="body1" gutterBottom sx={{ mt: 2, color:'inherit'}}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />

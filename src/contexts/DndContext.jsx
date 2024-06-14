@@ -14,7 +14,7 @@ const DndContext = ({ children }) => {
     const getBackend = (manager) => {
         if (isMobile) {
             console.log('Using TouchBackend for mobile devices');
-            return TouchBackend(manager, {}, touchBackendOptions); // Correct instantiation
+            return TouchBackend(manager, {}, touchBackendOptions); 
         }
         console.log('Using HTML5Backend for non-mobile devices');
         return HTML5Backend;
