@@ -4,87 +4,38 @@ import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
 import { useTheme } from '@mui/material/styles';
 import { useLogin } from '../contexts/LoginContext';
-import { useNavigate } from 'react-router-dom';
-import DroppableArea from './DroppableArea';
-import DragBreedCard from './DragBreedCard';
+import BreedCard from './BreedCard';
+import { useDrop } from 'react-dnd';
+import { ItemTypes } from '../utils/ItemTypes';
 import api from '../contexts/api';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, setNavOpen, setDoggyWalletOpen, sizeConfig, handleHome } = useLayout();
-    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, myDogs, setMyDogs } = useDogSearch();
-    const { loggedIn, token } = useLogin();
+    const { isFavBreedRailOpen, appBarHeight, setFavBreedRailOpen, sizeConfig } = useLayout();
+    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds } = useDogSearch();
+    const { loggedIn } = useLogin();
     const theme = useTheme();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (loggedIn) {
-            const fetchDBUserFavBreeds = async () => {
+            const fetchFavBreeds = async () => {
                 try {
                     const response = await api.get('/api/getbreeds');
-                    console.log('GET response:', response.data);
                     setUserFavBreeds(response.data);
-                    console.log('Favorite breeds fetched from user\'s database with api:', response.data);
                 } catch (error) {
                     console.error('Failed to fetch favorite breeds:', error);
                 }
             };
-            fetchDBUserFavBreeds();
+            fetchFavBreeds();
         }
-    }, [loggedIn, setUserFavBreeds, setFavBreedRailOpen]);
+    }, [loggedIn, setUserFavBreeds]);
 
-    const handleDrop = async (item) => {
-
-        console.log('Dropped item:', item);
-        const draggedBreed = myBreeds.find(breed => breed.name === item.breed.name);
-
-        if (!draggedBreed) {
-            console.warn('Breed not found in myBreeds:', item.breed.name);
-            return;
-        }
-
-        const updatedSearchBreeds = myBreeds.filter(breed => breed.name !== item.breed.name);
-        setMyBreeds(updatedSearchBreeds);
-
-        const updatedFavBreeds = [...userFavBreeds, draggedBreed];
-        setUserFavBreeds(updatedFavBreeds);
-
-        try {
-            const response = await api.post('/api/updatebreeds', {
-                fav_breeds: updatedFavBreeds
-            });
-            console.log('Favorite breeds updated successfully:', response.data);
-        } catch (error) {
-            console.error('Error updating favorite breeds:', error.response ? error.response.data : error.message);
-        }
-    };
-
-    const handleFindMyDog = async () => {
-        try {
-            const response = await api.post('/api/find_dogs', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                method:'POST',
-                body: JSON.stringify({ fav_breeds: userFavBreeds }),
-            });
-            console.log('Matched dogs:', response.data);
-            setNavOpen(false);
-            setFavBreedRailOpen(false);
-            setDoggyWalletOpen(true);
-            setMyDogs(response.data);
-            navigate('/dogsearch', { state: { myDogs: response.data } });
-        } catch (error) {
-            console.error('Failed to fetch matched dogs:', error);
-        }
-    };
-
-    const handleClearFavBreeds = async () => {
-        try {
-            const response = await api.delete('api/clearbreeds');
-            console.log('Favorite breeds cleared successfully');
-            setUserFavBreeds([]);
-        } catch (error) { console.error('Failed to clear favorite breeds:', error); }
-    };
+    const [{ isOver }, drop] = useDrop({
+        accept: ItemTypes.BREED,
+        drop: (item) => handleDrop(item, userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    });
 
     return (
         <Drawer
@@ -103,25 +54,19 @@ const FavBreedsRail = () => {
                 },
             }}
         >
-            <Box sx={{ pt: 11, display: "flex", flexDirection: "column", alignItems: 'center' }}>
+            <Box ref={drop} sx={{ pt: 11, display: "flex", flexDirection: "column", alignItems: 'center', backgroundColor: isOver ? 'lightgreen' : 'white' }}>
                 <Typography variant="h6" gutterBottom textAlign='center'>
                     Favorite Breeds
                 </Typography>
-                <DroppableArea id="userFavBreeds" onDrop={handleDrop} acceptType='breed'>
-                    {!loggedIn ? (<Box
-                        sx={{
-                            border: '2px dashed grey',
-                            borderRadius: '4px',
-                            padding: '16px',
-                            textAlign: 'center',
-                            backgroundColor: theme.palette.background.paper,
-                            color: theme.palette.text.primary
-                        }}
-                    >
-                        Sign Up or Sign In To Use this Feature!
-                    </Box>) : userFavBreeds.length === 0 ? (
+                <Box
+                    sx={{
+                        padding: 8,
+                        width: '100%',
+                    }}
+                >
+                    {userFavBreeds.length === 0 ? (
                         <Box
-                                sx={{
+                            sx={{
                                 ml: '10%',
                                 width: '80%',
                                 border: '2px dashed grey',
@@ -136,38 +81,51 @@ const FavBreedsRail = () => {
                         </Box>
                     ) : (
                         userFavBreeds.map((breed, index) => (
-                            <Box key={`${breed.name}-${index}`} sx={{ mb: 2 }}>
-                                <DragBreedCard
+                            <Box key={breed.id} sx={{ mb: 2 }}>
+                                <BreedCard
                                     sx={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary }}
-                                    id={`fav-${breed.name}`}
-                                    index={index}
+                                    id={`fav-${breed.id}`}
                                     breed={breed}
+                                    index={index}
                                 />
                             </Box>
                         ))
                     )}
-                </DroppableArea>
+                </Box>
                 <Button
                     variant="contained"
                     color="primary"
                     sx={{ marginTop: '10px' }}
-                    onClick={handleFindMyDog}
+                    onClick={() => setFavBreedRailOpen(false)}
                 >
-                    Find My Dog!
-                </Button >
-                {userFavBreeds.length > 0 && (
-                    <Button variant="outlined"
-                        color="secondary"
-                        sx={{
-                            marginTop: "20px"
-                        }}
-                        onClick={handleClearFavBreeds}
-                    >
-                        Clear my Favorite Breeds List!
-                    </Button>)}
+                    Close Rail
+                </Button>
             </Box>
         </Drawer>
     );
+};
+
+const handleDrop = async (item, userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds) => {
+    const draggedBreed = myBreeds.find(breed => breed.name === item.breed.name);
+
+    if (!draggedBreed) {
+        console.warn(`Breed not found in myBreeds:`, item.breed.name);
+        return;
+    }
+
+    setMyBreeds(prevMyBreeds => prevMyBreeds.filter(breed => breed.name !== item.breed.name));
+
+    const updatedUserFavBreeds = [...userFavBreeds, draggedBreed];
+    setUserFavBreeds(prevUserFavBreeds => {
+        const updadedUserFavBreeds = [...prevUserFavBreeds, draggedBreed];
+
+        try {
+            api.post('/api/updatebreeds', { fav_breeds: updatedUserFavBreeds });
+            console.log('Favorite breeds updated successfully');
+        } catch (error) {
+            console.error('Failed to update favorite breeds:', error);
+        }
+    });
 };
 
 export default FavBreedsRail;

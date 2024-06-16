@@ -6,6 +6,19 @@ export default defineConfig({
     plugins: [react()],
     build: {
         chunkSizeWarningLimit: 1000,
-        outDir: 'dist',
+        outDir: "dist",
+        sourcemap: true,
+    },
+    resolve: {
+        alias: {
+            global: "global-this",
+            crypto: "crypto-browserify",
+            stream: "stream-browserify",
+            assert: "assert",
+            http: "stream-http",
+            https: "https-browserify",
+            os: "os-browserify/browser",
+            url: "url",
+        },
     },
 });

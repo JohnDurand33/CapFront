@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
-import { useLayout } from '../contexts/LayoutContext';
-import { useLogin } from '../contexts/LoginContext';
-import {useTheme } from '@mui/material/styles';
-import DragHomeDogCard from './DragHomeDogCard';
-import DroppableArea from './DroppableArea';
-import axios from 'axios';
+import { Box, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import DogCard from './DogCard';
+import { useDrop } from 'react-dnd';
 import api from '../contexts/api';
 import { useDogSearch } from '../contexts/DogSearchContext';
+import { useLayout } from '../contexts/LayoutContext';
+import { useLogin } from '../contexts/LoginContext';
+import { ItemTypes } from '../utils/ItemTypes';
 import { jwtDecode } from 'jwt-decode';
-import { getRandomZip } from '../utils/randomZip'; 
+import { getRandomZip } from '../utils/randomZip';
 
 const Home = () => {
     const theme = useTheme();
-    const { token, loggedIn } = useLogin();
     const { homeDogs, setHomeDogs, userFavDogs, setUserFavDogs } = useDogSearch();
     const { setNavOpen, sizeConfig, isFavBreedRailOpen, isDoggyWalletOpen } = useLayout();
     const [fetchZip, setFetchZip] = useState('');
     const [loading, setLoading] = useState(true);
+    const { loggedIn, token } = useLogin();
 
     useEffect(() => {
         setHomeDogs([]);
@@ -138,54 +138,63 @@ const Home = () => {
         })
     }, [loggedIn]);
 
-    const handleDrop = async (item) => {
-        const draggedDog = userFavDogs.find(dog => dog.api_id === item.dog.api_id);
-
-        if (!draggedDog) {
-            console.warn(`Dog not found in user fav's Dogs:`, item.dog.name);
-            return;
-        }
-
-        const updatedUserFavDogs = userFavDogs.filter(dog => dog.api_id !== item.dog.api_id);
-        setUserFavDogs(updatedUserFavDogs);
-
-        try {
-            console.log('Removing FavDog:', draggedDog.api_id);
-            await api.delete(`api/rem_favdog/${draggedDog.api_id}`);
-            console.log('FavDog removed successfully');
-        } catch (error) {
-            console.error('Failed to remove FavDog:', error);
-        }
-    }
+    const [{ isOver }, drop] = useDrop({
+        accept: ItemTypes.DOG,
+        drop: (item) => handleDrop(item, homeDogs, setHomeDogs, userFavDogs, setUserFavDogs),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    });
 
     if (loading) {
         return <Typography variant="h4" component="h1" align="center" gutterBottom >Loading...</Typography>;
     }
 
     return (
-        <Box sx={{ width: '100%', height: '100%', overflow: 'auto', paddingTop: 8 }}>
+        <Box ref={drop} sx={{ width: '100%', height: '100%', overflow: 'auto', paddingTop: 8, backgroundColor: isOver ? 'lightblue' : 'white' }}>
             {!loading && (
                 <Typography variant="h2" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
                     Available Dogs Near Zip Code {fetchZip}
                 </Typography>
             )}
-            <DroppableArea onDrop={handleDrop} className="custom-droppable-area" acceptType='dog'>
-                <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: sizeConfig.gridTemplateColumns,
-                        gap: theme.spacing(sizeConfig.spacing),
-                    }}
-                >
-                    {homeDogs.map((dog) => (
-                        <Box key={dog.api_id} sx={{ gridColumn: 'span 1', maxWidth: sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen) }}>
-                            <DragHomeDogCard dog={dog} />
-                        </Box>
-                    ))}
-                </Box>
-            </DroppableArea>
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: sizeConfig.gridTemplateColumns,
+                    gap: theme.spacing(sizeConfig.spacing),
+                }}
+            >
+                {homeDogs.map((dog, index) => (
+                    <Box key={dog.api_id} sx={{ gridColumn: 'span 1', maxWidth: sizeConfig.getMaxCardWidth(isFavBreedRailOpen, isDoggyWalletOpen) }}>
+                        <DogCard dog={dog} index={index} />
+                    </Box>
+                ))}
+            </Box>
         </Box>
     );
+};
+
+const handleDrop = async (item, homeDogs, setHomeDogs, userFavDogs, setUserFavDogs) => {
+    const draggedDog = userFavDogs.find(dog => dog.api_id === item.api_id);
+
+    if (!draggedDog) {
+        console.warn(`Dog not found in userFavDogs:`, item.name);
+        return;
+    }
+
+    const updatedUserFavDogs = userFavDogs.filter(dog => dog.api_id !== item.api_id);
+    setUserFavDogs(updatedUserFavDogs);
+
+    const updatedHomeDogs = [...homeDogs, draggedDog];
+    setHomeDogs(updatedHomeDogs);
+
+    try {
+        console.log('Adding FavDog:', draggedDog.api_id);
+        await api.post('/api/add_favdog', { dog_id: draggedDog.api_id });
+        console.log('FavDog added successfully');
+    } catch (error) {
+        console.error('Failed to add FavDog:', error);
+    }
 };
 
 export default Home;

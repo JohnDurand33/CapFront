@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { LoginProvider } from './contexts/LoginContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { DogSearchProvider } from './contexts/DogSearchContext';
-import DndContext from './contexts/DndContext';
 import BreedSearchView from './components/BreedSearchView';
 import Home from './components/Home';
 import Layout from './components/Layout';
@@ -11,12 +10,10 @@ import LogIn from './components/LogIn';
 import SignUpForm from './components/SignUpForm';
 import useAppBarHeight from './hooks/useAppBarHeight';
 import DogSearchView from './components/DogSearchView';
-import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './components/NotFound';
 import { ThemeProvider, useMediaQuery, CssBaseline } from '@mui/material';
 import Instructions from './components/Instructions';
 import { getTheme } from './styles/theme'
-import ErrorBoundary from './components/ErrorBoundary';
 
 const App = () => {
     const [appBarHeight, appBarRef] = useAppBarHeight();
@@ -29,17 +26,16 @@ const App = () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
     };
 
+    
+
     return (
-        <Router>
             <LoginProvider>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <LayoutProvider>
                         <DogSearchProvider>
-                            <DndContext>
-                                <ErrorBoundary>
-                                    <Routes>
-                                        <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
+                                <Routes>
+                                    <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
                                         <Route index element={<Home />} />
                                         <Route path="signup" element={<SignUpForm />} />
                                         <Route path="login" element={<LogIn />} />
@@ -47,17 +43,15 @@ const App = () => {
                                         <Route path="breedview" element={<BreedSearchView />} />
                                         <Route path="dogsearch" element={<DogSearchView />} />
                                         <Route path="instructions" element={<Instructions />} />
-                                        </Route>
-                                        <Route path="*" element={<NotFound />} />
-                                    </Routes>
-                                </ErrorBoundary>
-                            </DndContext>
+                                    </Route>
+                                    <Route path="*" element={<NotFound />} />
+                                </Routes>
                         </DogSearchProvider>
                     </LayoutProvider>
                 </ThemeProvider>
             </LoginProvider>
-        </Router>
     );
 };
+
 
 export default App;
