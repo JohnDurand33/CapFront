@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchDrawer from './BreedSearchDrawer';
 import NavRail from './NavRail';
@@ -9,19 +9,17 @@ import FavBreedsRail from './FavBreedsRail';
 import DoggyWalletRail from './DoggyWalletRail';
 
 const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
-    const { isNavOpen, isBreedSearchOpen, isFavBreedRailOpen, isDoggyWalletOpen, screenType, sizeConfig } = useLayout();
+    const location = useLocation();
+    const { isNavOpen, isFavBreedRailOpen, isDoggyWalletOpen, screenType, sizeConfig } = useLayout();
 
     const paddingLeft = () => {
+        if (location.pathname === '/' || location.pathname === '/home') return '0px';
         if (isDoggyWalletOpen) return `calc(${sizeConfig.doggyWalletRailWidth} + 30px)`;
         if (isFavBreedRailOpen) return `calc(${sizeConfig.favBreedsRailWidth} + 30px)`;
         if (isNavOpen) return `calc(${sizeConfig.navRailWidth} + 30px)`;
-        return '40px';
+        return '30px';
     };
 
-    const paddingRight = () => {
-        if (isBreedSearchOpen) return `calc(${sizeConfig.breedSearchRailWidth} + 30px)`;
-        return '40px';
-    }
 
     return (
         <>
@@ -37,11 +35,11 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: `calc(100% - ${paddingLeft()} - ${paddingRight()})`,
                     height: '100%',
+                    width: '100%',
                     mt: `${appBarHeight}px`,
-                    ml: paddingLeft(),
-                    mr: paddingRight(),
+                    pl: paddingLeft(),
+                    mr: '30px',
                     transition: 'margin-left 0.2s ease-in-out, margin-right 0.2s ease-in-out',
                 }}
             >

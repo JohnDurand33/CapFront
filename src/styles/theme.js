@@ -18,6 +18,12 @@ const getTheme = (mode) => {
             secondary: {
                 main: validMode === "dark" ? "#FFBF00" : "#CC9A00",
             },
+            tertiary: {
+                main: validMode === "dark" ? "#0d47a1" : "#bbdefb",
+            },
+            customGrey: {
+                main: validMode === "dark" ? "#868686" : "#A9A9A9",
+            },
             background: {
                 default: validMode === "dark" ? "#424242" : "#F0F0F0",
                 paper: validMode === "dark" ? "#616161" : "#FFFFFF",

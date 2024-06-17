@@ -5,88 +5,107 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    display: flex; /* Enable flexbox */
-    flex-direction: column; /* Stack items vertically by default */
-    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
 }
 
 .image-section {
     background-image: url("../static/HeroHomeImage.png");
     background-size: cover;
     background-position: center;
-    width: 100%; /* Full width */
-    padding-bottom: 100%; /* Maintain 1:1 aspect ratio */
+    width: 100%;
+    padding-bottom: 100%;
 }
 
 .text-section {
-    display: flex; /* Enable flexbox */
-    flex-direction: column; /* Stack items vertically */
-    justify-content: space-between; /* Distribute space between items */
-    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
     width: 100%;
+    text-decoration: none;
 }
 
 .grey-section,
 .blue-section {
-    display: flex; /* Enable flexbox */
-    justify-content: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
 }
 
 .grey-section {
-    flex: 2; /* Take twice the space of blue section */
+    flex: 2;
 }
 
 .blue-section {
-    flex: 1; /* Take one-third the space of grey section */
+    flex: 1;
 }
 
-.link-container {
-    display: flex; /* Enable flexbox */
-    flex-direction: column; /* Stack links vertically */
-    justify-content: center; /* Center links vertically */
-    align-items: center; /* Center links horizontally */
+.text-content {
     text-align: center;
 }
 
+.text-content h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.text-content h2 {
+    margin: 0;
+    font-size: 5rem; 
+    font-weight: 800;
+    flex-shrink: 1!important;
+    text-decoration: none!important;
+}
+
+.text-content p {
+    margin: 0;
+    font-size: 1.2rem; 
+    font-weight: 400;
+}
+
 .link {
-    text-decoration: none;
-    margin: 10px 0; /* Space between links */
-    font-size: 1.2rem; /* Larger font size */
+    text-decoration: none!important;
+    color: 'inherit'!important;
 }
 
 /* Responsive layout for larger screens */
 @media (min-width: 1024px) {
     .home-container {
-        flex-direction: row; /* Change flex direction to row for larger screens */
+        flex-direction: row;
+        height: 100vh;
+        width: 100vw;
     }
 
     .image-section {
-        width: 50%; /* Half the viewport width */
-        height: 100vh; /* Full viewport height */
+        width: 50%;
+        height: 100vh;
         background-size: cover;
         background-position: center;
-        padding-bottom: 0; /* Remove padding-bottom for larger screens */
+        padding-bottom: 0;
     }
 
     .text-section {
-        width: 50%; /* Half the viewport width */
-        height: 100vh; /* Full viewport height */
-        display: flex; /* Ensure flexbox is enabled */
-        flex-direction: column; /* Stack items vertically */
-        justify-content: space-between; /* Distribute space between items */
+        width: 50%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .grey-section {
-        height: 67%; /* Two-thirds of text section height */
-        width: 100%; /* Full width of text section */
-        flex: none; /* Disable flex-grow and flex-shrink */
+        height: 67%;
+        width: 100%;
+        flex: none;
     }
 
     .blue-section {
-        height: 33%; /* One-third of text section height */
-        width: 100%; /* Full width of text section */
-        flex: none; /* Disable flex-grow and flex-shrink */
+        height: 33%;
+        width: 100%;
+        flex: none;
     }
 }
