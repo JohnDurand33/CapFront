@@ -152,7 +152,7 @@ const BreedSearchForm = () => {
                     navigate('/breedview');
                 }
 
-                if (userFavBreeds && userFavBreeds.length > 0) {
+                if (total && total.length > 0) {
                     console.log('userFavBreeds:', userFavBreeds);
                     setNavOpen(false);
                     setBreedSearchFormOpen(false);

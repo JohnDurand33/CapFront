@@ -11,8 +11,8 @@ import { ItemTypes } from '../utils/ItemTypes';
 import api from '../contexts/api';
 
 const FavBreedsRail = () => {
-    const { isFavBreedRailOpen, appBarHeight, sizeConfig } = useLayout();
-    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, setUserFavDogs } = useDogSearch();
+    const { isFavBreedRailOpen, appBarHeight, sizeConfig, setFavBreedRailOpen, setDoggyWalletOpen } = useLayout();
+    const { userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds, setMyDogs } = useDogSearch();
     const { loggedIn } = useLogin();
     const theme = useTheme();
     const navigate = useNavigate();
@@ -30,6 +30,8 @@ const FavBreedsRail = () => {
             const response = await api.post('/api/find_dogs');
             console.log('Dogs found:', response.data);
             setMyDogs(response.data);
+            setFavBreedRailOpen(false);
+            setDoggyWalletOpen(true);
             navigate('/dogsearch');
         } catch (error) {
             console.error('Failed to find dogs:', error);

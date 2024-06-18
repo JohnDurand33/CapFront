@@ -32,16 +32,12 @@ const DogSearchView = () => {
     });
 
     useEffect(() => {
-        try {
-            const getDogs = async () => {
-                const response = await api.post('/api/find_dogs');
-                setMyDogs(response.data);
-            }
-        } catch (error) {
-            console.error('Failed to fetch favorite dogs:', error);
-        }
+        const getDogs = async () => {
+            const response = await api.post('/api/find_dogs');
+            setMyDogs(response.data);
+        };
         getDogs();
-    }, []);
+    }, [myDogs]);
 
     return (
         <Box ref={drop} sx={getDropAreaStyles(isOver)}>
