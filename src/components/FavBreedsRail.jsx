@@ -29,7 +29,7 @@ const FavBreedsRail = () => {
         try {
             const response = await api.post('/api/find_dogs');
             console.log('Dogs found:', response.data);
-            setUserFavDogs(response.data);
+            setMyDogs(response.data);
             navigate('/dogsearch');
         } catch (error) {
             console.error('Failed to find dogs:', error);
@@ -46,6 +46,19 @@ const FavBreedsRail = () => {
         }
     };
 
+    useEffect(() => {
+        if (loggedIn) {
+            const fetchFavBreeds = async () => {
+                try {
+                    const response = await api.get('/api/getbreeds');
+                    setUserFavBreeds(response.data);
+                } catch (error) {
+                    console.error('Failed to fetch favorite breeds:', error);
+                }
+            };
+            fetchFavBreeds();
+        }
+    }, [loggedIn, setUserFavBreeds]);
 
     return (
         <Drawer

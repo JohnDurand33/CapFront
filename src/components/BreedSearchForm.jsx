@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import api from '../contexts/api';
 import { useNavigate } from 'react-router-dom';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
@@ -45,19 +46,6 @@ const BreedSearchForm = () => {
         setSearchingBreedName(!!formData.name);
     }, [formData.name]);
 
-    useEffect(() => {
-        if (loggedIn) {
-            const fetchFavBreeds = async () => {
-                try {
-                    const response = await api.get('/api/getbreeds');
-                    setUserFavBreeds(response.data);
-                } catch (error) {
-                    console.error('Failed to fetch favorite breeds:', error);
-                }
-            };
-            fetchFavBreeds();
-        }
-    }, [loggedIn, setUserFavBreeds]);
 
     const createRadioGroupAttr = (header, name, value) => (
         <Grid item xs={12}>
