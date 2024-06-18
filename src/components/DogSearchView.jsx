@@ -40,6 +40,7 @@ const DogSearchView = () => {
         } catch (error) {
             console.error('Failed to fetch favorite dogs:', error);
         }
+        getDogs();
     }, []);
 
     return (
