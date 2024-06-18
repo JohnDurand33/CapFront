@@ -107,7 +107,7 @@ const DoggyWalletRail = () => {
                     sx={{ marginTop: '10px' }}
                     onClick={handleClearDogs}
                 >
-                    Close Rail
+                    Clear Favorites!?
                 </Button>
             </Box>
         </Drawer>

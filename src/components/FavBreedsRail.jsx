@@ -108,7 +108,7 @@ const FavBreedsRail = () => {
                 </Button>
                 <Button
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     sx={{ marginTop: '10px' }}
                     onClick={handleClearBreeds}
                 >
@@ -140,8 +140,6 @@ const handleDrop = async (item, userFavBreeds, setUserFavBreeds, myBreeds, setMy
     }
 };
 
-export default FavBreedsRail;
-
 const handleFindDog = async () => {
     try {
         const response = await api.post('/api/find_dogs');
@@ -162,3 +160,6 @@ const handleClearBreeds = async () => {
         console.error('Failed to clear favorite breeds:', error);
     }
 };
+
+export default FavBreedsRail;
+

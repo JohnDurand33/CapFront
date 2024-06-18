@@ -68,6 +68,9 @@ const DogSearchView = () => {
                     ))}
                 </Box>
             )}
+            <Button variant="primary" onClick={handleClearFavDogs}>
+
+            </Button>
         </Box>
     );
 };
@@ -91,6 +94,16 @@ const handleDrop = async (item, myDogs, setMyDogs, userFavDogs, setUserFavDogs) 
         console.log('FavDog removed successfully');
     } catch (error) {
         console.error('Failed to remove FavDog:', error);
+    }
+};
+
+const handleClearFavDogs = async () => {
+    try {
+        console.log('Clearing all FavDogs');
+        await api.delete('/api/clear_fav_dogs');
+        console.log('All FavDogs removed successfully');
+    } catch (error) {
+        console.error('Failed to clear FavDogs:', error);
     }
 };
 
