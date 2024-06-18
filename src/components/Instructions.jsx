@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLogin } from '../contexts/LoginContext';
 import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
 import '../styles/index.css';
 
 const Instructions = () => {
+    const { loggedin, logout } = useLogin();
+
+    useEffect(() => {
+        if (!loggedin) {
+            logout();
+            navigate('/home');
+        };
+    }, []);
+
     return (
         <Box sx={{ padding: 3, mt:"5%" }}>
             <Typography variant="h4" gutterBottom>

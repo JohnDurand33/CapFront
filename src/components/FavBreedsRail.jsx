@@ -39,27 +39,6 @@ const FavBreedsRail = () => {
         }),
     });
 
-    const handleFindDog = async () => {
-        try {
-            const response = await api.post('/api/find_dogs');
-            console.log('Dogs found:', response.data);
-            setUserFavDogs(response.data);
-            navigate('/dogsearch');
-        } catch (error) {
-            console.error('Failed to find dogs:', error);
-        }
-    };
-
-    const handleClearBreeds = async () => {
-        try {
-            await api.delete('/api/clearbreeds');
-            setUserFavBreeds([]);
-            console.log('Favorite breeds cleared successfully');
-        } catch (error) {
-            console.error('Failed to clear favorite breeds:', error);
-        }
-    };
-
     return (
         <Drawer
             variant="persistent"
@@ -162,3 +141,24 @@ const handleDrop = async (item, userFavBreeds, setUserFavBreeds, myBreeds, setMy
 };
 
 export default FavBreedsRail;
+
+const handleFindDog = async () => {
+    try {
+        const response = await api.post('/api/find_dogs');
+        console.log('Dogs found:', response.data);
+        setUserFavDogs(response.data);
+        navigate('/dogsearch');
+    } catch (error) {
+        console.error('Failed to find dogs:', error);
+    }
+};
+
+const handleClearBreeds = async () => {
+    try {
+        await api.delete('/api/clearbreeds');
+        setUserFavBreeds([]);
+        console.log('Favorite breeds cleared successfully');
+    } catch (error) {
+        console.error('Failed to clear favorite breeds:', error);
+    }
+};

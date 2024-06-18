@@ -10,7 +10,7 @@ const Home = ({ appBarHeight }) => {
     const { setNavOpen } = useLayout();
 
     useEffect(() => {
-        if (location.pathname === '/home' || location.pathname === '/signup' || location.pathname === '/login') setNavOpen(false);
+        if (location.pathname === '/home') setNavOpen(false);
     })
 
     return (

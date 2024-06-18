@@ -10,7 +10,7 @@ import { ItemTypes } from '../utils/ItemTypes';
 import api from '../contexts/api';
 
 const DoggyWalletRail = () => {
-    const { isDoggyWalletOpen, appBarHeight, sizeConfig } = useLayout();
+    const { isDoggyWalletOpen, appBarHeight, sizeConfig, setDoggyWalletOpen } = useLayout();
     const { userFavDogs, setUserFavDogs, myDogs, setMyDogs } = useDogSearch();
     const { loggedIn } = useLogin();
     const theme = useTheme();
@@ -101,6 +101,14 @@ const DoggyWalletRail = () => {
                 >
                     Close Rail
                 </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginTop: '10px' }}
+                    onClick={handleClearDogs}
+                >
+                    Close Rail
+                </Button>
             </Box>
         </Drawer>
     );
@@ -127,5 +135,14 @@ const handleDrop = async (item, userFavDogs, setUserFavDogs, myDogs, setMyDogs) 
         console.error('Failed to add FavDog:', error);
     }
 };
+
+const handleClearDogs = async () => {
+    try {
+        await api.post('/api/clear_fav_dogs');
+        console.log('userFavDogs cleared successfully');
+    } catch (error) {
+        console.error('Failed to clear FavDogs:', error);
+    }
+}
 
 export default DoggyWalletRail;

@@ -41,11 +41,9 @@ const SignUpForm = () => {
             setErrors({});
             navigate('/login');
         } catch (error) {
-            // Handle error during the API call
             console.error('Sign Up Failed:', error);
             setStatus({ success: null, error: error.response?.data?.message || 'Sign up failed. Please try again.' });
         } finally {
-            // Ensure that setSubmitting is called to finish the form submission process
             setSubmitting(false);
         }
     };

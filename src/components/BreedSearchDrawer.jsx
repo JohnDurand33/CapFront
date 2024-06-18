@@ -6,7 +6,7 @@ import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchForm from './BreedSearchForm';
 
 const BreedSearchDrawer = ({ appBarHeight }) => {
-    const { isBreedSearchFormOpen } = useLayout(); // Removed sizeConfig as it's not needed now
+    const { isBreedSearchFormOpen } = useLayout(); 
     const theme = useTheme();
 
     return (
@@ -15,16 +15,16 @@ const BreedSearchDrawer = ({ appBarHeight }) => {
             open={isBreedSearchFormOpen}
             sx={{
                 '& .MuiDrawer-paper': {
-                    width: '430px', // Set the static width here
+                    width: '430px', 
                     padding: 2,
                     marginTop: `${appBarHeight}px`,
                     backgroundColor: theme.palette.background.paper,
-                    overflowY: 'auto',
+                    overflowY: 'auto' + '40px',
                     height: `calc(100vh - ${appBarHeight}px)`,
                 },
             }}
         >
-            <Box sx={{ p: 2 }}>
+            <Box sx={{ p: 2, pb: 4 }}>
                 <Typography variant="h6" gutterBottom>
                     Breed Search
                 </Typography>
