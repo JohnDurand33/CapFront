@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLogin } from '../contexts/LoginContext';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
 import '../styles/index.css';
 
 const Instructions = () => {
     const { loggedin, logout } = useLogin();
+    const { navigate } = useNavigate();
 
     useEffect(() => {
         if (!loggedin) {
