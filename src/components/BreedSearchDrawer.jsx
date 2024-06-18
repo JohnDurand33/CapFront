@@ -6,20 +6,21 @@ import { useLayout } from '../contexts/LayoutContext';
 import BreedSearchForm from './BreedSearchForm';
 
 const BreedSearchDrawer = ({ appBarHeight }) => {
-    const { myBreeds, setMyBreeds } = useDogSearch();
-    const { isBreedSearchFormOpen, toggleBreedSearchForm, setBreedSearchFormOpen, isScreen } = useLayout();
+    const { isBreedSearchFormOpen } = useLayout(); // Removed sizeConfig as it's not needed now
     const theme = useTheme();
 
     return (
         <Drawer
             anchor="right"
             open={isBreedSearchFormOpen}
-
             sx={{
                 '& .MuiDrawer-paper': {
-                    width: isScreen === 'phone' ? '100vh' : 450,
+                    width: '430px', // Set the static width here
                     padding: 2,
-                    marginTop: `${appBarHeight}px`
+                    marginTop: `${appBarHeight}px`,
+                    backgroundColor: theme.palette.background.paper,
+                    overflowY: 'auto',
+                    height: `calc(100vh - ${appBarHeight}px)`,
                 },
             }}
         >

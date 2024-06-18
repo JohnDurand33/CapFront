@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
+import '../styles/index.css';
 
 const Instructions = () => {
     return (
-        <Box sx={{ padding: 3 }}>
+        <Box sx={{ padding: 3, mt:"5%" }}>
             <Typography variant="h4" gutterBottom>
                 How to Find Your Perfect Dog
             </Typography>

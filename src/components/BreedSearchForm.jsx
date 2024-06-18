@@ -23,7 +23,7 @@ const BreedSearchForm = () => {
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const formRef = useRef(null);
     const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, sizeConfig } = useLayout();
-    const { myBreeds, setMyBreeds, userFavBreeds } = useDogSearch();
+    const { setMyBreeds, userFavBreeds } = useDogSearch();
     const theme = useTheme();
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const BreedSearchForm = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [setBreedSearchFormOpen]);
+    }, [setBreedSearchFormOpen, setNavOpen]);
 
     useEffect(() => {
         setSearchingBreedName(!!formData.name);
@@ -162,7 +162,6 @@ const BreedSearchForm = () => {
                     const params = new URLSearchParams();
                     for (const [key, value] of Object.entries(combination)) {
                         if (typeof value === 'object' && value !== null) {
-
                             for (const [subKey, subValue] of Object.entries(value)) {
                                 params.append(subKey, subValue);
                             }
@@ -188,7 +187,7 @@ const BreedSearchForm = () => {
                     .map(name => {
                         return total.find(breed => breed.name === name);
                     });
-                
+
                 console.log('filtered breeds:', uniqueBreeds);
                 setMyBreeds(uniqueBreeds);
                 setNavOpen(false);
@@ -203,8 +202,8 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80%', overflowY: 'auto', color:'inherit' }} ref={formRef}>
-            <Typography variant="body1" gutterBottom sx={{ mt: 2, color:'inherit'}}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80%', overflowY: 'visible', color: 'inherit' }} ref={formRef}>
+            <Typography variant="body1" gutterBottom sx={{ mt: 2, color: 'inherit' }}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
                 Medium: 21 to 60 lbs<br />

@@ -7,7 +7,7 @@ const customBorderStyles = {
 };
 
 const getTheme = (mode) => {
-    const validMode = mode === "dark" || mode === "light" ? mode : "light"; // Ensure mode is valid
+    const validMode = mode === "dark" || mode === "light" ? mode : "light"; 
 
     return createTheme({
         palette: {
@@ -22,7 +22,7 @@ const getTheme = (mode) => {
                 main: validMode === "dark" ? "#0d47a1" : "#bbdefb",
             },
             customGrey: {
-                main: validMode === "dark" ? "#868686" : "#A9A9A9",
+                main: validMode === "dark" ? "#868686" : "#d9d6d6",
             },
             background: {
                 default: validMode === "dark" ? "#424242" : "#F0F0F0",

@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useLogin } from '../contexts/LoginContext';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
+    const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
-    const { token, isTokenExpired, loggedIn } = useLogin();
 
     useEffect(() => {
-        if (!token || isTokenExpired(token)) {
+        if (!loggedIn) {
+            logout();
             navigate('/login');
         }
-    }, [token, navigate]);
+    }, [loggedIn, logout, navigate]);
 
-    return token && loggedIn ? children : null;
+    return loggedIn ? <Outlet /> : null;
 };
 
 export default ProtectedRoute;

@@ -16,6 +16,7 @@ import { useTheme } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import BrandLogo from '../static/Brand.png';
+import { set } from 'firebase/database';
 
 
 const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
@@ -40,7 +41,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/home');
+        setNavOpen(false);
     };
 
     const handleDisabledClick = () => {

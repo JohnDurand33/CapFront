@@ -1,32 +1,58 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import '../styles/index.css';
+import { useEffect } from 'react';
+import { useLayout } from '../contexts/LayoutContext';
 
-const Home = () => {
+const Home = ({ appBarHeight }) => {
+    const location = useLocation();
     const theme = useTheme();
+    const { setNavOpen } = useLayout();
+
+    useEffect(() => {
+        if (location.pathname === '/home' || location.pathname === '/signup' || location.pathname === '/login') setNavOpen(false);
+    })
 
     return (
         <div
             className="home-container"
+            style={{
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.text.primary,
+            }}
         >
             <div className="image-section"></div>
             <div className="text-section">
                 <div
                     className="grey-section"
-                    sx={{
+                    style={{
                         backgroundColor: theme.palette.customGrey.main,
                         color: theme.palette.text.primary,
                     }}
-                    href='/find-your-companion'
                 >
                     <div className="text-content">
-                        <h1>Perfect Pet Finder</h1>
-                        <h2>
-                            <Link to="/find-your-companion" className="link"
-                                sx={{
+                    <h1 >
+                            <Link
+                                to="/instructions"
+                                className="link-h1"
+                                style={{
                                     textDecoration: 'none',
                                     color: theme.palette.text.primary,
-                                }}>
+                                }}
+                            >
+                                Pet Finder
+                            </Link>
+                        </h1>
+                    
+                        <h2>
+                            <Link
+                                to="/instructions"
+                                className="link-h2"
+                                style={{
+                                    textDecoration: 'none',
+                                    color: theme.palette.text.primary,
+                                }}
+                            >
                                 Find Your Perfect Furry Companion Here
                             </Link>
                         </h2>
@@ -39,13 +65,19 @@ const Home = () => {
                         color: theme.palette.text.primary,
                     }}
                 >
-                    <div className="text-content">
-                        <p>
-                            <Link to="/about-us" className="link">
-                                Your new best friend is just a click away!
-                            </Link>
-                        </p>
-                    </div>
+                    <p className="text-content"
+                    sx={{textAlign:'center'}}>
+                        <Link
+                            to="/instructions"
+                            className="link-p"
+                            style={{
+                                textDecoration: 'none',
+                                color: theme.palette.text.primary,
+                            }}
+                        >
+                            Your new best friend is just a click away!
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

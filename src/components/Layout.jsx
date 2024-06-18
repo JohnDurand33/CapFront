@@ -14,9 +14,9 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
 
     const paddingLeft = () => {
         if (location.pathname === '/' || location.pathname === '/home') return '0px';
+        if (isNavOpen) return `calc(${sizeConfig.navRailWidth} + 30px)`;
         if (isDoggyWalletOpen) return `calc(${sizeConfig.doggyWalletRailWidth} + 30px)`;
         if (isFavBreedRailOpen) return `calc(${sizeConfig.favBreedsRailWidth} + 30px)`;
-        if (isNavOpen) return `calc(${sizeConfig.navRailWidth} + 30px)`;
         return '30px';
     };
 
@@ -24,11 +24,12 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
     return (
         <>
             <NewAppBar toggleMode={toggleMode} mode={mode} appBarRef={appBarRef} appBarHeight={appBarHeight} />
-            {screenType !== 'phone' && <NavRail toggleMode={toggleMode} mode={mode} appBarHeight={appBarHeight} />}
+            {screenType !== 'phone' && location.pathname  && <NavRail toggleMode={toggleMode} mode={mode} appBarHeight={appBarHeight} />}
             <BreedSearchDrawer appBarHeight={appBarHeight} />
             {isFavBreedRailOpen && <FavBreedsRail />}
             {isDoggyWalletOpen && <DoggyWalletRail />}
             <Box
+                appBarHeight={appBarHeight}
                 component="main"
                 sx={{
                     display: 'flex',
@@ -37,10 +38,10 @@ const Layout = ({ toggleMode, mode, appBarRef, appBarHeight }) => {
                     justifyContent: 'center',
                     height: '100%',
                     width: '100%',
-                    mt: `${appBarHeight}px`,
+                    pt: `${appBarHeight}px`,
                     pl: paddingLeft(),
-                    mr: '30px',
-                    transition: 'margin-left 0.2s ease-in-out, margin-right 0.2s ease-in-out',
+                    pr: location.pathname === '/home' ? 0 : '30px',
+                    transition: 'margin-left 0.5s ease-in-out 0.5s, background-color 0.3s ease',
                 }}
             >
                 <Outlet />

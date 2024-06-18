@@ -30,7 +30,7 @@ const Login = () => {
             setNavOpen(true);
             setFavBreedRailOpen(false);
             setDoggyWalletOpen(false);
-            navigate("/home");
+            navigate("/instructions");
         } else {
             console.error('Login failed');
             setStatus({ success: null, error: 'Login failed. Please try again.' });
