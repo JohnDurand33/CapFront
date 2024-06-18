@@ -28,8 +28,8 @@ const getScreenType = (width) => {
 const sizeConfigs = {
     phone: {
         navRailWidth: '60px',
-        favBreedsRailWidth: '200px', // Increased width for better visibility
-        doggyWalletRailWidth: '200px', // Increased width for better visibility
+        favBreedsRailWidth: '200px', 
+        doggyWalletRailWidth: '200px', 
         gridTemplateColumns: 'repeat(1, 1fr)',
         spacing: 1,
         getMaxCardWidth: (isFavBreedRailOpen, isDoggyWalletOpen) => {

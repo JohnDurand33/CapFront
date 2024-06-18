@@ -17,7 +17,6 @@ export const LoginProvider = ({ children }) => {
 
         if (!storedToken) {
             console.log('No token found');
-            setLoggedIn(false);
             logout();
         } else {
             if (!isTokenExpired(storedToken)) {

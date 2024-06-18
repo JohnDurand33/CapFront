@@ -35,15 +35,15 @@ const App = () => {
                     <DogSearchProvider>
                             <Routes>
                                 <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
-                                    <Route index element={<Home />} />
-                                    <Route path="signup" element={<SignUpForm />} />
-                                    <Route path="login" element={<LogIn />} />
-                                    <Route path="instructions" element={<Instructions />} />
-                                    <Route element={<ProtectedRoute />}>
-                                        <Route path="home" element={<Home />} />
-                                        <Route path="breedview" element={<BreedSearchView />} />
-                                        <Route path="dogsearch" element={<DogSearchView />} />
-                                    </Route>
+                                <Route index element={<Home />} />
+                                <Route path="home" element={<Home />} />
+                                <Route path="signup" element={<SignUpForm />} />
+                                <Route path="login" element={<LogIn />} />
+                                <Route path="instructions" element={<Instructions />} />
+                                <Route element={<ProtectedRoute />}>
+                                    <Route path="breedview" element={<BreedSearchView />} />
+                                    <Route path="dogsearch" element={<DogSearchView />} />
+                                </Route>
                                 </Route>
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
