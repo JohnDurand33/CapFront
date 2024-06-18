@@ -17,20 +17,6 @@ const FavBreedsRail = () => {
     const theme = useTheme();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (loggedIn) {
-            const fetchFavBreeds = async () => {
-                try {
-                    const response = await api.get('/api/getbreeds');
-                    setUserFavBreeds(response.data);
-                } catch (error) {
-                    console.error('Failed to fetch favorite breeds:', error);
-                }
-            };
-            fetchFavBreeds();
-        }
-    }, [loggedIn, setUserFavBreeds]);
-
     const [{ isOver }, drop] = useDrop({
         accept: ItemTypes.BREED,
         drop: (item) => handleDrop(item, userFavBreeds, setUserFavBreeds, myBreeds, setMyBreeds),
@@ -38,6 +24,28 @@ const FavBreedsRail = () => {
             isOver: !!monitor.isOver(),
         }),
     });
+
+    const handleFindDog = async () => {
+        try {
+            const response = await api.post('/api/find_dogs');
+            console.log('Dogs found:', response.data);
+            setUserFavDogs(response.data);
+            navigate('/dogsearch');
+        } catch (error) {
+            console.error('Failed to find dogs:', error);
+        }
+    };
+
+    const handleClearBreeds = async () => {
+        try {
+            await api.delete('/api/clearbreeds');
+            setUserFavBreeds([]);
+            console.log('Favorite breeds cleared successfully');
+        } catch (error) {
+            console.error('Failed to clear favorite breeds:', error);
+        }
+    };
+
 
     return (
         <Drawer
@@ -140,26 +148,6 @@ const handleDrop = async (item, userFavBreeds, setUserFavBreeds, myBreeds, setMy
     }
 };
 
-const handleFindDog = async () => {
-    try {
-        const response = await api.post('/api/find_dogs');
-        console.log('Dogs found:', response.data);
-        setUserFavDogs(response.data);
-        navigate('/dogsearch');
-    } catch (error) {
-        console.error('Failed to find dogs:', error);
-    }
-};
-
-const handleClearBreeds = async () => {
-    try {
-        await api.delete('/api/clearbreeds');
-        setUserFavBreeds([]);
-        console.log('Favorite breeds cleared successfully');
-    } catch (error) {
-        console.error('Failed to clear favorite breeds:', error);
-    }
-};
 
 export default FavBreedsRail;
 

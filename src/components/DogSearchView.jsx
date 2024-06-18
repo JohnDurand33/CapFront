@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
@@ -30,6 +30,17 @@ const DogSearchView = () => {
         transition: 'background-color 0.2s ease-in-out',
         marginRight: theme.spacing(sizeConfig.spacing),
     });
+
+    useEffect(() => {
+        try {
+            const getDogs = async () => {
+                const response = await api.post('/api/find_dogs');
+                setMyDogs(response.data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch favorite dogs:', error);
+        }
+    }, []);
 
     return (
         <Box ref={drop} sx={getDropAreaStyles(isOver)}>
@@ -100,7 +111,7 @@ const handleDrop = async (item, myDogs, setMyDogs, userFavDogs, setUserFavDogs) 
 const handleClearFavDogs = async () => {
     try {
         console.log('Clearing all FavDogs');
-        await api.delete('/api/clear_fav_dogs');
+        await api.delete('/api/clear_favdogs');
         console.log('All FavDogs removed successfully');
     } catch (error) {
         console.error('Failed to clear FavDogs:', error);

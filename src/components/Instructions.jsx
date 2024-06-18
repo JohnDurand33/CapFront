@@ -2,14 +2,16 @@ import { useEffect } from 'react';
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
+import { getToken } from '../utils/auth.js';
 import '../styles/index.css';
 
 const Instructions = () => {
     const { loggedin, logout } = useLogin();
-    const { navigate } = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!loggedin) {
+        const currentToken = getToken();
+        if (!currentToken) {
             logout();
             navigate('/home');
         };

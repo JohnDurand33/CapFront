@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
+import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material';
 
 const BreedSearchForm = () => {
@@ -20,10 +21,11 @@ const BreedSearchForm = () => {
     });
 
     const navigate = useNavigate();
+    const { loggedIn } = useLogin();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const formRef = useRef(null);
     const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, sizeConfig } = useLayout();
-    const { setMyBreeds, userFavBreeds } = useDogSearch();
+    const { myBreeds, setMyBreeds, userFavBreeds, setUserFavBreeds } = useDogSearch();
     const theme = useTheme();
 
     useEffect(() => {
@@ -42,6 +44,20 @@ const BreedSearchForm = () => {
     useEffect(() => {
         setSearchingBreedName(!!formData.name);
     }, [formData.name]);
+
+    useEffect(() => {
+        if (loggedIn) {
+            const fetchFavBreeds = async () => {
+                try {
+                    const response = await api.get('/api/getbreeds');
+                    setUserFavBreeds(response.data);
+                } catch (error) {
+                    console.error('Failed to fetch favorite breeds:', error);
+                }
+            };
+            fetchFavBreeds();
+        }
+    }, [loggedIn, setUserFavBreeds]);
 
     const createRadioGroupAttr = (header, name, value) => (
         <Grid item xs={12}>
@@ -142,12 +158,25 @@ const BreedSearchForm = () => {
 
                 if (total.length === 0) {
                     console.log('No breeds found with this name:', formData.name);
-                    return;
+                    setBreedSearchFormOpen(false);
+                    setFavBreedRailOpen(false);
+                    setNavOpen(false);
+                    navigate('/breedview');
                 }
 
-                if (userFavBreeds && userFavBreeds.length > 0) setBreedSearchFormOpen(false);
-                setFavBreedRailOpen(true);
-                navigate('/breedview');
+                if (userFavBreeds && userFavBreeds.length > 0) {
+                    console.log('userFavBreeds:', userFavBreeds);
+                    setNavOpen(false);
+                    setBreedSearchFormOpen(false);
+                    setFavBreedRailOpen(true);
+                    navigate('/breedview');
+                } else {
+                    console.log('No favorite breeds found');
+                    setNavOpen(false);
+                    setBreedSearchFormOpen(false);
+                    setFavBreedRailOpen(false);
+                    navigate('/breedview');
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
