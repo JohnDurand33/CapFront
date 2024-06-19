@@ -1,16 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import '../styles/index.css';
 import { useEffect } from 'react';
 import { useLayout } from '../contexts/LayoutContext';
+import { useLogin } from '../contexts/LoginContext';
 
 const Home = ({ appBarHeight }) => {
-    const location = useLocation();
+    const { loggedIn, logout } = useLogin();
     const theme = useTheme();
     const { setNavOpen } = useLayout();
 
     useEffect(() => {
-        if (location.pathname === '/home') setNavOpen(false);
+        if (!loggedIn) {
+            logout();
+        }
+        setNavOpen(false);
     })
 
     return (

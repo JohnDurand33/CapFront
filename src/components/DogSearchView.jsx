@@ -37,7 +37,7 @@ const DogSearchView = () => {
             setMyDogs(response.data);
         };
         getDogs();
-    }, [myDogs]);
+    }, []);
 
     return (
         <Box ref={drop} sx={getDropAreaStyles(isOver)}>

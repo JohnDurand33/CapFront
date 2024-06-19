@@ -33,6 +33,20 @@ const getTheme = (mode) => {
                 secondary: validMode === "dark" ? "#BDBDBD" : "#757575",
             },
         },
+        typography: {
+            h1: {
+                color: validMode === "dark" ? "#FFFFFF" : "#212121",
+            },
+            h2: {
+                color: validMode === "dark" ? "#FFFFFF" : "#212121",
+            },
+            body1: {
+                color: validMode === "dark" ? "#FFFFFF" : "#212121",
+            },
+            body2: {
+                color: validMode === "dark" ? "#BDBDBD" : "#757575",
+            },
+        },
         transitions: {},
         spacing: 8,
         zIndex: {

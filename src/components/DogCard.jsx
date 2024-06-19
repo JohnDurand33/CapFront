@@ -1,11 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from '../utils/ItemTypes';
+import api from '../contexts/api';
+import OrgDetailsModal from './OrgDetailsModal';
 
-const DogCard = ({ dog, index, handleContactClick }) => {
+const DogCard = ({ dog, index }) => {
     const theme = useTheme();
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [organizationDetails, setOrganizationDetails] = useState(null);
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.DOG,
@@ -14,6 +18,18 @@ const DogCard = ({ dog, index, handleContactClick }) => {
             isDragging: !!monitor.isDragging(),
         }),
     }));
+
+    const handleModalOpen = async (dog) => {
+        try {
+            const response = await api.post('/api/get_org_details', { dog_id: dog.org_id });
+            setOrganizationDetails(response.data.organization);
+            setModalOpen(true);
+        } catch (error) {
+            console.error('Error fetching organization details:', error);
+        }
+    };
+
+    const handleModalClose = () => setModalOpen(false);
 
     return (
         <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -34,7 +50,7 @@ const DogCard = ({ dog, index, handleContactClick }) => {
                     </Grid>
                     <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
                         <CardContent sx={{ flex: '1 1 auto', textAlign: 'center' }}>
-                            <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold', color: '#333' }}>
+                            <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
                                 {dog.name}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
@@ -52,9 +68,6 @@ const DogCard = ({ dog, index, handleContactClick }) => {
                             <Typography variant="body2" color="textSecondary">
                                 Location: {dog.city}, {dog.state}
                             </Typography>
-                            <input type="hidden" value={dog.org_id} />
-                        </CardContent>
-                        {handleContactClick && (
                             <Button
                                 size="large"
                                 variant="contained"
@@ -66,15 +79,23 @@ const DogCard = ({ dog, index, handleContactClick }) => {
                                     background: theme.palette.primary.main,
                                     fontWeight: 'bold',
                                     textAlign: 'center',
+                                    marginTop: 2,
                                 }}
-                                onClick={handleContactClick}
+                                onClick={() => handleModalOpen(dog)}
                             >
                                 CONTACT ADOPTION AGENCY
                             </Button>
-                        )}
+                        </CardContent>
                     </Grid>
                 </Grid>
             </Card>
+            <OrgDetailsModal
+                open={isModalOpen}
+                handleClose={handleModalClose}
+                orgDetails={organizationDetails}
+                dogName={dog.name}
+                dogApiId={dog.api_id}
+            />
         </div>
     );
 };
