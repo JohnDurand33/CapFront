@@ -18,8 +18,8 @@ import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRou
 
 const App = () => {
     const [appBarHeight, appBarRef] = useAppBarHeight();
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [mode, setMode] = useState(prefersDarkMode ? 'dark' : 'light');
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
+    const [mode, setMode] = useState(prefersDarkMode ? 'light' : 'dark');
 
     const theme = useMemo(() => getTheme(mode), [mode]);
 
