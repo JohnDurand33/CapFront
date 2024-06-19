@@ -1,26 +1,28 @@
 import { Modal, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
-const createMailToLink = (email, dogName, dogApiId) => {
-    const subject = encodeURIComponent(`Interest in Adopting ${dogName}`);
-    const body = encodeURIComponent(`Hello,\n\nI am interested in adopting ${dogName} (ID: ${dogApiId}). Could you please provide more information?\n\nThank you!`);
-    return `mailto:${email}?subject=${subject}&body=${body}`;
-};
 
 const OrgDetailsModal = ({ open, handleClose, orgDetails, dogName, dogApiId }) => {
     const theme = useTheme();
+    
+    const modalStyle = {
+        backGroundColor: theme.palette.background.paper,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
+    const createMailToLink = (email, dogName, dogApiId) => {
+        const subject = encodeURIComponent(`Interest in Adopting ${dogName}`);
+        const body = encodeURIComponent(`Hello,\n\nI am interested in adopting ${dogName} (ID: ${dogApiId}). Could you please provide more information?\n\nThank you!`);
+        return `mailto:${email}?subject=${subject}&body=${body}`;
+    };
 
     return (
         <Modal
@@ -40,7 +42,7 @@ const OrgDetailsModal = ({ open, handleClose, orgDetails, dogName, dogApiId }) =
                         </Typography>
                         {orgDetails.email && (
                             <Typography variant="body2" color="textSecondary">
-                                Email: <a href={createMailToLink(orgDetails.email, dogName, dogApiId)}>{orgDetails.email}</a>
+                                Email (Click Link to Send): <a href={createMailToLink(orgDetails.email, dogName, dogApiId)}>{orgDetails.email}</a>
                             </Typography>
                         )}
                         {orgDetails.website_url && (

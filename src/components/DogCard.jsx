@@ -21,7 +21,7 @@ const DogCard = ({ dog, index }) => {
 
     const handleModalOpen = async (dog) => {
         try {
-            const response = await api.post('/api/get_org_details', { dog_id: dog.org_id });
+            const response = await api.post('/api/get_org_details', { dog_id: dog.api_id });
             setOrganizationDetails(response.data.organization);
             setModalOpen(true);
         } catch (error) {
