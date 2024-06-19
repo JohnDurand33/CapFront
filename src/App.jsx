@@ -14,7 +14,10 @@ import NotFound from './components/NotFound';
 import { ThemeProvider, useMediaQuery, CssBaseline } from '@mui/material';
 import Instructions from './components/Instructions';
 import { getTheme } from './styles/theme';
-import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
+import ProtectedRoute from './components/ProtectedRoute'; 
+import { DndProvider } from 'react-dnd';
+import { HTML5toTouch } from './dndConfig';
+import { MultiBackend } from 'react-dnd-multi-backend';
 
 const App = () => {
     const [appBarHeight, appBarRef] = useAppBarHeight();
@@ -31,7 +34,8 @@ const App = () => {
         <LoginProvider>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <LayoutProvider>
+                    <LayoutProvider>
+                    <DndProvider backend={MultiBackend} options={HTML5toTouch}>
                     <DogSearchProvider>
                             <Routes>
                                 <Route path="/" element={<Layout appBarRef={appBarRef} appBarHeight={appBarHeight} toggleMode={toggleMode} mode={mode} />}>
@@ -47,7 +51,8 @@ const App = () => {
                                 </Route>
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
-                    </DogSearchProvider>
+                        </DogSearchProvider>
+                    </DndProvider>
                 </LayoutProvider>
             </ThemeProvider>
         </LoginProvider>
