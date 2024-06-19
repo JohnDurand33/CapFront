@@ -174,7 +174,6 @@ export const LayoutProvider = ({ children }) => {
         setBreedSearchFormOpen(false);
         setDoggyWalletOpen(false);
         setFavBreedRailOpen(false);
-        setNavOpen(true);
         navigate('/home');
     };
 

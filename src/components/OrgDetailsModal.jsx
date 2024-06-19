@@ -32,36 +32,57 @@ const OrgDetailsModal = ({ open, handleClose, orgDetails, dogName, dogApiId }) =
             aria-describedby="modal-description"
         >
             <Box sx={modalStyle}>
-                <Typography id="modal-title" variant="h6" component="h2">
+                <Typography id="modal-title" variant="h6" component="h2" sx={{
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                }}>
                     Organization Details
                 </Typography>
                 {orgDetails ? (
                     <>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body2" color="textSecondary" sx={{
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word',
+                        }}>
                             Name: {orgDetails.name}
                         </Typography>
                         {orgDetails.email && (
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2" color="textSecondary" sx={{
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                            }}>
                                 Email (Click Link to Send): <a href={createMailToLink(orgDetails.email, dogName, dogApiId)}>{orgDetails.email}</a>
                             </Typography>
                         )}
                         {orgDetails.website_url && (
-                            <Typography variant="body2" color="textSecondary">
-                                Website: <a href={orgDetails.website_url} target="_blank" rel="noopener noreferrer">{orgDetails.website_url}</a>
+                            <Typography variant="body2" color="textSecondary" sx={{
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                            }}>
+                                Adoption Organization's Website: <a href={orgDetails.website_url} target="_blank" rel="noopener noreferrer">{orgDetails.website_url}</a>
                             </Typography>
                         )}
                         {orgDetails.adoption_url && (
-                            <Typography variant="body2" color="textSecondary">
-                                Adoption URL: <a href={orgDetails.adoption_url} target="_blank" rel="noopener noreferrer">{orgDetails.adoption_url}</a>
+                            <Typography variant="body2" color="textSecondary" sx={{
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                            }}>
+                                Organization's Pet Adoption URL: <a href={orgDetails.adoption_url} target="_blank" rel="noopener noreferrer">{orgDetails.adoption_url}</a>
                             </Typography>
                         )}
                         {orgDetails.fb_url && (
-                            <Typography variant="body2" color="textSecondary">
-                                Facebook: <a href={orgDetails.fb_url} target="_blank" rel="noopener noreferrer">{orgDetails.fb_url}</a>
+                            <Typography variant="body2" color="textSecondary" sx={{
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                            }}>
+                                Adoption Organization's Facebook Link: <a href={orgDetails.fb_url} target="_blank" rel="noopener noreferrer">{orgDetails.fb_url}</a>
                             </Typography>
                         )}
-                        <Typography variant="body2" color="textSecondary">
-                            Location: {orgDetails.city}, {orgDetails.state}
+                        <Typography variant="body2" color="textSecondary" sx={{
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word',
+                        }}>
+                            Adoption Organization's Location (City, State): {orgDetails.city}, {orgDetails.state}
                         </Typography>
                     </>
                 ) : (

@@ -12,7 +12,6 @@ const Home = ({ appBarHeight }) => {
 
     useEffect(() => {
         if (!loggedIn) {
-            logout();
             setNavOpen(false);
         }
     }, [])

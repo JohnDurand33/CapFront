@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import api from '../contexts/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
-import { useLogin } from '../contexts/LoginContext';
 import { useTheme } from '@mui/material';
+import { useLogin } from '../contexts/LoginContext';
 
 const BreedSearchForm = () => {
     const [formData, setFormData] = useState({
@@ -22,25 +21,30 @@ const BreedSearchForm = () => {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
     const { loggedIn } = useLogin();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const formRef = useRef(null);
     const { setBreedSearchFormOpen, setFavBreedRailOpen, setNavOpen, sizeConfig } = useLayout();
-    const { myBreeds, setMyBreeds, userFavBreeds, setUserFavBreeds } = useDogSearch();
+    const { myBreeds, setMyBreeds, userFavBreeds } = useDogSearch();
     const theme = useTheme();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (formRef.current && !formRef.current.contains(event.target)) {
                 setBreedSearchFormOpen(false);
-                setNavOpen(true);
+                if (loggedIn === false) {
+                    setNavOpen(false);
+                } else {
+                    setNavOpen(true);
+                }
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [setBreedSearchFormOpen, setNavOpen]);
+    }, [setBreedSearchFormOpen, setNavOpen, loggedIn]);
 
     useEffect(() => {
         setSearchingBreedName(!!formData.name);

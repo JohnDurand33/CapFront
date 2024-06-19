@@ -16,28 +16,14 @@ import { useTheme } from '@mui/material';
 import { useDogSearch } from '../contexts/DogSearchContext';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import BrandLogo from '../static/Brand.png';
-import { set } from 'firebase/database';
 
 
 const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
-    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeconfig, handleHome } = useLayout();
+    const { handleNavToggle, isBreedSearchFormOpen, setBreedSearchFormOpen, handleFavBreedRail, handleDoggyWallet, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, screenType, sizeConfig, handleHome, handleBreedSearchForm } = useLayout();
     const {userFavBreeds} = useDogSearch();
-
     const { loggedIn, logout } = useLogin();
     const navigate = useNavigate();
     const theme = useTheme();
-
-    const handleBreedSearchForm = () => {
-        if (isBreedSearchFormOpen) {
-            setBreedSearchFormOpen(false);
-            return;
-        } else {
-            setBreedSearchFormOpen(true);
-            setNavOpen(true);
-            setFavBreedRailOpen(false)
-            setDoggyWalletOpen(false);
-        }
-    };
 
     const handleLogout = async () => {
         await logout();
@@ -71,16 +57,14 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                         <PetsIcon />
                                 </IconButton>
                             </span>
-                            </Tooltip>
-                        <IconButton
-                            color="inherit"
-                            onClick={handleBreedSearchForm}
-                        >
+                        </Tooltip>
+                        <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                        <IconButton color="inherit" onClick={handleBreedSearchForm} disabled={!loggedIn}>
                         <SearchIcon />
-                        </IconButton>
+                            </IconButton>
+                        </Tooltip>
                         <IconButton
                             color="inherit"
-                            onClick={handleHome}
                             component={Link} to='/home'
                         >
                             <HomeIcon />
@@ -93,7 +77,7 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {loggedIn ? (
                         <>
-                            <IconButton color="inherit" onClick={handleLogout}>
+                                <IconButton color="inherit" onClick={handleLogout} disabled={!loggedIn}>
                                 <ExitToAppIcon />
                             </IconButton>
                         </>
