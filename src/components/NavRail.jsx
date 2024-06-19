@@ -72,10 +72,14 @@ function NavRail({ mode, toggleMode, appBarHeight }) {
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItemButton>
-                    <ListItemButton onClick={handleNewSearchRequest}>
+                    <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                        <span>
+                            <ListItemButton onClick={handleNewSearchRequest} disabled={!loggedIn}>
                         <ListItemIcon><SearchIcon /></ListItemIcon>
                         <ListItemText primary="New Search" />
                     </ListItemButton>
+                        </span>
+                    </Tooltip>
                     <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
                         <span>
                             <ListItemButton onClick={handleDoggyWallet} disabled={!loggedIn}>

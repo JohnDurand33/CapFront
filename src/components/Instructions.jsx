@@ -1,21 +1,12 @@
 import { useEffect } from 'react';
-import { useLogin } from '../contexts/LoginContext';
-import { useNavigate } from 'react-router-dom';
+import { useLayout } from '../contexts/LayoutContext';
 import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
-import { getToken } from '../utils/auth.js';
 import '../styles/index.css';
 
 const Instructions = () => {
-    const { loggedin, logout } = useLogin();
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        const currentToken = getToken();
-        if (!currentToken) {
-            logout();
-            navigate('/home');
-        };
-    }, []);
+    const { loggedIn } = useLayout();
+
 
     return (
         <Box sx={{ padding: 3, mt: "5%" }}>

@@ -42,6 +42,7 @@ const Home = ({ appBarHeight }) => {
                                     textDecoration: 'none',
                                     color: theme.palette.text.primary,
                                 }}
+                                disabled={loggedIn}
                             >
                                 Pet Finder
                             </Link>
@@ -55,6 +56,7 @@ const Home = ({ appBarHeight }) => {
                                     textDecoration: 'none',
                                     color: theme.palette.text.primary,
                                 }}
+                                disabled={loggedIn}
                             >
                                 Find Your Perfect Furry Companion Here
                             </Link>
@@ -71,14 +73,15 @@ const Home = ({ appBarHeight }) => {
                     <p className="text-content"
                     sx={{textAlign:'center'}}>
                         <Link
-                            to="/instructions"
+                            to="/signup"
                             className="link-p"
                             style={{
                                 textDecoration: 'none',
                                 color: theme.palette.text.primary,
                             }}
+                            disabled={loggedIn}
                         >
-                            Your new best friend is just a click away!
+                            Your new best friend is just a click away (Sign Up Now)!
                         </Link>
                     </p>
                 </div>

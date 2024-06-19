@@ -58,11 +58,15 @@ const NewAppBar = ({ appBarRef, toggleMode, mode }) => {
                                 </IconButton>
                             </span>
                         </Tooltip>
+                        
                         <Tooltip title={!loggedIn ? 'Sign Up for Free Access' : ''}>
+                            <span>
                         <IconButton color="inherit" onClick={handleBreedSearchForm} disabled={!loggedIn}>
-                        <SearchIcon />
-                            </IconButton>
-                        </Tooltip>
+                                    <SearchIcon />
+                                    
+                                </IconButton>
+                            </span>
+                            </Tooltip>
                         <IconButton
                             color="inherit"
                             component={Link} to='/home'
