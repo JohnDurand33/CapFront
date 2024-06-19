@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LayoutContext = createContext();
@@ -37,6 +37,7 @@ const sizeConfigs = {
             return `calc(100vw - ${railWidth} - 40px)`;
         },
         cardHeight: '500px',
+        typeFieldWidth: '100%',
     },
     tablet: {
         navRailWidth: '60px',
@@ -49,6 +50,7 @@ const sizeConfigs = {
             return `calc((100vw - ${railWidth} - 40px) / 2)`;
         },
         cardHeight: '500px',
+        typeFieldWidth: '85%',
     },
     laptop: {
         navRailWidth: '200px',
@@ -61,6 +63,7 @@ const sizeConfigs = {
             return `calc((100vw - ${railWidth} - 40px) / 3)`;
         },
         cardHeight: '600px',
+        typeFieldWidth: '70%',
     },
     largeLaptop: {
         navRailWidth: '220px',
@@ -73,6 +76,7 @@ const sizeConfigs = {
             return `calc((100vw - ${railWidth} - 40px) / 4)`;
         },
         cardHeight: '650px',
+        typeFieldWidth: '60%',
     },
     desktop: {
         navRailWidth: '240px',
@@ -85,6 +89,7 @@ const sizeConfigs = {
             return `calc((100vw - ${railWidth} - 40px) / 5)`;
         },
         cardHeight: '700px',
+        typeFieldWidth: '50%',
     }
 };
 

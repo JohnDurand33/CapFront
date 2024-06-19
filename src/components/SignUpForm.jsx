@@ -4,8 +4,10 @@ import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
 import api from '../contexts/api.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useLayout } from '../contexts/LayoutContext.jsx';
 
 const SignUpForm = () => {
+    const { sizeConfig } = useLayout();
     const navigate = useNavigate();
 
     const initialValues = {
@@ -51,7 +53,7 @@ const SignUpForm = () => {
     return (
         <Box
             sx={{
-                width: '100%',
+                width: sizeConfig.typeFieldWidth,
                 mx: 'auto',
                 pt: 5
             }}

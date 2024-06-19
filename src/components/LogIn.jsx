@@ -5,9 +5,10 @@ import { TextField, Button, Box, Typography } from '@mui/material';
 import * as Yup from 'yup';
 import { useLogin } from '../contexts/LoginContext';
 import { useLayout } from '../contexts/LayoutContext';
+import '../styles/index.css';
 
 const Login = () => {
-    const { isNavOpen, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen } = useLayout();
+    const { isNavOpen, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen, sizeConfig } = useLayout();
     const { login } = useLogin();
     const navigate = useNavigate();
 
@@ -41,15 +42,15 @@ const Login = () => {
     return (
         <Box
             sx={{
-                width: '100%',
+                width: sizeConfig.typeFieldWidth,
                 mx: 'auto',
-                pt:5
+                pt: 5,
             }}
         >
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin} className='sign-login-fields'>
                 {({ isSubmitting, status }) => (
-                    <Form>
-                        <Box>
+                    <Form  >
+                        <Box >
                             <Typography variant="h4" gutterBottom>Log In</Typography>
                             {status?.success && <Typography color="success">{status.success}</Typography>}
                             {status?.error && <Typography color="error">{status.error}</Typography>}

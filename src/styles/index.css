@@ -106,6 +106,12 @@ p {
     
 }
 
+.sign-login-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* Responsive layout for larger screens */
 @media (min-width: 1024px) {
     .home-container {
