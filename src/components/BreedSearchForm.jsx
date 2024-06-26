@@ -223,7 +223,7 @@ const BreedSearchForm = () => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, maxHeight: '80%', overflowY: 'visible', color: 'inherit' }} ref={formRef}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, pb: 5, maxHeight: '80%', overflowY: 'visible', color: 'inherit' }} ref={formRef}>
             <Typography variant="body1" gutterBottom sx={{ mt: 2, color: 'inherit' }}>
                 <strong>Size Ranges:</strong><br />
                 Small: Up to 20 lbs<br />
