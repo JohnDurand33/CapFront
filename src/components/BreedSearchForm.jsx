@@ -6,8 +6,10 @@ import { useDogSearch } from '../contexts/DogSearchContext';
 import { useLayout } from '../contexts/LayoutContext';
 import { useTheme } from '@mui/material';
 import { useLogin } from '../contexts/LoginContext';
+import { CircularProgress } from "@mui/material";
 
 const BreedSearchForm = () => {
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         size: '',
@@ -21,7 +23,6 @@ const BreedSearchForm = () => {
     });
 
     const navigate = useNavigate();
-    const location = useLocation();
     const { loggedIn } = useLogin();
     const [searchingBreedName, setSearchingBreedName] = useState(false);
     const formRef = useRef(null);
@@ -136,6 +137,7 @@ const BreedSearchForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (formData.name) {
             try {
                 const response = await axios.get(`https://api.api-ninjas.com/v1/dogs?name=${encodeURIComponent(formData.name)}`, {
@@ -145,6 +147,7 @@ const BreedSearchForm = () => {
                     name: breed.name,
                     image_link: breed.image_link,
                 }));
+                
                 setMyBreeds(total);
                 console.log('myBreeds:', total);
 
@@ -217,6 +220,8 @@ const BreedSearchForm = () => {
                 navigate('/breedview');
             } catch (error) {
                 console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
             }
         }
         console.log('myBreeds -> with response.data set to this variable:', myBreeds);
@@ -239,6 +244,11 @@ const BreedSearchForm = () => {
                     Please clear the breed name field to search for breeds by their attributes.
                 </Typography>
             )}
+            {loading ? (
+                <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 5 }}>
+                    <CircularProgress size={60} height="100%"/>
+                </Box> 
+            ) : (
             <Grid container spacing={2}>
                 <Grid item xs={12} >
                     <TextField
@@ -286,6 +296,7 @@ const BreedSearchForm = () => {
                     </Button>
                 </Grid>
             </Grid>
+            )}
         </Box>
     );
 };

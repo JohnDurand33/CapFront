@@ -5,8 +5,11 @@ import '../styles/index.css';
 
 const Instructions = () => {
 
-    const { loggedIn } = useLayout();
+    const { setNavOpen } = useLayout();
 
+    useEffect(() => {
+        setNavOpen(true)
+    }, [])
 
     return (
         <Box sx={{ padding: 3, mt: "5%" }}>
