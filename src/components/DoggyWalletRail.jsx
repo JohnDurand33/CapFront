@@ -42,6 +42,7 @@ const DoggyWalletRail = () => {
             variant="persistent"
             open={isDoggyWalletOpen}
             anchor="left"
+            transition='margin-left 0.5s ease-in-out, background-color 0.5s ease-in-out'
             sx={{
                 alignItems: 'center',
                 flexShrink: 0,

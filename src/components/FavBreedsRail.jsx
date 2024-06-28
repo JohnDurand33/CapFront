@@ -67,6 +67,7 @@ const FavBreedsRail = () => {
             variant="persistent"
             open={isFavBreedRailOpen}
             anchor="left"
+            transition='margin-left 0.5s ease-in-out, background-color 0.5s ease-in-out'
             sx={{
                 alignItems: 'center',
                 flexShrink: 0,
@@ -76,7 +77,7 @@ const FavBreedsRail = () => {
                     mt: `${appBarHeight}px`,
                     zIndex: theme.zIndex.drawer,
                     width: sizeConfig.favBreedsRailWidth,
-                    backgroundColor: isOver ? '#aca9a9' : theme.palette.background.default, // Use '#aca9a9' for hover color
+                    backgroundColor: isOver ? '#aca9a9' : theme.palette.background.default,
                     transition: 'margin-left 0.5s ease-in-out, background-color 0.5s ease-in-out',
                 },
             }}
