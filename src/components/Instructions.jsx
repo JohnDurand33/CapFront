@@ -5,9 +5,11 @@ import '../styles/index.css';
 
 const Instructions = () => {
 
-    const { setNavOpen } = useLayout();
+    const { setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen } = useLayout();
 
     useEffect(() => {
+        setFavBreedRailOpen(false)
+        setDoggyWalletOpen(false)
         setNavOpen(true)
     }, [])
 

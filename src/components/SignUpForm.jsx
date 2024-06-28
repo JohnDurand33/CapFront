@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLayout } from '../contexts/LayoutContext.jsx';
 
 const SignUpForm = () => {
-    const { sizeConfig } = useLayout();
+    const { sizeConfig, setNavOpen, setFavBreedRailOpen, setDoggyWalletOpen } = useLayout();
     const navigate = useNavigate();
 
     const initialValues = {
@@ -23,6 +23,8 @@ const SignUpForm = () => {
     ];
 
     useEffect(() => {
+        setFavBreedRailOpen(false)
+        setDoggyWalletOpen(false)
         setNavOpen(true)
     }, [])
 
